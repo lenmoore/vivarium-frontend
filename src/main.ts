@@ -1,6 +1,28 @@
 import { createApp } from 'vue';
 import App from './App.vue';
 import router from './router';
-import store from './store';
+import { useStore } from './store';
+import { createPinia, setActivePinia } from 'pinia';
 
-createApp(App).use(store).use(router).mount('#app');
+const app = createApp(App);
+
+const pinia = createPinia();
+setActivePinia(pinia);
+app.use(pinia);
+
+// ✅ works because the pinia instance is now active
+const store = useStore(pinia);
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+app.use(store);
+
+app.use(router);
+app.mount('#app');
+
+router.beforeEach((to) => {
+    // ✅ This will work because the router starts its navigation after
+    // the router is installed and pinia will be installed too
+    const store = useStore();
+
+    if (to.meta.requiresAuth && !store.isLoggedIn) return '/login';
+});
