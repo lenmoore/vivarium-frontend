@@ -1,15 +1,15 @@
 <template>
     <div class="home">
-        hey {{ useStore.name }}<br />
-        <button @click="submitClick">{{ useStore.counter }}</button>
+        hey {{ useMainStore.name }}<br />
+        <button @click="submitClick">{{ useMainStore.counter }}</button>
         <HelloWorld msg="Welcome to Your Vue.js + TypeScript App" />
     </div>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
-import HelloWorld from '@/components/HelloWorld.vue';
-import { useStore } from '@/store'; // @ is an alias to /src
+import HelloWorld from '../components/HelloWorld.vue';
+import { useMainStore } from '../store';
 
 @Options({
     components: {
@@ -17,10 +17,10 @@ import { useStore } from '@/store'; // @ is an alias to /src
     },
 })
 export default class LoginView extends Vue {
-    useStore = useStore();
+    useMainStore = useMainStore();
 
     async submitClick() {
-        const { addOne } = useStore();
+        const { addOne } = useMainStore();
         console.log('submit clicked');
         addOne();
     }

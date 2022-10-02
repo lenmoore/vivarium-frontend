@@ -12,10 +12,10 @@
     "forceConsistentCasingInFileNames": true,
     "useDefineForClassFields": true,
     "sourceMap": true,
-    "baseUrl": ".",
     "types": [
       "webpack-env"
     ],
+    "baseUrl": ".",
     "paths": {
       "@/*": [
         "src/*"

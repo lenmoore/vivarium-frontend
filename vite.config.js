@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
+import path from 'path';
 // todo do the environments --
 // dev mode should not use docker because the HMR api is shit with docker
 
@@ -10,4 +11,9 @@ export default defineConfig({
         host: true,
     },
     plugins: [vue()],
+    resolve: {
+        alias: {
+            '@': path.resolve(__dirname, './src'),
+        },
+    },
 });

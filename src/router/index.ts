@@ -21,10 +21,15 @@ const routes: Array<RouteRecordRaw> = [
         name: 'login',
         component: () => import('../views/Auth/LoginView.vue'),
     },
+    {
+        path: '/admin',
+        name: 'admin',
+        component: () => import('../views/Admin/AdminHome.vue'),
+    },
 ];
 
 const router = createRouter({
-    history: createWebHistory(process.env.BASE_URL),
+    history: createWebHistory(''),
     routes,
 });
 

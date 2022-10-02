@@ -1,22 +1,31 @@
-import TokenService from '@/services/token.service';
-import api from '@/services/api';
+import TokenService from '../services/token.service';
+import api from '../services/api';
+import { useMainStore } from '@/store';
+import router from '../router';
+import axios from 'axios';
 
 class AuthService {
-    login(email: string, password: string) {
-        console.log('hello');
-        // todo sends to wrong url for some reason?!
-        return api
-            .post('/sessions', {
-                email,
-                password,
+    async login(email: string, password: string) {
+        await axios
+            .post(`/sessions`, {
+                email: email,
+                password: password,
             })
             .then((response) => {
+                console.log('response->', response);
                 if (response.data.accessToken) {
-                    // localStorage.setItem('user', JSON.stringify(response.data));
+                    localStorage.setItem('user', JSON.stringify(response.data));
                     TokenService.setUser(response.data);
+
+                    const { setLoggedInStatus } = useMainStore();
+                    setLoggedInStatus(true);
+                    // router.push('/');
                 }
 
-                return response.data;
+                console.log('BRO');
+                console.log(response);
+                console.log('listen this is the post');
+                return response;
             });
     }
 

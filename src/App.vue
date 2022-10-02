@@ -7,6 +7,12 @@
     <router-view />
 </template>
 
+<script setup lang="ts">
+import { ref, watchEffect } from 'vue';
+
+const res = '';
+</script>
+
 <style lang="scss">
 #app {
     font-family: Avenir, Helvetica, Arial, sans-serif;
