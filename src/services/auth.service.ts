@@ -6,7 +6,7 @@ import axios from 'axios';
 
 class AuthService {
     async login(email: string, password: string) {
-        await axios
+        await api
             .post(`/sessions`, {
                 email: email,
                 password: password,

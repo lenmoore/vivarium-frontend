@@ -1,10 +1,11 @@
 <template>
     <nav>
-        <router-link to="/">Home</router-link> |
-        <router-link to="/about">About</router-link> |
-        <router-link to="/login">Login</router-link> |
+        <RouterLink to="/">Home</RouterLink> |
+        <RouterLink to="/about">About</RouterLink> |
+        <RouterLink to="/login">Login</RouterLink> |
+        <RouterLink to="/humanity-shop">Humanity Shop</RouterLink> |
     </nav>
-    <router-view />
+    <RouterView />
 </template>
 
 <script setup lang="ts">

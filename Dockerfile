@@ -10,4 +10,4 @@ RUN npm i -g vite
 COPY . .
 
 EXPOSE 8080
-CMD ["npm", "run", "serve"]
+CMD ["vite", "dev"]

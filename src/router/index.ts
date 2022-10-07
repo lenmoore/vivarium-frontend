@@ -26,6 +26,21 @@ const routes: Array<RouteRecordRaw> = [
         name: 'admin',
         component: () => import('../views/Admin/AdminHome.vue'),
     },
+    {
+        path: '/humanity-shop',
+        name: 'humanity-shop',
+        component: () => import('../views/HumanityShop/HumanityShopHome.vue'),
+        children: [
+            {
+                path: 'shop-data',
+                name: 'humanity-shop.shop-data',
+                component: () =>
+                    import(
+                        '../views/HumanityShop/Admin/ShopDataVisualization.vue'
+                    ),
+            },
+        ],
+    },
 ];
 
 const router = createRouter({
