@@ -6,7 +6,8 @@ import axios from 'axios';
 
 class AuthService {
     async login(email: string, password: string) {
-        await api
+        console.log('trying to log in');
+        const user = await api
             .post(`/sessions`, {
                 email: email,
                 password: password,
@@ -27,6 +28,8 @@ class AuthService {
                 console.log('listen this is the post');
                 return response;
             });
+        console.log(user);
+        return user;
     }
 
     logout() {

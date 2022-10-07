@@ -1,9 +1,9 @@
 <template>
-    <form>
+    <form onsubmit="return false;">
         <slot></slot>
 
-        <button @click="submit">submit</button>
-        <button @click="cancel">cancel</button>
+        <button @on-click="submit">submit</button>
+        <button @on-click="cancel">cancel</button>
     </form>
 </template>
 

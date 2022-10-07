@@ -11,7 +11,7 @@ export default defineConfig({
         port: 8080,
         proxy: {
             'localhost:8080': {
-                target: 'http://localhost:3000',
+                target: 'http://localhost:80',
                 changeOrigin: true,
                 secure: false,
             },

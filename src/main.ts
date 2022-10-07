@@ -20,10 +20,10 @@ app.use(router);
 
 app.mount('#app');
 
-router.beforeEach((to) => {
-    // ✅ This will work because the router starts its navigation after
-    // the router is installed and pinia will be installed too
-    const store = useMainStore();
-
-    if (to.meta.requiresAuth && !store.isLoggedIn) return '/login';
-});
+// router.beforeEach((to) => {
+//     // ✅ This will work because the router starts its navigation after
+//     // the router is installed and pinia will be installed too
+//     const store = useMainStore();
+//
+//     if (to.meta.requiresAuth && !store.isLoggedIn) return '/login';
+// });

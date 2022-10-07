@@ -1,5 +1,5 @@
 <script setup>
-import useAuthStore from '../../store/auth.store';
+import { useAuthStore } from '../../store/auth.store';
 import BaseForm from '../../components/BaseForm/index.vue';
 import BaseInput from '../../components/BaseForm/BaseInput.vue';
 
@@ -8,10 +8,12 @@ const user = {
     password: '',
 };
 
-async function onLogin() {
-    const authStore = useAuthStore();
+const authStore = useAuthStore();
 
-    await authStore.login(user.username, user.password);
+function onLogin() {
+    return authStore.login(user.username, user.password).then((data) => {
+        console.log(data);
+    });
 }
 </script>
 
