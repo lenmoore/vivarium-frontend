@@ -4,7 +4,7 @@
 
         <div class="container">
             <nav>
-                <RouterLink :to="{ name: 'humanity-shop.shop-data' }">
+                <RouterLink :to="{ name: 'admin.humanity-shop.shop-data' }">
                     Data visualisation
                 </RouterLink>
             </nav>

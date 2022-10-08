@@ -1,17 +1,10 @@
 <template>
-    <nav>
-        <RouterLink to="/">Home</RouterLink> |
-        <RouterLink to="/about">About</RouterLink> |
-        <RouterLink to="/login">Login</RouterLink> |
-        <RouterLink to="/humanity-shop">Humanity Shop</RouterLink> |
-    </nav>
+    <BaseNavigation />
     <RouterView />
 </template>
 
 <script setup lang="ts">
-import { ref, watchEffect } from 'vue';
-
-const res = '';
+import BaseNavigation from '@/components/Navigation/BaseNavigation.vue';
 </script>
 
 <style lang="scss">

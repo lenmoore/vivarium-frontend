@@ -10,7 +10,7 @@
 
 <script setup>
 import { useDataVisStore } from '../../../store/humanity-shop/data-vis-store';
-import { computed, defineComponent } from 'vue';
+import { computed } from 'vue';
 
 const { getQuestionnaireResultsFromCSV } = useDataVisStore();
 

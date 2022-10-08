@@ -1,9 +1,7 @@
 import TokenService from '../services/token.service';
 import api from '../services/api';
-import { useMainStore } from '@/store';
 import router from '../router';
 import axios from 'axios';
-
 class AuthService {
     async login(email: string, password: string) {
         console.log('trying to log in');
@@ -15,17 +13,15 @@ class AuthService {
             .then((response) => {
                 console.log('response->', response);
                 if (response.data.accessToken) {
-                    localStorage.setItem('user', JSON.stringify(response.data));
-                    TokenService.setUser(response.data);
+                    const user = {
+                        ...response.data,
+                        email: email,
+                    };
+                    TokenService.setUser(user);
 
-                    const { setLoggedInStatus } = useMainStore();
-                    setLoggedInStatus(true);
-                    // router.push('/');
+                    router.push('/admin');
                 }
 
-                console.log('BRO');
-                console.log(response);
-                console.log('listen this is the post');
                 return response;
             });
         console.log(user);

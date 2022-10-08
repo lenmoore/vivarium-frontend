@@ -1,3 +1,5 @@
+// import { useAuthStore } from "@/store/auth.store";
+
 class TokenService {
     getLocalRefreshToken() {
         const user = JSON.parse(localStorage.getItem('user') || '{}');
@@ -19,9 +21,12 @@ class TokenService {
         return JSON.parse(localStorage.getItem('user') || '{}');
     }
 
-    setUser(user: object) {
-        console.log(JSON.stringify(user));
+    setUser(user: User) {
+        console.log(user);
         localStorage.setItem('user', JSON.stringify(user));
+        localStorage.setItem('accessToken', user.accessToken.slice(1, -1)); // it has " at beginning and end
+        // const authStore = useAuthStore();
+        // return authStore.setUser(user);
     }
 
     removeUser() {

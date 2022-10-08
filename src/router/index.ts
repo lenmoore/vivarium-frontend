@@ -10,11 +10,7 @@ const routes: Array<RouteRecordRaw> = [
     {
         path: '/about',
         name: 'about',
-        // route level code-splitting
-        // this generates a separate chunk (about.[hash].js) for this route
-        // which is lazy-loaded when the route is visited.
-        component: () =>
-            import(/* webpackChunkName: "about" */ '../views/AboutView.vue'),
+        component: () => import('../views/AboutView.vue'),
     },
     {
         path: '/login',
@@ -25,6 +21,40 @@ const routes: Array<RouteRecordRaw> = [
         path: '/admin',
         name: 'admin',
         component: () => import('../views/Admin/AdminHome.vue'),
+        children: [
+            {
+                path: '/humanity-shop',
+                name: 'admin.humanity-shop',
+                component: () =>
+                    import('../views/HumanityShop/HumanityShopHome.vue'),
+                children: [
+                    {
+                        path: 'shop-data',
+                        name: 'admin.humanity-shop.shop-data',
+                        component: () =>
+                            import(
+                                '../views/HumanityShop/Admin/ShopDataVisualization.vue'
+                            ),
+                        children: [
+                            {
+                                path: ':id',
+                                name: 'admin.humanity-shop.shop-data.product',
+                                component: () =>
+                                    import(
+                                        '../views/HumanityShop/Admin/ProductDetails.vue'
+                                    ),
+                            },
+                        ],
+                    },
+                ],
+            },
+            {
+                path: '',
+                name: '',
+                component: () =>
+                    import('../views/Performance/PerformanceManager.vue'),
+            },
+        ],
     },
     {
         path: '/humanity-shop',
