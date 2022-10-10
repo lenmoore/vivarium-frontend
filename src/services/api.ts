@@ -3,12 +3,23 @@ import { useAuthStore } from '@/store/auth.store';
 
 // axios.defaults.baseURL = 'http://localhost:80/api';
 
+function refreshHeader() {
+    // return auth header with jwt if user is logged in and request is to the api url
+    const isLoggedIn = localStorage.accessToken != null;
+
+    if (isLoggedIn) {
+        return `${localStorage.refreshToken?.toString().trim()}`;
+    } else {
+        return '';
+    }
+}
+
 function authHeader() {
     // return auth header with jwt if user is logged in and request is to the api url
     const isLoggedIn = localStorage.accessToken != null;
 
     if (isLoggedIn) {
-        return  `Bearer ${localStorage.accessToken}`;
+        return `Bearer ${localStorage.accessToken?.toString().trim()}`;
     } else {
         return '';
     }
@@ -33,11 +44,11 @@ function authHeader() {
 //     });
 // }
 
-
 const instance: AxiosInstance = axios.create({
     headers: {
         'Content-Type': 'application/json',
-        Authorization: authHeader(),
+        Authorization: authHeader().toString(),
+        'X-Refresh': refreshHeader().toString(),
     },
     baseURL: 'http://localhost:3000/api',
 });

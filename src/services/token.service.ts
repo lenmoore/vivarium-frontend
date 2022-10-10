@@ -11,12 +11,6 @@ class TokenService {
         return user?.accessToken;
     }
 
-    updateLocalAccessToken(token: string) {
-        const user = JSON.parse(localStorage.getItem('user') || '{}');
-        user.accessToken = token;
-        localStorage.setItem('user', JSON.stringify(user));
-    }
-
     getUser() {
         return JSON.parse(localStorage.getItem('user') || '{}');
     }
@@ -24,13 +18,13 @@ class TokenService {
     setUser(user: User) {
         console.log(user);
         localStorage.setItem('user', JSON.stringify(user));
-        localStorage.setItem('accessToken', user.accessToken.slice(1, -1)); // it has " at beginning and end
-        // const authStore = useAuthStore();
-        // return authStore.setUser(user);
+        localStorage.setItem('accessToken', user.accessToken); // it has " at beginning and end
+        localStorage.setItem('refreshToken', user.refreshToken);
     }
 
     removeUser() {
         localStorage.removeItem('user');
+        localStorage.removeItem('accessToken');
     }
 }
 

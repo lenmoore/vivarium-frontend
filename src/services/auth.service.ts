@@ -1,17 +1,15 @@
 import TokenService from '../services/token.service';
 import api from '../services/api';
 import router from '../router';
-import axios from 'axios';
+
 class AuthService {
     async login(email: string, password: string) {
-        console.log('trying to log in');
-        const user = await api
+        return await api
             .post(`/sessions`, {
                 email: email,
                 password: password,
             })
             .then((response) => {
-                console.log('response->', response);
                 if (response.data.accessToken) {
                     const user = {
                         ...response.data,
@@ -21,16 +19,13 @@ class AuthService {
 
                     router.push('/admin');
                 }
-
-                return response;
             });
-        console.log(user);
-        return user;
     }
 
     logout() {
         // localStorage.removeItem('user');
         TokenService.removeUser();
+        router.push('/');
     }
 
     register(email: string, password: string) {

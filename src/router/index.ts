@@ -49,8 +49,8 @@ const routes: Array<RouteRecordRaw> = [
                 ],
             },
             {
-                path: '',
-                name: '',
+                path: 'performance-manager',
+                name: 'admin.performance-manager',
                 component: () =>
                     import('../views/Performance/PerformanceManager.vue'),
             },

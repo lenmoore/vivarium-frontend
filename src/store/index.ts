@@ -8,8 +8,6 @@ import api from '../services/api';
 export const useMainStore = defineStore('main', {
     state: () => ({
         counter: 0,
-        name: 'Lena',
-        isLoggedIn: false,
         healthCheckResult: '',
     }),
     getters: {
@@ -31,9 +29,6 @@ export const useMainStore = defineStore('main', {
         },
         addOne() {
             this.counter++;
-        },
-        setLoggedInStatus(status: boolean) {
-            this.isLoggedIn = status;
         },
     },
 });

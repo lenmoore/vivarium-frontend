@@ -1,18 +1,16 @@
 <template>
-    <div v-if="type === 'text'">
+    <div>
         <label :for="id">
             {{ label }}
             <input
                 :name="name"
                 :id="id"
-                type="text"
+                :type="type"
                 :value="modelValue"
                 @input="updateValue"
             />
         </label>
     </div>
-    <div v-else-if="type === 'number'">number</div>
-    <div v-else-if="type === 'date'">date</div>
 </template>
 
 <script>

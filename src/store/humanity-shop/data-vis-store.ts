@@ -10,7 +10,9 @@ export const useDataVisStore = defineStore('dataVis', {
     getters: {},
     actions: {
         async getQuestionnaireResultsFromCSV() {
-            return await api.get('/products-vis');
+            return await api.get('/products-vis').then((data) => {
+                return data;
+            });
         },
     },
 });
