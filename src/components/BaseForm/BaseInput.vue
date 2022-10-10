@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="!editMode">
         <label :for="id">
             {{ label }}
             <input
@@ -11,6 +11,7 @@
             />
         </label>
     </div>
+    <div v-else>{{ modelValue }}</div>
 </template>
 
 <script>
@@ -29,6 +30,10 @@ export default {
         disabled: {
             type: Boolean,
             default: false,
+        },
+        editMode: {
+            type: Boolean,
+            default: true,
         },
         type: {
             type: String,

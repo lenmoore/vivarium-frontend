@@ -16,6 +16,17 @@ class PerformanceService {
             return data;
         });
     }
+    async getPerformanceById(id: string): Promise<TheatrePerformance> {
+        return await api
+            .get(`/performances/${id}`, {
+                params: {
+                    performanceId: id,
+                },
+            })
+            .then(({ data }) => {
+                return data;
+            });
+    }
 
     async editPerformance() {}
 

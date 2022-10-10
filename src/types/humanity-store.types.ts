@@ -1,51 +1,39 @@
 interface IProduct {
-    id?: number; // todo remove ? when db works
+    id?: string; // todo remove ? when db works
     name: string;
     price?: number;
-    humanityValues?: {
-        red?: number;
-        blue?: number;
-        green?: number;
-        orange?: number;
+    humanity_values?: {
+        green: { average: number; entries: [] };
+        red: { average: number; entries: [] };
+        blue: { average: number; entries: [] };
+        orange: { average: number; entries: [] };
     };
     imageUrl?: string;
     qrCode?: string;
 }
 
 interface Basket {
-    id: number;
+    id: string;
 }
 
 class Product implements IProduct {
-    constructor(name: string) {
-        this.name = name;
+    constructor(product: any) {
+        this.name = product.name;
+        this.id = product.productId;
+        this.humanity_values = product.humanity_values;
+        this.price = product.price;
+        this.qrCode = product.qr_code;
     }
 
+    id?: string;
     name: string;
-}
-
-class ProductVisualisation implements IProduct {
-    constructor(name: string) {
-        this.name = name;
-    }
-
-    name: string;
-    humanityValuesFromQuestionnaire?: {
-        red?: {
-            averageValue: number;
-            responses: number;
-        };
-        blue?: {
-            averageValue: number;
-            responses: number;
-        };
-        green?: {
-            averageValue: number;
-            responses: number;
-        };
-        orange?: {
-            averageValue: number;
-            responses: number;
-        };
+    price?: number;
+    humanity_values?: {
+        green: { average: number; entries: [] };
+        red: { average: number; entries: [] };
+        blue: { average: number; entries: [] };
+        orange: { average: number; entries: [] };
     };
+    imageUrl?: string;
+    qrCode?: string;
 }

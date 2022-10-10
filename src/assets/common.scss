@@ -1,0 +1,27 @@
+// vars
+$turquoise: #11A7A7;
+$ochre: #CD8417;
+// overrides
+.btn-primary {
+    border-radius: 0;
+    background-color: white;
+    color: $turquoise;
+    &:active {
+        color: $ochre;
+    }
+
+    // todo hover, focus, etc
+}
+a {
+    color: $turquoise;
+
+}
+// common components
+.menu-item {
+    font-size: 1.2rem;
+}
+
+.fa-solid {
+    font-size: 0.8rem;
+    margin: 0.2rem;
+}

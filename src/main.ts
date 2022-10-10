@@ -4,6 +4,10 @@ import router from './router';
 import { useMainStore } from './store';
 import { createPinia, setActivePinia } from 'pinia';
 
+import BootstrapVue3 from 'bootstrap-vue-3';
+import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap-vue-3/dist/bootstrap-vue-3.css';
+import '../src/assets/common.scss';
 const app = createApp(App);
 const pinia = createPinia();
 
@@ -15,6 +19,7 @@ const store = useMainStore(pinia);
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 app.use(store);
+app.use(BootstrapVue3);
 
 app.use(router);
 

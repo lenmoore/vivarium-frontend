@@ -49,10 +49,30 @@ const routes: Array<RouteRecordRaw> = [
                 ],
             },
             {
-                path: 'performance-manager',
-                name: 'admin.performance-manager',
+                path: 'performances',
+                name: 'admin.performances',
                 component: () =>
-                    import('../views/Performance/PerformanceManager.vue'),
+                    import('../views/Performance/PerformanceIndex.vue'),
+                redirect: { name: 'admin.performance-manager' },
+                children: [
+                    {
+                        path: 'manage',
+                        name: 'admin.performance-manager',
+                        component: () =>
+                            import(
+                                '../views/Performance/PerformanceManager.vue'
+                            ),
+                        children: [],
+                    },
+                    {
+                        path: ':id',
+                        name: 'admin.performance-manager.performance',
+                        component: () =>
+                            import(
+                                '../views/Performance/Instance/InstanceManager.vue'
+                            ),
+                    },
+                ],
             },
         ],
     },
@@ -68,6 +88,12 @@ const routes: Array<RouteRecordRaw> = [
                     import(
                         '../views/HumanityShop/Admin/ShopDataVisualization.vue'
                     ),
+            },
+            {
+                path: 'products',
+                name: 'admin.humanity-shop.products',
+                component: () =>
+                    import('../views/HumanityShop/Admin/ProductsList.vue'),
             },
         ],
     },

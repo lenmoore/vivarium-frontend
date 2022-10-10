@@ -27,7 +27,7 @@ class User implements IUser {
             name: json?.name,
             username: json?.username,
             accessToken: json?.accessToken,
-            refreshToken: json?.refreshToken
+            refreshToken: json?.refreshToken,
         });
     }
 }

@@ -1,10 +1,10 @@
 <script setup>
-import { usePerformanceStore } from '../../store/performance-store';
-import { storeToRefs } from 'pinia';
+import { usePerformanceStore } from '../../store/performance.store';
 import { computed } from 'vue';
 import BaseForm from '../../components/BaseForm/index.vue';
 import BaseInput from '../../components/BaseForm/BaseInput.vue';
 import moment from 'moment';
+import PerformanceMenu from './Menu/PerformanceMenu.vue';
 
 const performanceStore = usePerformanceStore();
 performanceStore.getPerformances();
@@ -30,10 +30,8 @@ async function onSubmit() {
 </script>
 
 <template>
-    <div>
-        Etendused
-
-        <div>{{ performances }}</div>
+    <div class="h-100">
+        <PerformanceMenu :menu-items="performances" />
 
         <div>
             <BaseForm @submit="onSubmit">

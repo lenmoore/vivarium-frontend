@@ -15,7 +15,7 @@ if (isAuthorized.value) {
     navLinks = [
         { name: 'home', label: 'home' },
         { name: 'admin.humanity-shop', label: 'humanity shop' },
-        { name: 'admin.performance-manager', label: 'performances' },
+        { name: 'admin.performances', label: 'performances' },
     ];
 } else {
     navLinks = [
@@ -26,16 +26,24 @@ if (isAuthorized.value) {
 </script>
 
 <template>
-    <nav>
-        <RouterLink
-            class="px-2"
-            v-for="link in navLinks"
-            :key="link.name"
-            :to="{ name: link.name }"
-        >
-            {{ link.label }} |
-        </RouterLink>
-
-        <button v-if="isAuthorized" @click="authStore.logout()">log out</button>
-    </nav>
+    <div class="nav-wrapper w-100 d-flex justify-content-start align-items-end">
+        <nav class="nav-wrapper d-flex flex-column">
+            <RouterLink
+                class="nav-item"
+                v-for="link in navLinks"
+                :key="link.name"
+                :to="{ name: link.name }"
+            >
+                {{ link.label }} |
+            </RouterLink>
+        </nav>
+    </div>
 </template>
+
+<style lang="scss">
+.nav-item {
+    text-transform: capitalize;
+    text-align: left;
+    padding-bottom: 0.25rem;
+}
+</style>
