@@ -1,7 +1,9 @@
 <template>
-    <div class="app-wrapper">
+    <div class="app-wrapper container">
         <BaseHeader class="app-header" />
-        <RouterView class="app-router-view" />
+        <div class="app-router-view">
+            <RouterView />
+        </div>
         <BaseNavigation class="app-navigation" />
     </div>
 </template>
@@ -17,7 +19,7 @@ body,
 #app,
 .app-wrapper,
 .app-router-view {
-    height: 90%;
+    height: 94%;
 }
 
 .app-wrapper {
@@ -29,12 +31,17 @@ body,
 .app-header {
     padding: 1rem;
 }
+
+.app-router-view {
+    overflow: scroll;
+}
 .app-navigation {
-    position: fixed;
-    left: 0;
-    bottom: 0;
-    padding: 1rem;
+    --bs-gutter-x: 1.5rem;
+    --bs-gutter-y: 0;
     width: 100%;
-    text-align: center;
+    padding-right: calc(var(--bs-gutter-x) * 0.5);
+    padding-left: calc(var(--bs-gutter-x) * 0.5);
+    margin-right: auto;
+    margin-left: auto;
 }
 </style>

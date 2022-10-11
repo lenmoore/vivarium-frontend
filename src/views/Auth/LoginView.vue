@@ -11,15 +11,19 @@ const user = {
 const authStore = useAuthStore();
 
 function onLogin() {
-    return authStore.login(user.username, user.password).then((data) => {
-        console.log(data);
-    });
+    return authStore
+        .login(user.username, user.password)
+        .then((data) => {
+            console.log(data);
+        })
+        .finally(() => {
+            this.reload();
+        });
 }
 </script>
 
 <template>
-    <div>login view :)</div>
-    <BaseForm @submit="onLogin">
+    <BaseForm :show-cancel="false" @submit="onLogin">
         <BaseInput
             :id="'email'"
             :label="'Your email'"

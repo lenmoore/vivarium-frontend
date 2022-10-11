@@ -26,7 +26,7 @@ if (isAuthorized.value) {
 </script>
 
 <template>
-    <div class="nav-wrapper w-100 d-flex justify-content-start align-items-end">
+    <div class="nav-wrapper d-flex justify-content-start align-items-end">
         <nav class="nav-wrapper d-flex flex-column">
             <RouterLink
                 class="nav-item"
@@ -34,16 +34,22 @@ if (isAuthorized.value) {
                 :key="link.name"
                 :to="{ name: link.name }"
             >
-                {{ link.label }} |
+                {{ link.label }}
             </RouterLink>
         </nav>
     </div>
 </template>
 
 <style lang="scss">
+@import 'src/assets/common';
 .nav-item {
     text-transform: capitalize;
     text-align: left;
     padding-bottom: 0.25rem;
+    font-size: 1.5rem;
+    color: $ochre;
+}
+.nav-wrapper {
+    padding-bottom: 1rem;
 }
 </style>

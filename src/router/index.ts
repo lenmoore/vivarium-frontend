@@ -25,9 +25,27 @@ const routes: Array<RouteRecordRaw> = [
             {
                 path: '/humanity-shop',
                 name: 'admin.humanity-shop',
+                redirect: { name: 'admin.humanity-shop.products' },
                 component: () =>
                     import('../views/HumanityShop/HumanityShopHome.vue'),
                 children: [
+                    {
+                        path: 'products',
+                        name: 'admin.humanity-shop.products',
+                        component: () =>
+                            import(
+                                '../views/HumanityShop/Admin/ProductsList.vue'
+                            ),
+                        children: [],
+                    },
+                    {
+                        path: 'product/:id',
+                        name: 'admin.humanity-shop.products.details',
+                        component: () =>
+                            import(
+                                '../views/HumanityShop/Admin/ProductDetails.vue'
+                            ),
+                    },
                     {
                         path: 'shop-data',
                         name: 'admin.humanity-shop.shop-data',
@@ -35,16 +53,6 @@ const routes: Array<RouteRecordRaw> = [
                             import(
                                 '../views/HumanityShop/Admin/ShopDataVisualization.vue'
                             ),
-                        children: [
-                            {
-                                path: ':id',
-                                name: 'admin.humanity-shop.shop-data.product',
-                                component: () =>
-                                    import(
-                                        '../views/HumanityShop/Admin/ProductDetails.vue'
-                                    ),
-                            },
-                        ],
                     },
                 ],
             },
@@ -80,22 +88,6 @@ const routes: Array<RouteRecordRaw> = [
         path: '/humanity-shop',
         name: 'humanity-shop',
         component: () => import('../views/HumanityShop/HumanityShopHome.vue'),
-        children: [
-            {
-                path: 'shop-data',
-                name: 'humanity-shop.shop-data',
-                component: () =>
-                    import(
-                        '../views/HumanityShop/Admin/ShopDataVisualization.vue'
-                    ),
-            },
-            {
-                path: 'products',
-                name: 'admin.humanity-shop.products',
-                component: () =>
-                    import('../views/HumanityShop/Admin/ProductsList.vue'),
-            },
-        ],
     },
 ];
 

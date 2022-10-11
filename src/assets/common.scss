@@ -1,17 +1,43 @@
+@import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap');
+
+* {
+    font-family: 'Chakra Petch', 'Droid Sans Mono', sans-serif;
+}
 // vars
 $turquoise: #11A7A7;
-$ochre: #CD8417;
+$ochre: #F3A530;
+
+$orange: #ff9d16;
+$blue: #275af8;
+$red: #dc1a1a;
+$green: #26a107;
 // overrides
-.btn-primary {
+$enable-rounded: false;
+$enable-responsive-font-sizes: true;
+.btn {
     border-radius: 0;
     background-color: white;
     color: $turquoise;
-    &:active {
-        color: $ochre;
-    }
+    border: 2px solid black !important;
+    display: inline-flex;
+    width: 100%;
+    justify-content: center;
 
-    // todo hover, focus, etc
+    &:hover, &:active, &:focus {
+        color: white !important;
+        background-color: $turquoise !important;
+    }
 }
+//.btn-primary {
+//    border-radius: 0;
+//    background-color: white;
+//    color: $turquoise;
+//    &:active {
+//        color: $ochre;
+//    }
+//
+//    // todo hover, focus, etc
+//}
 a {
     color: $turquoise;
 
@@ -24,4 +50,13 @@ a {
 .fa-solid {
     font-size: 0.8rem;
     margin: 0.2rem;
+}
+
+// typography
+.font-size-xs {
+    font-size: 0.75rem;
+}
+
+.text-turquoise {
+    color: $turquoise;
 }

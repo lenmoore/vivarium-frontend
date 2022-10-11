@@ -1,15 +1,17 @@
 <template>
-    <div v-if="!editMode">
-        <label :for="id">
-            {{ label }}
-            <input
-                :name="name"
-                :id="id"
-                :type="type"
-                :value="modelValue"
-                @input="updateValue"
-            />
-        </label>
+    <div v-if="editMode">
+        <div>
+            <label :for="id" class="text-turquoise"> {{ label }} </label>
+        </div>
+
+        <input
+            :name="name"
+            :placeholder="placeholder || label"
+            :id="id"
+            :type="type"
+            :value="modelValue"
+            @input="updateValue"
+        />
     </div>
     <div v-else>{{ modelValue }}</div>
 </template>
@@ -51,6 +53,10 @@ export default {
             type: String,
             default: '',
         },
+        placeholder: {
+            type: String,
+            default: '',
+        },
         modelValue: {
             type: [String, Number],
             default: '',
@@ -84,3 +90,14 @@ export default {
     },
 };
 </script>
+
+<style lang="scss">
+input {
+    margin-bottom: 1rem;
+    display: inline-flex;
+    width: 100%;
+    &::placeholder {
+        font-size: 0.75rem;
+    }
+}
+</style>

@@ -1,11 +1,25 @@
 <script setup>
 import { defineProps } from 'vue';
-
+import router from '../../../router';
 defineProps(['product']);
 </script>
 <template>
-    <div>
-        <img :src="product.imageUrl" alt="" /> {{ product.title }}
+    <div class="product-wrapper">
+        <div>
+            <RouterLink
+                :to="{
+                    name: 'admin.humanity-shop.products.details',
+                    params: {
+                        id: product._id,
+                    },
+                }"
+                >info</RouterLink
+            >
+            <img :src="product.imageUrl" alt="" />
+            <span class="title">
+                {{ product.title }}
+            </span>
+        </div>
         <span class="values">
             <span class="green">{{
                 Math.round(
@@ -38,6 +52,8 @@ defineProps(['product']);
 .values {
     span {
         margin: 0.5rem;
+        color: white;
+        padding: 0.5rem;
     }
     .red {
         background-color: indianred;
@@ -51,5 +67,15 @@ defineProps(['product']);
     .orange {
         background-color: darkorange;
     }
+}
+
+.product-wrapper {
+    padding: 1rem;
+    margin-bottom: 0.5rem;
+    margin-top: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    border-bottom: 1px solid black;
 }
 </style>

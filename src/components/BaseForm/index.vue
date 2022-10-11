@@ -1,15 +1,27 @@
 <template>
-    <form onsubmit="return false;">
-        <slot></slot>
+    <div class="form-wrapper">
+        <form onsubmit="return false;">
+            <slot></slot>
 
-        <button @on-click="submit">submit</button>
-        <button @on-click="cancel">cancel</button>
-    </form>
+            <div class="buttons">
+                <button v-if="showCancel" class="btn" @on-click="cancel">
+                    Cancel
+                </button>
+                <button class="btn" @on-click="submit">OK</button>
+            </div>
+        </form>
+    </div>
 </template>
 
 <script>
 export default {
     name: 'BaseForm',
+    props: {
+        showCancel: {
+            type: Boolean,
+            default: true,
+        },
+    },
     methods: {
         submit() {
             console.log('submit');
@@ -22,3 +34,15 @@ export default {
     },
 };
 </script>
+
+<style lang="scss">
+.form-wrapper {
+    form {
+        width: 20rem;
+    }
+}
+
+.buttons {
+    display: flex;
+}
+</style>
