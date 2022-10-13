@@ -32,16 +32,16 @@ class User implements IUser {
     }
 }
 
-class Visitor implements IUser {
+export class Visitor implements IUser {
     accessToken: string;
     id: '';
     name: string;
     refreshToken: string;
     username: string;
-    wardrobeNumber: number;
+    wardrobe_number: number;
     email: string;
-    wantsNewsletter: boolean;
-    wantsSummary: boolean;
+    wants_newsletter: boolean;
+    wants_summary: boolean;
     performance: TheatrePerformance;
     basket?: Basket;
 
@@ -50,13 +50,13 @@ class Visitor implements IUser {
         this.name = 'visitor';
         this.email = user.email || '';
         this.username =
-            user.wardrobeNumber + '_' + user.performance.date.toString();
+            user.wardrobe_number + '_' + user.performance.date.toString();
         this.accessToken = user.accessToken;
         this.refreshToken = user.refreshToken;
         this.performance = user.performance;
-        this.wantsSummary = user.wantsSummary || false;
-        this.wantsNewsletter = user.wantsNewsletter || false;
-        this.wardrobeNumber = user.wardrobeNumber;
+        this.wants_summary = user.wants_summary || false;
+        this.wants_newsletter = user.wants_newsletter || false;
+        this.wardrobe_number = user.wardrobe_number;
         this.basket = user.basket;
     }
 
@@ -69,10 +69,24 @@ class Visitor implements IUser {
             accessToken: json.accessToken,
             refreshToken: json.refreshToken,
             performance: json.performance,
-            wantsSummary: json.wants_summary,
-            wantsNewsletter: json.wants_newsletter,
-            wardrobeNumber: json.wardrobe_number,
+            wants_summary: json.wants_summary,
+            wants_newsletter: json.wants_newsletter,
+            wardrobe_number: json.wardrobe_number,
             basket: json.basket,
         });
+    }
+    // todo WHY is this shit not working?
+    static toJSON(visitor: Visitor): object {
+        return {
+            id: visitor.id,
+            name: visitor?.name,
+            email: visitor?.email || '',
+            username: visitor?.username,
+            performance: visitor?.performance,
+            wants_summary: visitor?.wants_summary,
+            wants_newsletter: visitor?.wants_newsletter,
+            wardrobe_number: visitor?.wardrobe_number,
+            basket: visitor?.basket,
+        };
     }
 }

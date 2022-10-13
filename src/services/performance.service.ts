@@ -1,4 +1,5 @@
 import api from '@/services/api';
+import { Visitor } from '@/types/users.types';
 
 class PerformanceService {
     async addPerformance(
@@ -41,5 +42,13 @@ class PerformanceService {
     }
 
     async deletePerformance() {}
+
+    async addVisitor(newVisitor: Visitor) {
+        return await api.post(`/visitors`, newVisitor).then(({ data }) => {
+            return data;
+        });
+    }
+
+    async getVisitor(id: string) {}
 }
 export default new PerformanceService();

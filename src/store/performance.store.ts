@@ -9,7 +9,7 @@ export const usePerformanceStore = defineStore({
     state: () =>
         ({
             performances: [] as TheatrePerformance[],
-            activePerformance: {} as TheatrePerformance,
+            activePerformance: {},
         } as RootPerformanceState),
 
     getters: {
@@ -18,6 +18,9 @@ export const usePerformanceStore = defineStore({
         },
         getPerformance: (state) => {
             return (id: string) => state.performances.find((i) => i.id === id);
+        },
+        getActivePerformance(state): TheatrePerformance | undefined {
+            return state.performances.find((p) => p.active);
         },
     },
     actions: {
@@ -36,6 +39,7 @@ export const usePerformanceStore = defineStore({
         async setActivePerformance(
             p: TheatrePerformance
         ): Promise<TheatrePerformance> {
+            // todo set all other performances as inactive
             p.active = true;
             return await PerformanceService.editPerformance(p);
         },

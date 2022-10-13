@@ -5,9 +5,13 @@ import { useVisitorStore } from '../../store/visitor.store';
 
 const visitorStore = useVisitorStore();
 const visitor = visitorStore.getVisitor;
+
+function onLogin() {
+    visitor.isLoggedIn = true;
+}
 </script>
 <template>
     Hello visitor.
-    <VisitorLogin v-if="!visitor.isLoggedIn" />
+    <VisitorLogin @logged-in="onLogin" v-if="!visitor.isLoggedIn" />
     <RouterView v-else />
 </template>
