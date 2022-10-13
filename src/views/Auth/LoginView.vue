@@ -17,7 +17,7 @@ function onLogin() {
             console.log(data);
         })
         .finally(() => {
-            this.reload();
+            console.log('jou');
         });
 }
 </script>

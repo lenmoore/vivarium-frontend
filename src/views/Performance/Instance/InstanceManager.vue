@@ -14,9 +14,31 @@ const performance = performances.value.find((p) => p._id === id);
 
 <template>
     <div>
-        <h1>instance manager</h1>
         <div v-if="performance">
-            {{ performance.title }} {{ performance.date }}
+            {{ performance.title }} <br />
+            kuupaev: {{ performance.date }}
+
+            <div class="d-flex">
+                <button
+                    class="btn"
+                    v-if="performance.active"
+                    @click="
+                        performanceStore.setInactivePerformance(performance)
+                    "
+                >
+                    Lopeta etendus
+                </button>
+                <button
+                    v-else
+                    class="btn"
+                    @click="performanceStore.setActivePerformance(performance)"
+                >
+                    Alusta etendust
+                </button>
+            </div>
+            <small>
+                {{ performance }}
+            </small>
         </div>
     </div>
 </template>

@@ -75,15 +75,146 @@ let product = products.value.find((p) => p._id === id);
                 </div>
             </div>
             <img :src="product.image" alt="product img" />
-            <QrcodeVue :value="product._id" :size="300" level="H" />
+            <QrcodeVue :value="product.title" :size="300" level="H" />
         </div>
-        <div>green - {{ product.humanity_values.green }}</div>
-        <br />
-        <div>red - {{ product.humanity_values.red }}</div>
-        <br />
-        <div>blue - {{ product.humanity_values.blue }}</div>
-        <br />
-        <div>orange -{{ product.humanity_values.orange }}</div>
+        <div class="d-flex entry-counts">
+            <div class="border">
+                green: <br />
+                1:
+                {{
+                    product.humanity_values.green.entries.filter((v) => v === 1)
+                        .length
+                }}
+                <br />
+                2:
+                {{
+                    product.humanity_values.green.entries.filter((v) => v === 2)
+                        .length
+                }}
+                <br />
+                3:
+                {{
+                    product.humanity_values.green.entries.filter((v) => v === 3)
+                        .length
+                }}
+                <br />
+                4:
+                {{
+                    product.humanity_values.green.entries.filter((v) => v === 4)
+                        .length
+                }}
+                <br />
+                5:
+                {{
+                    product.humanity_values.green.entries.filter((v) => v === 5)
+                        .length
+                }}
+            </div>
+
+            <div class="border">
+                red: <br />
+                1:
+                {{
+                    product.humanity_values.red.entries.filter((v) => v === 1)
+                        .length
+                }}
+                <br />
+                2:
+                {{
+                    product.humanity_values.red.entries.filter((v) => v === 2)
+                        .length
+                }}
+                <br />
+                3:
+                {{
+                    product.humanity_values.red.entries.filter((v) => v === 3)
+                        .length
+                }}
+                <br />
+                4:
+                {{
+                    product.humanity_values.red.entries.filter((v) => v === 4)
+                        .length
+                }}
+                <br />
+                5:
+                {{
+                    product.humanity_values.red.entries.filter((v) => v === 5)
+                        .length
+                }}
+            </div>
+
+            <div class="border">
+                blue: <br />
+                1:
+                {{
+                    product.humanity_values.blue.entries.filter((v) => v === 1)
+                        .length
+                }}
+                <br />
+                2:
+                {{
+                    product.humanity_values.blue.entries.filter((v) => v === 2)
+                        .length
+                }}
+                <br />
+                3:
+                {{
+                    product.humanity_values.blue.entries.filter((v) => v === 3)
+                        .length
+                }}
+                <br />
+                4:
+                {{
+                    product.humanity_values.blue.entries.filter((v) => v === 4)
+                        .length
+                }}
+                <br />
+                5:
+                {{
+                    product.humanity_values.blue.entries.filter((v) => v === 5)
+                        .length
+                }}
+            </div>
+
+            <div class="border">
+                orange: <br />
+                1:
+                {{
+                    product.humanity_values.orange.entries.filter(
+                        (v) => v === 1
+                    ).length
+                }}
+                <br />
+                2:
+                {{
+                    product.humanity_values.orange.entries.filter(
+                        (v) => v === 2
+                    ).length
+                }}
+                <br />
+                3:
+                {{
+                    product.humanity_values.orange.entries.filter(
+                        (v) => v === 3
+                    ).length
+                }}
+                <br />
+                4:
+                {{
+                    product.humanity_values.orange.entries.filter(
+                        (v) => v === 4
+                    ).length
+                }}
+                <br />
+                5:
+                {{
+                    product.humanity_values.orange.entries.filter(
+                        (v) => v === 5
+                    ).length
+                }}
+            </div>
+        </div>
         <br />
     </div>
 </template>
@@ -102,6 +233,12 @@ let product = products.value.find((p) => p._id === id);
         .value {
             margin: 1rem;
         }
+    }
+}
+
+.entry-counts {
+    div {
+        margin: 1rem;
     }
 }
 </style>

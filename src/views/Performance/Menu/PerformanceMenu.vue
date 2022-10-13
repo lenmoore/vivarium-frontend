@@ -14,7 +14,7 @@ const props = defineProps(['menuItems']);
                 name: 'admin.performance-manager.performance',
                 params: { id: item._id },
             }"
-            :label="item.title"
+            :label="item.title + ' ' + (item.active ? 'AKTIIVNE' : '-')"
         />
     </div>
 </template>

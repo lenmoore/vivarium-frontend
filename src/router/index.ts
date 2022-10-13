@@ -85,9 +85,21 @@ const routes: Array<RouteRecordRaw> = [
         ],
     },
     {
-        path: '/humanity-shop',
-        name: 'humanity-shop',
-        component: () => import('../views/HumanityShop/HumanityShopHome.vue'),
+        path: '/visitor',
+        name: 'visitor',
+        redirect: { name: 'visitor.humanity-shop' },
+        component: () =>
+            import('../views/VisitorInteractions/VisitorIndex.vue'),
+        children: [
+            {
+                path: '/humanity-shop',
+                name: 'visitor.humanity-shop',
+                component: () =>
+                    import(
+                        '../views/VisitorInteractions/HumanityShop/HumanityShopHome.vue'
+                    ),
+            },
+        ],
     },
 ];
 

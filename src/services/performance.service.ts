@@ -28,7 +28,17 @@ class PerformanceService {
             });
     }
 
-    async editPerformance() {}
+    async editPerformance(payload: any) {
+        return await api
+            .put(`/performances/${payload.performanceId}`, payload, {
+                params: {
+                    performanceId: payload.performanceId,
+                },
+            })
+            .then(({ data }) => {
+                return data;
+            });
+    }
 
     async deletePerformance() {}
 }

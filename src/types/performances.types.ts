@@ -20,12 +20,15 @@ class TheatrePerformance implements IPerformance {
     title: string;
     date?: Date;
     phases?: Phase[];
+    visitors?: Visitor[];
+    active?: boolean;
 
     constructor(performance: any) {
         this.title = performance.title;
         this.id = performance.id;
         this.date = performance.date;
         this.phases = performance.phases;
+        this.visitors = performance.visitors;
     }
 
     static fromJSON(json: any): TheatrePerformance {
@@ -34,6 +37,7 @@ class TheatrePerformance implements IPerformance {
             title: json?.string,
             date: json?.Date,
             phases: json?.phases,
+            visitors: json?.visitors,
         });
     }
 }

@@ -20,7 +20,8 @@ if (isAuthorized.value) {
 } else {
     navLinks = [
         { name: 'home', label: 'home' },
-        { name: 'login', label: 'login' },
+        { name: 'login', label: '(admin) login' },
+        { name: 'visitor', label: '(publik) login' },
     ];
 }
 </script>
