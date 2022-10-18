@@ -34,6 +34,9 @@ export const useHumanityShopStore = defineStore({
                 return data;
             });
         },
+        async updateBasket(basket: Basket) {
+            return await BasketService.updateBasket(basket);
+        },
     },
     persist: true,
 });

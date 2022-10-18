@@ -2,7 +2,10 @@
 import { QrStream } from 'vue3-qr-reader';
 import { computed, onMounted, reactive, ref } from 'vue';
 import { useHumanityShopStore } from '../../../store/humanity-shop/humanity-shop.store';
+import { useVisitorStore } from '../../../store/visitor.store';
 
+const visitorStore = useVisitorStore();
+const visitor = reactive(visitorStore.getVisitor);
 const qr = reactive({
     result: 'none',
     customError: '-',
@@ -14,6 +17,7 @@ const qr = reactive({
 const humanityShopStore = useHumanityShopStore();
 onMounted(() => {
     humanityShopStore.fetchProducts();
+    humanityShopStore.getVisitorBasket();
 });
 const products = computed(() => humanityShopStore.getProducts);
 
@@ -37,8 +41,12 @@ async function onDecode(content) {
     // turnCameraOn();
 }
 
-async function addProductTobasket() {
+async function addProductToBasket() {
     console.log('gonna try and add this to the basket', qr.foundProduct);
+    let basket = reactive(visitor).basket;
+
+    basket.products.push(qr.foundProduct._id);
+    await humanityShopStore.updateBasket(basket);
 }
 
 function onInit(promise) {
@@ -73,7 +81,7 @@ function timeout(ms) {
                 {{ qr.foundProduct }} <br />
 
                 <button @click="onInit">Cancel</button>
-                <button @click="addProductTobasket">Add to basket</button>
+                <button @click="addProductToBasket">Add to basket</button>
             </div>
             trynna scan {{ qr.customError }}<br />
             <QrStream @decode="onDecode" @init="onInit">

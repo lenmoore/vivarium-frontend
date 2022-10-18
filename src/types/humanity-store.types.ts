@@ -12,9 +12,20 @@ interface IProduct {
     qrCode?: string;
 }
 
-interface Basket {
+interface IBasket {
     id: string;
     products?: Product[];
+}
+
+class Basket implements IBasket {
+    id: string;
+    products?: Product[];
+    basketId?: string;
+    constructor(basket: any) {
+        this.id = basket.id;
+        this.basketId = basket.basketId;
+        this.products = basket?.products;
+    }
 }
 
 class Product implements IProduct {

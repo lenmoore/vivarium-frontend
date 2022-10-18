@@ -9,5 +9,9 @@ class BasketService {
                 return data;
             });
     }
+
+    async updateBasket(basket: Basket): Promise<Basket> {
+        return await api.put(`/baskets/${basket.basketId}`, basket);
+    }
 }
 export default new BasketService();
