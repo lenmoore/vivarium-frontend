@@ -8,24 +8,28 @@ export const useAuthStore = defineStore({
             accessToken: '',
             refreshToken: '',
             name: '',
+            admin: false,
         },
     }),
     getters: {
-        isAuthorized() {
+        isAuthenticated() {
             return !['', null, undefined].includes(
                 localStorage.getItem('accessToken')
             );
+        },
+        isAdmin(state) {
+            return state.user.admin;
         },
     },
     actions: {
         async login(username: string, password: string) {
             try {
-                await AuthService.login(username, password);
+                return await AuthService.login(username, password);
             } catch (e) {
                 console.log(e);
             }
         },
-        async setUser(user: User) {
+        async setUser(user: any) {
             this.user = user;
         },
         async logout() {

@@ -1,4 +1,6 @@
-class Phase {
+import { Visitor } from '@/types/users.types';
+
+export class Phase {
     id?: string;
     name?: string;
     orderNumber?: number;
@@ -10,14 +12,14 @@ class Phase {
 
 interface IPerformance {
     id?: string;
-    title: string;
+    title?: string;
     date?: Date;
     phases?: Phase[];
 }
 
-class TheatrePerformance implements IPerformance {
+export class TheatrePerformance implements IPerformance {
     id?: string;
-    title: string;
+    title?: string;
     date?: Date;
     phases?: Phase[];
     visitors?: Visitor[];
@@ -29,6 +31,7 @@ class TheatrePerformance implements IPerformance {
         this.date = performance.date;
         this.phases = performance.phases;
         this.visitors = performance.visitors;
+        this.active = performance.active;
     }
 
     static fromJSON(json: any): TheatrePerformance {
@@ -38,6 +41,7 @@ class TheatrePerformance implements IPerformance {
             date: json?.Date,
             phases: json?.phases,
             visitors: json?.visitors,
+            active: json?.active,
         });
     }
 }

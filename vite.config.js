@@ -27,7 +27,7 @@ export default defineConfig({
                 },
             },
         }),
-        // basicSsl(),
+        basicSsl(),
     ],
     resolve: {
         alias: {

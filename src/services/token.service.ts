@@ -1,5 +1,5 @@
-// import { useAuthStore } from "@/store/auth.store";
-
+import { useAuthStore } from '@/store/auth.store';
+import { User } from '@/types/users.types';
 class TokenService {
     getLocalRefreshToken() {
         const user = JSON.parse(localStorage.getItem('user') || '{}');
@@ -17,6 +17,8 @@ class TokenService {
 
     setUser(user: User) {
         console.log(user);
+        const authStore = useAuthStore();
+        authStore.user = user;
         localStorage.setItem('user', JSON.stringify(user));
         localStorage.setItem('accessToken', user.accessToken); // it has " at beginning and end
         localStorage.setItem('refreshToken', user.refreshToken);

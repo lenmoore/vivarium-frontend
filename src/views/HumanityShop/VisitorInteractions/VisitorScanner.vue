@@ -4,9 +4,8 @@ const result = '';
 const customError = '';
 </script>
 <template>
-    <div class="container">
-        <h1>scanner test 1</h1>
-
+    <div>
+        <h2>Scan a product~~~</h2>
         <div class="scanner-wrapper">
             {{ result }} trynna scan {{ customError }} <QrStream></QrStream>
         </div>

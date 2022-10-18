@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import PerformanceService from '@/services/performance.service';
+import { TheatrePerformance } from '@/types/performances.types';
 export type RootPerformanceState = {
     performances: TheatrePerformance[];
     activePerformance: TheatrePerformance;
@@ -19,8 +20,8 @@ export const usePerformanceStore = defineStore({
         getPerformance: (state) => {
             return (id: string) => state.performances.find((i) => i.id === id);
         },
-        getActivePerformance(state): TheatrePerformance | undefined {
-            return state.performances.find((p) => p.active);
+        getActivePerformance: (state) => {
+            return state.performances.find((p) => p.active) || undefined;
         },
     },
     actions: {

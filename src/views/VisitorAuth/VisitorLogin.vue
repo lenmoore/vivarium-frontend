@@ -3,36 +3,36 @@ import { useVisitorStore } from '../../store/visitor.store';
 import BaseForm from '../../components/BaseForm/index.vue';
 import BaseInput from '../../components/BaseForm/BaseInput.vue';
 import { usePerformanceStore } from '../../store/performance.store';
-import { computed, defineEmits } from 'vue';
+import { computed, defineEmits, onMounted, watchEffect } from 'vue';
 import router from '../../router/index';
 
 const performanceStore = usePerformanceStore();
-performanceStore.getPerformances();
-const activePerformance = computed(
-    () => performanceStore.getActivePerformance
-).value;
-console.log(activePerformance);
+onMounted(() => {
+    performanceStore.getPerformances();
+});
+const activePerformance = computed(() => {
+    return performanceStore.getActivePerformance;
+});
+const visitorStore = useVisitorStore();
 
 const visitor = {
     email: '',
     wardrobe_number: 0,
     wants_newsletter: 'false',
     wants_summary: 'false',
-    performance: activePerformance,
 };
-const emit = defineEmits(['logged-in']);
-const visitorStore = useVisitorStore();
 
 async function onLogin() {
-    visitor.username =
-        visitor.wardrobe_number + '_' + visitor.performance.date.toString();
+    console.log(activePerformance.value);
+    visitor.username = visitor.wardrobe_number + '_' + Date.now();
     visitor.wardrobe_number = parseInt(visitor.wardrobe_number);
-    activePerformance.performance_id = activePerformance?.performanceId;
+    if (visitor.email.length === 0) {
+        visitor.email = 'n@o.pe';
+    }
     return await visitorStore.login(visitor).then((data) => {
         console.log(data);
-        emit('logged-in');
-        router.push({ name: 'visitor.humanity-shop' });
         localStorage.setItem('accessToken', data.accessToken);
+        router.push({ name: 'visitor.humanity-shop' });
     });
 }
 </script>

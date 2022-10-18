@@ -1,7 +1,7 @@
 import TokenService from '../services/token.service';
 import api from '../services/api';
 import router from '../router';
-
+import { decodeJwt } from 'jose';
 class AuthService {
     async login(email: string, password: string) {
         return await api
@@ -15,6 +15,12 @@ class AuthService {
                         ...response.data,
                         email: email,
                     };
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    const decoded = decodeJwt(response.data.accessToken);
+                    console.log(decoded);
+                    user.admin = decoded.admin;
+                    localStorage.setItem('admin', user.admin);
                     TokenService.setUser(user);
 
                     router.push('/admin');

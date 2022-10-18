@@ -6,12 +6,13 @@ interface IUser {
     refreshToken?: string;
 }
 
-class User implements IUser {
+export class User implements IUser {
     id: '';
     name: string;
     username: string;
     accessToken: string;
     refreshToken: string;
+    admin: boolean;
 
     constructor(user: any) {
         this.id = user.id;
@@ -19,6 +20,7 @@ class User implements IUser {
         this.username = user.username;
         this.accessToken = user.accessToken;
         this.refreshToken = user.refreshToken;
+        this.admin = user.admin;
     }
 
     static fromJSON(json: any): User {

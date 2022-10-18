@@ -84,20 +84,45 @@ const routes: Array<RouteRecordRaw> = [
             },
         ],
     },
+
+    {
+        path: '/visitor-login',
+        name: 'visitor.login',
+        component: () => import('../views/VisitorAuth/VisitorLogin.vue'),
+    },
     {
         path: '/visitor',
         name: 'visitor',
-        redirect: { name: 'visitor.humanity-shop' },
         component: () =>
-            import('../views/VisitorInteractions/VisitorIndex.vue'),
+            import(
+                '../views/HumanityShop/VisitorInteractions/VisitorIndex.vue'
+            ),
         children: [
             {
-                path: '/humanity-shop',
+                path: 'humanity-shop',
                 name: 'visitor.humanity-shop',
                 component: () =>
                     import(
-                        '../views/VisitorInteractions/HumanityShop/HumanityShopHome.vue'
+                        '../views/HumanityShop/VisitorInteractions/HumanityShopHome.vue'
                     ),
+                children: [
+                    {
+                        path: 'cart',
+                        name: 'visitor.humanity-shop.cart',
+                        component: () =>
+                            import(
+                                '../views/HumanityShop/VisitorInteractions/VisitorCart.vue'
+                            ),
+                    },
+                    {
+                        path: 'scan',
+                        name: 'visitor.humanity-shop.scan',
+                        component: () =>
+                            import(
+                                '../views/HumanityShop/VisitorInteractions/VisitorScanner.vue'
+                            ),
+                    },
+                ],
             },
         ],
     },

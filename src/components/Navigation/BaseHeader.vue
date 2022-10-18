@@ -4,8 +4,8 @@ import { computed, watch } from 'vue';
 import router from '../../router';
 
 const authStore = useAuthStore();
-const isAuthorized = computed(() => authStore.isAuthorized);
-
+const isAuthenticated = computed(() => authStore.isAuthenticated);
+const isAdmin = localStorage.admin;
 const pageTitles = {
     'admin.humanity-shop': 'Humanity shop',
     products: 'Products',
@@ -23,9 +23,10 @@ const pageTitles = {
     <div class="d-flex align-items-center justify-content-between">
         <h1>{{ pageTitles[router.currentRoute.value.name] }}</h1>
         <div>
+            isadmin: {{ isAdmin }}
             <button
                 class="btn btn-primary"
-                v-if="isAuthorized"
+                v-if="isAuthenticated"
                 @click="authStore.logout()"
             >
                 log out

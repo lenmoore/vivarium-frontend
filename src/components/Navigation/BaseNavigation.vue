@@ -4,24 +4,32 @@ import { computed, watch } from 'vue';
 import { storeToRefs } from 'pinia';
 
 const authStore = useAuthStore();
-const isAuthorized = computed(() => authStore.isAuthorized);
+const isAuthenticated = computed(() => authStore.isAuthenticated);
 let navLinks = [];
 
-watch(isAuthorized, () => {
-    console.log('idk what to do', isAuthorized);
+const isAdmin = localStorage.admin;
+watch(isAuthenticated, () => {
+    console.log('idk what to do', isAuthenticated);
 });
 
-if (isAuthorized.value) {
+if (isAuthenticated.value && isAdmin) {
     navLinks = [
         { name: 'home', label: 'home' },
         { name: 'admin.humanity-shop', label: 'humanity shop' },
         { name: 'admin.performances', label: 'performances' },
     ];
+} else if (isAuthenticated.value) {
+    // is authenticated as visitor
+    navLinks = [
+        { name: 'home', label: 'home' },
+        { name: 'visitor.humanity-shop.cart', label: 'cart' },
+        { name: 'visitor.humanity-shop.scan', label: 'scan' },
+    ];
 } else {
     navLinks = [
         { name: 'home', label: 'home' },
         { name: 'login', label: '(admin) login' },
-        { name: 'visitor', label: '(publik) login' },
+        { name: 'visitor.login', label: '(publik) login' },
     ];
 }
 </script>
