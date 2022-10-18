@@ -1,5 +1,6 @@
 import api from '@/services/api';
 import { Visitor } from '@/types/users.types';
+import { TheatrePerformance } from '@/types/performances.types';
 
 class PerformanceService {
     async addPerformance(

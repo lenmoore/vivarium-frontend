@@ -3,6 +3,7 @@ import App from './App.vue';
 import router from './router';
 import { useMainStore } from './store';
 import { createPinia, setActivePinia } from 'pinia';
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
 
 import BootstrapVue3 from 'bootstrap-vue-3';
 import 'bootstrap/dist/css/bootstrap.css';
@@ -12,6 +13,7 @@ import '../src/assets/common.scss';
 const app = createApp(App);
 const pinia = createPinia();
 
+pinia.use(piniaPluginPersistedstate);
 setActivePinia(pinia);
 app.use(pinia);
 

@@ -6,7 +6,7 @@ import QrcodeVue from 'qrcode.vue';
 const route = useRoute();
 
 const humanityStore = useHumanityShopStore();
-humanityStore.getProducts();
+humanityStore.fetchProducts();
 
 const products = computed(() => humanityStore.products);
 const id = route.params.id.toString();

@@ -29,6 +29,7 @@ async function onLogin() {
     if (visitor.email.length === 0) {
         visitor.email = 'n@o.pe';
     }
+    visitor.performanceId = activePerformance.value.performanceId;
     return await visitorStore.login(visitor).then((data) => {
         console.log(data);
         localStorage.setItem('accessToken', data.accessToken);

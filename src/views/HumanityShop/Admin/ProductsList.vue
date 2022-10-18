@@ -4,7 +4,7 @@ import { computed } from 'vue';
 import ProductItem from './ProductItem.vue';
 const humanityStore = useHumanityShopStore();
 
-humanityStore.getProducts();
+humanityStore.fetchProducts();
 let products = computed(() => humanityStore.products).value;
 
 function sortProducts(color) {

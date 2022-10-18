@@ -107,11 +107,11 @@ const routes: Array<RouteRecordRaw> = [
                     ),
                 children: [
                     {
-                        path: 'cart',
-                        name: 'visitor.humanity-shop.cart',
+                        path: 'basket',
+                        name: 'visitor.humanity-shop.basket',
                         component: () =>
                             import(
-                                '../views/HumanityShop/VisitorInteractions/VisitorCart.vue'
+                                '../views/HumanityShop/VisitorInteractions/VisitorBasket.vue'
                             ),
                     },
                     {

@@ -2,28 +2,17 @@ import { defineStore } from 'pinia';
 import { usePerformanceStore } from '@/store/performance.store';
 import PerformanceService from '@/services/performance.service';
 import { Visitor } from '@/types/users.types';
+import { TheatrePerformance } from '@/types/performances.types';
 const performanceStore = usePerformanceStore();
 
 export type RootVisitorState = {
-    visitor: {
-        isLoggedIn: boolean;
-        wardrobe_number: number;
-        email: string;
-        wants_newsletter: boolean;
-        wants_summary: boolean;
-        performance: TheatrePerformance;
-        basket?: Basket;
-    };
+    visitor: Visitor;
 };
 export const useVisitorStore = defineStore({
     id: 'visitor',
     state: () =>
         ({
-            visitor: {
-                isLoggedIn: false,
-                wardrobe_number: 0,
-                email: '',
-            },
+            visitor: {} as Visitor,
         } as RootVisitorState),
     getters: {
         getVisitor(state) {
@@ -32,8 +21,13 @@ export const useVisitorStore = defineStore({
     },
     actions: {
         async login(visitor: Visitor) {
-            // todo this just creates the visitor every time, we also need to login
-            return await PerformanceService.addVisitor(visitor);
+            return await PerformanceService.addVisitor(visitor).then((data) => {
+                console.log(data);
+                this.visitor = new Visitor(data);
+                // todo add visitor to performance also
+                return data;
+            });
         },
     },
+    persist: true,
 });

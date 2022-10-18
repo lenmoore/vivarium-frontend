@@ -50,8 +50,8 @@ const instance: AxiosInstance = axios.create({
         Authorization: authHeader().toString(),
         'X-Refresh': refreshHeader().toString(),
     },
-    baseURL: 'https://localhost:3000/api',
-    // baseURL: 'https://192.168.8.102:3000/api',
+    // baseURL: 'https://localhost:3000/api',
+    baseURL: 'https://192.168.8.102:3000/api',
     // baseURL: 'http://localhost:3000/api',
 });
 

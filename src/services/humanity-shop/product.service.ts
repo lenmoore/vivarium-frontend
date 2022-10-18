@@ -1,7 +1,7 @@
 import api from '@/services/api';
 
 class ProductService {
-    async getProducts(): Promise<Product[]> {
+    async fetchProducts(): Promise<Product[]> {
         return await api.get(`/products`).then(({ data }) => {
             return data;
         });

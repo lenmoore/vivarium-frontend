@@ -1,3 +1,5 @@
+import { TheatrePerformance } from '@/types/performances.types';
+
 interface IUser {
     id: '';
     name?: string;
@@ -37,6 +39,7 @@ export class User implements IUser {
 export class Visitor implements IUser {
     accessToken: string;
     id: '';
+    visitorId: '';
     name: string;
     refreshToken: string;
     username: string;
@@ -49,10 +52,10 @@ export class Visitor implements IUser {
 
     constructor(user: any) {
         this.id = user.id;
+        this.visitorId = user.visitorId;
         this.name = 'visitor';
         this.email = user.email || '';
-        this.username =
-            user.wardrobe_number + '_' + user.performance.date.toString();
+        this.username = user.wardrobe_number + '_' + Date.now();
         this.accessToken = user.accessToken;
         this.refreshToken = user.refreshToken;
         this.performance = user.performance;
@@ -77,7 +80,7 @@ export class Visitor implements IUser {
             basket: json.basket,
         });
     }
-    // todo WHY is this shit not working?
+
     static toJSON(visitor: Visitor): object {
         return {
             id: visitor.id,

@@ -22,7 +22,7 @@ if (isAuthenticated.value && isAdmin) {
     // is authenticated as visitor
     navLinks = [
         { name: 'home', label: 'home' },
-        { name: 'visitor.humanity-shop.cart', label: 'cart' },
+        { name: 'visitor.humanity-shop.basket', label: 'basket' },
         { name: 'visitor.humanity-shop.scan', label: 'scan' },
     ];
 } else {

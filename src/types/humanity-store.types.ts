@@ -14,6 +14,7 @@ interface IProduct {
 
 interface Basket {
     id: string;
+    products?: Product[];
 }
 
 class Product implements IProduct {
