@@ -17,12 +17,17 @@ const products = ref(humanityStore.getProducts);
 let productsInBasket = products.value.filter((p) =>
     basket.products.includes(p._id)
 );
+
+async function removeProduct(item) {
+    basket.products.remove(item);
+    await humanityStore.updateBasket(basket);
+}
 </script>
 <template>
     <div>
         visitor basket
-        <div>visitorId: {{ visitor.visitorId }}</div>
-        {{ basket }} <br /><br />
+        <small>visitorId: {{ visitor.visitorId }}</small>
+
         <div class="basket-items-wrapper">
             <div
                 :key="item.id"
@@ -32,7 +37,9 @@ let productsInBasket = products.value.filter((p) =>
                 {{ item.title }}
 
                 <div>
-                    <button class="btn">X</button>
+                    <button class="btn" @click="removeProduct(item.id)">
+                        X
+                    </button>
                 </div>
             </div>
         </div>
@@ -42,10 +49,7 @@ let productsInBasket = products.value.filter((p) =>
 <style lang="scss">
 .basket-items-wrapper {
     width: 100%;
-    border: 1px solid black;
     .basket-item {
-        border: 1px solid red;
-
         margin-bottom: 1rem;
         display: flex;
         justify-content: space-between;

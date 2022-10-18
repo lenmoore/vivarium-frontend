@@ -34,7 +34,6 @@ async function onDecode(content) {
         (product) => product.title === content
     );
     // this.isValid = content.startsWith('http'); // todo - check if exists in products
-    qr.isValid = content === 'Ruubiku kuubik';
     console.log(qr.isValid);
     // some more delay, so users have time to read the message
     // await timeout(2000);
@@ -46,7 +45,9 @@ async function addProductToBasket() {
     let basket = reactive(visitor).basket;
 
     basket.products.push(qr.foundProduct._id);
-    await humanityShopStore.updateBasket(basket);
+    await humanityShopStore.updateBasket(basket).then(() => {
+        qr.foundProduct = null;
+    });
 }
 
 function onInit(promise) {
@@ -73,27 +74,51 @@ function timeout(ms) {
 </script>
 <template>
     <div>
-        <h2>Scan a product~~~</h2>
+        <h2>Skänni midagi!</h2>
         <div class="scanner-wrapper">
-            last result: {{ qr.result }} <br />
-            -- <br />
-            <div>
-                {{ qr.foundProduct }} <br />
-
-                <button @click="onInit">Cancel</button>
-                <button @click="addProductToBasket">Add to basket</button>
-            </div>
-            trynna scan {{ qr.customError }}<br />
             <QrStream @decode="onDecode" @init="onInit">
-                {{ qr.isValid }}
-                <div v-if="qr.isValid" class="validation-success">
-                    That's a product! {{ qr.result }}. Add it?
-                </div>
+                <div v-if="qr.foundProduct" class="validation-success">
+                    <div class="product-add">
+                        <div class="product-title">
+                            {{ qr.foundProduct.title }}
+                        </div>
 
-                <div v-if="!qr.isValid" class="validation-failure">
-                    No product found.
+                        <div class="btns">
+                            <button class="btn" @click="onInit">Cancel</button>
+                            <button
+                                class="btn btn-primary"
+                                @click="addProductToBasket"
+                            >
+                                Add to basket
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </QrStream>
         </div>
     </div>
 </template>
+
+<style lang="scss">
+.validation-success {
+    height: 100%;
+    width: 100%;
+    .product-add {
+        background-color: darkseagreen;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        .product-title {
+            font-size: 1.2rem;
+        }
+
+        .btns {
+            .btn {
+                margin-top: 0.5rem;
+            }
+        }
+    }
+}
+</style>
