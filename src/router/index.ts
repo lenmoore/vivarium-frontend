@@ -20,7 +20,27 @@ const routes: Array<RouteRecordRaw> = [
     {
         path: '/superadmin',
         name: 'superadmin',
-        component: () => import('../views/Admin/SuperAdmin/SuperAdminHome.vue'),
+        component: () => import('../views/Admin/SuperAdmin/index.vue'),
+        children: [
+            {
+                path: 'games',
+                name: 'superadmin.games',
+                component: () =>
+                    import('../views/Admin/SuperAdmin/SuperAdminGames.vue'),
+            },
+            {
+                path: 'phases',
+                name: 'superadmin.phases',
+                component: () =>
+                    import('../views/Admin/SuperAdmin/SuperAdminPhases.vue'),
+            },
+            {
+                path: 'game/:id',
+                name: 'superadmin.game-details',
+                component: () =>
+                    import('../views/Admin/SuperAdmin/GameSetup.vue'),
+            },
+        ],
     },
     {
         path: '/admin',
