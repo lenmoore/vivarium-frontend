@@ -2,6 +2,7 @@
 import { useAuthStore } from '../../store/auth.store';
 import BaseForm from '../../components/BaseForm/index.vue';
 import BaseInput from '../../components/BaseForm/BaseInput.vue';
+import router from '../../router/index';
 
 const user = {
     username: '',
@@ -18,6 +19,7 @@ function onLogin() {
         })
         .finally(() => {
             console.log('jou');
+            router.push({ name: 'admin.performances' });
         });
 }
 </script>

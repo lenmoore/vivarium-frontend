@@ -43,16 +43,15 @@ function authHeader() {
 //         return data;
 //     });
 // }
-
+const gonsiori = 'https://192.168.8.102:3000/api';
+const vatteater = 'https://192.168.1.153:3000/api';
 const instance: AxiosInstance = axios.create({
     headers: {
         'Content-Type': 'application/json',
         Authorization: authHeader().toString(),
         'X-Refresh': refreshHeader().toString(),
     },
-    // baseURL: 'https://localhost:3000/api',
-    baseURL: 'https://192.168.8.102:3000/api',
-    // baseURL: 'http://localhost:3000/api',
+    baseURL: gonsiori,
 });
 
 export default instance;

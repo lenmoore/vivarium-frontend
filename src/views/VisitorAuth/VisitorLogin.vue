@@ -29,8 +29,9 @@ async function onLogin() {
     if (visitor.email.length === 0) {
         visitor.email = 'n@o.pe';
     }
-    visitor.performanceId = activePerformance.value.performanceId;
-    return await visitorStore.login(visitor).then((data) => {
+    visitor.performance = activePerformance.value._id;
+
+    await visitorStore.login(visitor).then((data) => {
         console.log(data);
         localStorage.setItem('accessToken', data.accessToken);
         router.push({ name: 'visitor.humanity-shop' });
@@ -40,7 +41,6 @@ async function onLogin() {
 
 <template>
     <BaseForm :show-cancel="false" @submit="onLogin">
-        {{ activePerformance }}
         <BaseInput
             :id="'wardrobe_number'"
             :label="'Garderoobinumber'"
