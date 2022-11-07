@@ -18,6 +18,11 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('../views/Auth/LoginView.vue'),
     },
     {
+        path: '/superadmin',
+        name: 'superadmin',
+        component: () => import('../views/Admin/SuperAdmin/SuperAdminHome.vue'),
+    },
+    {
         path: '/admin',
         name: 'admin',
         component: () => import('../views/Admin/AdminHome.vue'),

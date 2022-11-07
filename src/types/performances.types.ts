@@ -5,7 +5,7 @@ export class Phase {
     name?: string;
     orderNumber?: number;
     description?: string;
-    isActive?: boolean;
+    active?: boolean;
     startedAt?: Date;
     endedAt?: Date;
 }

@@ -1,16 +1,20 @@
 import { defineStore } from 'pinia';
 import PerformanceService from '@/services/performance.service';
-import { TheatrePerformance } from '@/types/performances.types';
+import { Phase, TheatrePerformance } from '@/types/performances.types';
 export type RootPerformanceState = {
     performances: TheatrePerformance[];
     activePerformance: TheatrePerformance;
+    phases: Phase[];
+    activePhase: Phase;
 };
 export const usePerformanceStore = defineStore({
     id: 'performance',
     state: () =>
         ({
             performances: [] as TheatrePerformance[],
+            phases: [] as Phase[],
             activePerformance: {},
+            activePhase: {},
         } as RootPerformanceState),
 
     getters: {
@@ -22,6 +26,9 @@ export const usePerformanceStore = defineStore({
         },
         getActivePerformance: (state) => {
             return state.performances.find((p) => p.active) || undefined;
+        },
+        getActivePhase: (state) => {
+            return state.phases.find((p) => p.active) || undefined;
         },
     },
     actions: {
@@ -37,6 +44,9 @@ export const usePerformanceStore = defineStore({
         async getPerformances() {
             this.performances = await PerformanceService.getPerformances();
         },
+        async getPhases() {
+            this.phases = await PerformanceService.getPhases();
+        },
         async setActivePerformance(
             p: TheatrePerformance
         ): Promise<TheatrePerformance> {
@@ -50,5 +60,19 @@ export const usePerformanceStore = defineStore({
             p.active = false;
             return await PerformanceService.editPerformance(p);
         },
+        async addPhase(newPhase: Phase) {
+            const phase: Phase = await PerformanceService.addPhase(newPhase);
+            console.log(phase);
+            return phase;
+        },
+
+        async addGame() {},
+
+        async editPhase(p: Phase): Promise<Phase> {
+            p.active = !p.active;
+            return await PerformanceService.editPhase(p);
+        },
+
+        async editGame() {},
     },
 });

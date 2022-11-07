@@ -8,6 +8,7 @@ import PerformanceMenu from './Menu/PerformanceMenu.vue';
 
 const performanceStore = usePerformanceStore();
 performanceStore.getPerformances();
+performanceStore.getPhases();
 
 const newPerformance = {
     title: '',
@@ -15,17 +16,18 @@ const newPerformance = {
     date: Date,
 };
 const performances = computed(() => performanceStore.performances);
+const phases = computed(() => performanceStore.phases);
+console.log(phases);
+const requestPhasesList = phases.value;
+console.log(requestPhasesList);
 
 async function onSubmit() {
-    return await performanceStore
-        .addPerformance({
-            title: newPerformance.title,
-            location: newPerformance.location,
-            date: moment(newPerformance.date).format('YYYY-MM-DD HH:mm'),
-        })
-        .then((data) => {
-            console.log(data);
-        });
+    return await performanceStore.addPerformance({
+        title: newPerformance.title,
+        location: newPerformance.location,
+        date: moment(newPerformance.date).format('YYYY-MM-DD HH:mm'),
+        phases: requestPhasesList,
+    });
 }
 </script>
 
