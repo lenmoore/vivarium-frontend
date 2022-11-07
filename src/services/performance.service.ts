@@ -1,6 +1,6 @@
 import api from '@/services/api';
 import { Visitor } from '@/types/users.types';
-import { Phase, TheatrePerformance } from '@/types/performances.types';
+import { Game, Phase, TheatrePerformance } from '@/types/performances.types';
 
 class PerformanceService {
     async addPerformance(
@@ -18,8 +18,19 @@ class PerformanceService {
         });
     }
 
+    async addGame(newGame: Game): Promise<Game> {
+        return await api.post(`/games`, newGame).then(({ data }) => {
+            return data;
+        });
+    }
+
     async getPhases(): Promise<Phase[]> {
         return await api.get(`/phases`).then(({ data }) => {
+            return data;
+        });
+    }
+    async getGames(): Promise<Game[]> {
+        return await api.get(`/games`).then(({ data }) => {
             return data;
         });
     }

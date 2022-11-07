@@ -4,7 +4,25 @@
             <label :for="id" class="text-turquoise"> {{ label }} </label>
         </div>
 
+        <select
+            :value="modelValue"
+            v-if="type === 'select'"
+            :name="name"
+            @input="updateValue"
+            :id="id"
+        >
+            <option
+                :key="i + ' ' + option"
+                :id="i + ' ' + option"
+                v-for="(option, i) in options"
+                :value="option._id"
+                :name="name"
+            >
+                {{ option.name }}
+            </option>
+        </select>
         <input
+            v-else
             :name="name"
             :placeholder="placeholder || label"
             :id="id"
@@ -61,10 +79,15 @@ export default {
             type: [String, Number],
             default: '',
         },
+        options: {
+            type: Array,
+            default: () => [],
+        },
     },
     setup(props, context) {
         const updateValue = (event) => {
             context.emit('update:modelValue', event.target.value);
+            console.log(event);
         };
 
         return { updateValue };
@@ -75,6 +98,7 @@ export default {
                 return this.value;
             },
             set(value) {
+                console.log(value);
                 this.$emit('input', value);
             },
         },

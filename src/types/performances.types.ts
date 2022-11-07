@@ -10,6 +10,31 @@ export class Phase {
     endedAt?: Date;
 }
 
+class Step {
+    question_text?: string;
+    question_options?: [
+        {
+            option_text: '';
+            humanity_values: {
+                green: 0;
+                red: 0;
+                blue: 0;
+                orange: 0;
+            };
+        }
+    ];
+}
+
+export class Game {
+    id?: string;
+    name?: string;
+    pre_capsule?: boolean;
+    open_for_colors?: string[];
+    game_type?: string;
+    game_steps?: Step[];
+    game_players?: Visitor[];
+}
+
 interface IPerformance {
     id?: string;
     title?: string;
