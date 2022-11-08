@@ -24,7 +24,10 @@ export const usePerformanceStore = defineStore({
             return state.performances;
         },
         getPerformance: (state) => {
-            return (id: string) => state.performances.find((i) => i.id === id);
+            return (id: string) => state.performances.find((i) => i._id === id);
+        },
+        getGame: (state) => {
+            return (id: string) => state.games.find((i) => i._id === id);
         },
         getActivePerformance: (state) => {
             return state.performances.find((p) => p.active) || undefined;
@@ -36,6 +39,9 @@ export const usePerformanceStore = defineStore({
     actions: {
         async getPerformanceById(id: string): Promise<TheatrePerformance> {
             return await PerformanceService.getPerformanceById(id);
+        },
+        async getGameById(id: string): Promise<TheatrePerformance> {
+            return await PerformanceService.getGameById(id);
         },
         async addPerformance(newPerformance: TheatrePerformance) {
             const performance: TheatrePerformance =
@@ -81,6 +87,9 @@ export const usePerformanceStore = defineStore({
             return await PerformanceService.editPhase(p);
         },
 
-        async editGame() {},
+        async editGame(g: Game): Promise<Game> {
+            console.log('game in editGame performance.store', g);
+            return await PerformanceService.editGame(g);
+        },
     },
 });

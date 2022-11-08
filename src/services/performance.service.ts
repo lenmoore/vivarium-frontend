@@ -45,6 +45,12 @@ class PerformanceService {
         });
     }
 
+    async getGameById(id: string): Promise<Game> {
+        return await api.get(`/games/${id}`, {}).then(({ data }) => {
+            return data;
+        });
+    }
+
     async editPerformance(payload: any) {
         return await api
             .put(`/performances/${payload.performanceId}`, payload, {
@@ -62,6 +68,18 @@ class PerformanceService {
             .put(`/phases/${payload.phaseId}`, payload, {
                 params: {
                     phaseId: payload.phaseId,
+                },
+            })
+            .then(({ data }) => {
+                return data;
+            });
+    }
+
+    async editGame(payload: any) {
+        return await api
+            .put(`/games/${payload.gameId}`, payload, {
+                params: {
+                    gameId: payload.gameId,
                 },
             })
             .then(({ data }) => {

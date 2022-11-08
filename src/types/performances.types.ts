@@ -1,7 +1,7 @@
 import { Visitor } from '@/types/users.types';
 
 export class Phase {
-    id?: string;
+    _id?: string;
     name?: string;
     orderNumber?: number;
     description?: string;
@@ -10,7 +10,7 @@ export class Phase {
     endedAt?: Date;
 }
 
-class Step {
+export class Step {
     question_text?: string;
     question_options?: [
         {
@@ -26,7 +26,7 @@ class Step {
 }
 
 export class Game {
-    id?: string;
+    _id?: string;
     name?: string;
     pre_capsule?: boolean;
     open_for_colors?: string[];
@@ -36,14 +36,14 @@ export class Game {
 }
 
 interface IPerformance {
-    id?: string;
+    _id?: string;
     title?: string;
     date?: Date;
     phases?: Phase[];
 }
 
 export class TheatrePerformance implements IPerformance {
-    id?: string;
+    _id?: string;
     title?: string;
     date?: Date;
     phases?: Phase[];
@@ -52,7 +52,7 @@ export class TheatrePerformance implements IPerformance {
 
     constructor(performance: any) {
         this.title = performance.title;
-        this.id = performance.id;
+        this._id = performance._id;
         this.date = performance.date;
         this.phases = performance.phases;
         this.visitors = performance.visitors;
@@ -61,7 +61,7 @@ export class TheatrePerformance implements IPerformance {
 
     static fromJSON(json: any): TheatrePerformance {
         return new TheatrePerformance({
-            id: json?._id,
+            _id: json?.__id,
             title: json?.string,
             date: json?.Date,
             phases: json?.phases,

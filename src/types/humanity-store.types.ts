@@ -1,5 +1,5 @@
 interface IProduct {
-    id?: string; // todo remove ? when db works
+    _id?: string;
     name: string;
     price?: number;
     humanity_values?: {
@@ -13,16 +13,16 @@ interface IProduct {
 }
 
 interface IBasket {
-    id: string;
+    _id: string;
     products?: Product[];
 }
 
 class Basket implements IBasket {
-    id: string;
+    _id: string;
     products?: Product[];
     basketId?: string;
     constructor(basket: any) {
-        this.id = basket.id;
+        this._id = basket._id;
         this.basketId = basket.basketId;
         this.products = basket?.products;
     }
@@ -31,13 +31,13 @@ class Basket implements IBasket {
 class Product implements IProduct {
     constructor(product: any) {
         this.name = product.name;
-        this.id = product.productId;
+        this._id = product.productId;
         this.humanity_values = product.humanity_values;
         this.price = product.price;
         this.qrCode = product.qr_code;
     }
 
-    id?: string;
+    _id?: string;
     name: string;
     price?: number;
     humanity_values?: {

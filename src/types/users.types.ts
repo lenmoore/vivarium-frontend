@@ -1,7 +1,7 @@
 import { TheatrePerformance } from '@/types/performances.types';
 
 interface IUser {
-    id: '';
+    _id: '';
     name?: string;
     username?: string;
     accessToken?: string;
@@ -9,7 +9,7 @@ interface IUser {
 }
 
 export class User implements IUser {
-    id: '';
+    _id: '';
     name: string;
     username: string;
     accessToken: string;
@@ -17,7 +17,7 @@ export class User implements IUser {
     admin: boolean;
 
     constructor(user: any) {
-        this.id = user.id;
+        this._id = user._id;
         this.name = user.name;
         this.username = user.username;
         this.accessToken = user.accessToken;
@@ -27,7 +27,7 @@ export class User implements IUser {
 
     static fromJSON(json: any): User {
         return new User({
-            id: json?.id,
+            _id: json?._id,
             name: json?.name,
             username: json?.username,
             accessToken: json?.accessToken,
@@ -38,7 +38,7 @@ export class User implements IUser {
 
 export class Visitor implements IUser {
     accessToken: string;
-    id: '';
+    _id: '';
     visitorId: '';
     name: string;
     refreshToken: string;
@@ -51,7 +51,7 @@ export class Visitor implements IUser {
     basket?: Basket;
 
     constructor(user: any) {
-        this.id = user.id;
+        this._id = user._id;
         this.visitorId = user.visitorId;
         this.name = 'visitor';
         this.email = user.email || '';
@@ -67,7 +67,7 @@ export class Visitor implements IUser {
 
     static fromJSON(json: any) {
         return new Visitor({
-            id: json.id,
+            _id: json.id,
             name: json?.name,
             email: json.email || '',
             username: json.username,
@@ -83,7 +83,7 @@ export class Visitor implements IUser {
 
     static toJSON(visitor: Visitor): object {
         return {
-            id: visitor.id,
+            id: visitor._id,
             name: visitor?.name,
             email: visitor?.email || '',
             username: visitor?.username,

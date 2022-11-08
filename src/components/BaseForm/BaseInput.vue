@@ -87,7 +87,6 @@ export default {
     setup(props, context) {
         const updateValue = (event) => {
             context.emit('update:modelValue', event.target.value);
-            console.log(event);
         };
 
         return { updateValue };
@@ -98,7 +97,6 @@ export default {
                 return this.value;
             },
             set(value) {
-                console.log(value);
                 this.$emit('input', value);
             },
         },

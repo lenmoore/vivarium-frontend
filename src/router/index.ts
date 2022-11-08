@@ -34,13 +34,13 @@ const routes: Array<RouteRecordRaw> = [
                 component: () =>
                     import('../views/Admin/SuperAdmin/SuperAdminPhases.vue'),
             },
-            {
-                path: 'game/:id',
-                name: 'superadmin.game-details',
-                component: () =>
-                    import('../views/Admin/SuperAdmin/GameSetup.vue'),
-            },
         ],
+    },
+
+    {
+        path: '/superadmin/game/:id',
+        name: 'superadmin.game-details',
+        component: () => import('../views/Admin/SuperAdmin/GameSetup.vue'),
     },
     {
         path: '/admin',

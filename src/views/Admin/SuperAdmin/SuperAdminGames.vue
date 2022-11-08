@@ -38,7 +38,7 @@ async function onSubmitGame() {
                         @click="
                             router.push({
                                 name: 'superadmin.game-details',
-                                params: { game: game, id: game._id },
+                                params: { id: game._id },
                             })
                         "
                     >
