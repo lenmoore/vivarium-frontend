@@ -4,6 +4,7 @@ import BaseForm from '../../../components/BaseForm/index.vue';
 import BaseInput from '../../../components/BaseForm/BaseInput.vue';
 import { usePerformanceStore } from '../../../store/performance.store';
 import router from '../../../router/index';
+import { Game } from '../../../types/performances.types';
 
 console.log(router);
 const performanceStore = usePerformanceStore();
@@ -13,14 +14,16 @@ const games = computed(() => performanceStore.games);
 const newPhase = {
     name: '',
     active: false,
-    game: '',
+    game: Game,
 };
 
 async function onSubmitPhase() {
+    console.log(newPhase);
+    const game = games.value.find((g) => g._id === newPhase.game);
     return await performanceStore.addPhase({
         name: newPhase.name,
         active: newPhase.active,
-        game: newPhase.game,
+        phase_game: newPhase.game,
     });
 }
 </script>

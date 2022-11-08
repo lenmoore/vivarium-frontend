@@ -6,6 +6,7 @@ export class Phase {
     orderNumber?: number;
     description?: string;
     active?: boolean;
+    phase_game?: Game;
     startedAt?: Date;
     endedAt?: Date;
 }

@@ -2,7 +2,7 @@
     <div class="app-wrapper container">
         <BaseHeader class="app-header" />
         <div class="app-router-view">
-            <RouterView />
+            <RouterView :key="$route.fullPath" />
         </div>
         <BaseNavigation class="app-navigation" />
     </div>
@@ -11,6 +11,15 @@
 <script setup lang="ts">
 import BaseNavigation from '@/components/Navigation/BaseNavigation.vue';
 import BaseHeader from '@/components/Navigation/BaseHeader.vue';
+import { usePerformanceStore } from '@/store/performance.store';
+import { computed, nextTick } from 'vue';
+
+const performanceStore = usePerformanceStore();
+
+const activePhase = computed(() => performanceStore.getActivePhase);
+console.log(activePhase);
+console.log(activePhase);
+nextTick();
 </script>
 
 <style lang="scss">

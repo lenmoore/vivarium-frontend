@@ -64,6 +64,9 @@ class PerformanceService {
     }
 
     async editPhase(payload: any) {
+        if (typeof payload.phase_game === 'object') {
+            payload.phase_game = payload.phase_game._id;
+        }
         return await api
             .put(`/phases/${payload.phaseId}`, payload, {
                 params: {

@@ -26,8 +26,12 @@ export const useHumanityShopStore = defineStore({
             this.products = await ProductService.fetchProducts();
         },
         async getVisitorBasket() {
+            console.log(
+                'visitorStore.getVisitor._id',
+                visitorStore.getVisitor._id
+            );
             return await BasketService.getBasketByVisitorId(
-                visitorStore.getVisitor.visitorId
+                visitorStore.getVisitor._id
             ).then((data) => {
                 console.log(data);
                 visitorStore.visitor.basket = data;

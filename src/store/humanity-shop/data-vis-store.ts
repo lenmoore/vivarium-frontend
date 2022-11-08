@@ -4,7 +4,7 @@ import api from '@/services/api';
 export const useDataVisStore = defineStore('dataVis', {
     state: () => {
         return {
-            productsQuestionnaireResults: [] as ProductVisualisation[],
+            productsQuestionnaireResults: [] as Product[],
         };
     },
     getters: {},

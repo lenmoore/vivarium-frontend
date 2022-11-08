@@ -1,28 +1,18 @@
-<template>
-    <div class="home">
-        hey {{ useMainStore.name }}<br />
-        <button @click="submitClick">{{ useMainStore.counter }}</button>
-        <HelloWorld msg="Welcome to Your Vue.js + TypeScript App" />
-    </div>
-</template>
+<script setup>
+import { useAuthStore } from '@/store/auth.store';
+import { usePerformanceStore } from '@/store/performance.store';
+import { computed } from 'vue';
 
-<script lang="ts">
-import { Options, Vue } from 'vue-class-component';
-import HelloWorld from '../components/HelloWorld.vue';
-import { useMainStore } from '../store';
+const authStore = useAuthStore();
+const performanceStore = usePerformanceStore();
 
-@Options({
-    components: {
-        HelloWorld,
-    },
-})
-export default class LoginView extends Vue {
-    useMainStore = useMainStore();
-
-    async submitClick() {
-        const { addOne } = useMainStore();
-        console.log('submit clicked');
-        addOne();
-    }
-}
+const activePhase = computed(() => performanceStore.getActivePhase);
+const isAuthenticated = computed(() => authStore.isAuthenticated);
+console.log('nice');
 </script>
+
+<template>
+    <div class="home">Hello.</div>
+
+    {{ isAuthenticated }} {{ activePhase }}
+</template>
