@@ -18,5 +18,5 @@ function openPhases() {
             </ul>
         </div>
     </div>
-    <RouterView />
+    <RouterView :key="$route.fullPath" />
 </template>

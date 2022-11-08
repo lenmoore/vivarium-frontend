@@ -17,10 +17,14 @@ const newGame = {
 };
 
 async function onSubmitGame() {
-    return await performanceStore.addGame({
+    const game = await performanceStore.addGame({
         name: newGame.name,
         pre_capsule: newGame.pre_capsule,
         open_for_colors: newGame.open_for_colors,
+    });
+    await router.push({
+        name: 'superadmin.game-details',
+        params: { id: game._id },
     });
 }
 </script>
@@ -30,9 +34,10 @@ async function onSubmitGame() {
         <div class="d-flex">
             <div class="w-25 p-4 m-4">
                 <div>
-                    <div>showGames.</div>
+                    <div>olemasolevad mangud:</div>
 
                     <div
+                        class="border p-2 m-2"
                         :key="game._id"
                         v-for="game in games"
                         @click="

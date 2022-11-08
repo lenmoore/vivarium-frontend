@@ -9,33 +9,35 @@ const props = defineProps({
     step: Step,
 });
 const step = ref(props.step);
-const newQuestionOption = {
-    option_text: '',
-    humanity_values: {
-        green: 0,
-        red: 0,
-        blue: 0,
-        orange: 0,
-    },
-};
 
 function addNewOptionToStep() {
     if (!step.value.question_options) {
         step.value.question_options = [];
     }
-    step.value.question_options.push(newQuestionOption);
+    step.value.question_options.push({
+        option_text: '',
+        humanity_values: {
+            green: 0,
+            red: 0,
+            blue: 0,
+            orange: 0,
+        },
+    });
 }
-
-function updateOptionText(val) {
-    console.log(val);
+function deleteGameStep() {
+    console.log('todo delete step');
 }
 </script>
 
 <template>
     <div class="game-step">
-        <small>{{ step }}</small>
+        <div
+            class="top d-flex align-items-center justify-content-between w-100"
+        >
+            <span> Küsimus </span>
+            <button @click="deleteGameStep">Kustuta</button>
+        </div>
         <div>
-            kysimus
             <BaseInput
                 id="question_text"
                 label="question_text"
@@ -49,21 +51,63 @@ function updateOptionText(val) {
             <div
                 :key="`option_${i}`"
                 v-for="(option, i) in step.question_options"
+                class="d-flex align-items-center justify-content-between"
             >
                 <BaseInput
                     :id="`option_${i}`"
                     label="option_text"
+                    class="w-100 mr-2"
                     :name="`option_${i}`"
                     type="text"
-                    @input="updateOptionText"
                     v-model="option.option_text"
                 />
+                <span class="values d-flex">
+                    <BaseInput
+                        :id="`option_green_${i}`"
+                        label="option_green"
+                        :name="`option_green_${i}`"
+                        type="number"
+                        input-class="small-number green"
+                        v-model="option.humanity_values.green"
+                    />
+                    <BaseInput
+                        :id="`option_red_${i}`"
+                        label="option_red"
+                        :name="`option_red_${i}`"
+                        type="number"
+                        input-class="small-number red"
+                        v-model="option.humanity_values.red"
+                    />
+                    <BaseInput
+                        :id="`option_orange_${i}`"
+                        label="option_orange"
+                        :name="`option_orange_${i}`"
+                        type="number"
+                        input-class="small-number orange"
+                        v-model="option.humanity_values.orange"
+                    />
+                    <BaseInput
+                        :id="`option_blue_${i}`"
+                        label="option_blue"
+                        :name="`option_blue_${i}`"
+                        type="number"
+                        input-class="small-number blue"
+                        v-model="option.humanity_values.blue"
+                    />
+                </span>
             </div>
             <div>
-                <button @click="addNewOptionToStep">+ variant</button>
+                <button class="btn btn-icon" @click="addNewOptionToStep">
+                    + variant
+                </button>
             </div>
         </div>
-        <button @click="$emit('submit', step)">salvesta</button>
+        <div class="">
+            <span> </span
+            ><button class="btn btn-primary" @click="$emit('submit', step)">
+                salvesta
+            </button>
+        </div>
     </div>
 </template>
 

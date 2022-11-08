@@ -14,27 +14,19 @@ onMounted(() => {
 });
 
 let game = computed(() => performanceStore.getGame(id));
-console.log(game);
 
-const newStep = new Step({
+let newStep = new Step({
     question_text: '',
     question_options: [],
 });
 
 async function addStep(val) {
-    console.log(val);
-    console.log(game);
     let gameToSend = game.value;
     gameToSend.game_steps.push(val);
-    console.log(gameToSend);
     await performanceStore.editGame(gameToSend);
 }
 async function editStep(val) {
-    console.log(val);
-    console.log(game);
-    console.log(game.value.game_steps);
     game.value.game_steps.push(val);
-    console.log(game);
     await performanceStore.editGame(game.value);
 }
 </script>
@@ -42,7 +34,10 @@ async function editStep(val) {
     <div v-if="game">
         <h3>{{ game.name }}</h3>
 
+        lisa uus:
         <GameStep id="new-step" :step="newStep" @submit="addStep" />
+
+        kysimused:
         <div
             :key="`step_${i}`"
             :id="`step_${i}`"

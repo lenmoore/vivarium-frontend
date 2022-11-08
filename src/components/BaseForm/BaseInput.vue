@@ -28,6 +28,7 @@
             :id="id"
             :type="type"
             :value="modelValue"
+            :class="inputClass"
             @input="updateValue"
         />
     </div>
@@ -72,6 +73,10 @@ export default {
             default: '',
         },
         placeholder: {
+            type: String,
+            default: '',
+        },
+        inputClass: {
             type: String,
             default: '',
         },

@@ -18,8 +18,8 @@ const visitorStore = useVisitorStore();
 const visitor = {
     email: '',
     wardrobe_number: 0,
-    wants_newsletter: 'false',
-    wants_summary: 'false',
+    wants_newsletter: false,
+    wants_summary: false,
 };
 
 async function onLogin() {
@@ -29,6 +29,7 @@ async function onLogin() {
     if (visitor.email.length === 0) {
         visitor.email = 'n@o.pe';
     }
+    console.log(activePerformance);
     visitor.performance = activePerformance.value._id;
 
     await visitorStore.login(visitor).then((data) => {

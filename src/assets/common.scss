@@ -16,18 +16,23 @@ $enable-rounded: false;
 $enable-responsive-font-sizes: true;
 $hover-color: #c4c4c4;
 
-.btn {
+.btn, .btn-primary {
     border-radius: 0;
     background-color: white;
     color: $turquoise;
-    border: 2px solid black !important;
+    border: 2px solid black;
     display: inline-flex;
     width: 100%;
     justify-content: center;
 
     &:hover, &:active, &:focus {
-        color: white !important;
+        color: white;
         background-color: $turquoise !important;
+    }
+
+    &.btn-icon {
+        //border: 0;
+        width: 8rem;
     }
 }
 //.btn-primary {
@@ -42,7 +47,23 @@ $hover-color: #c4c4c4;
 //}
 a {
     color: $turquoise;
+}
 
+.small-number {
+    width: 3rem;
+
+    &.red {
+        background-color: $red;
+    }
+    &.green {
+        background-color: $green;
+    }
+    &.orange {
+        background-color: $orange;
+    }
+    &.blue {
+        background-color: $blue;
+    }
 }
 // common components
 .menu-item {
