@@ -3,8 +3,8 @@ import { useAuthStore } from '@/store/auth.store';
 import { computed, onMounted, reactive, ref, watch } from 'vue';
 import { usePerformanceStore } from '@/store/performance.store';
 
-const authStore = useAuthStore();
 const performanceStore = usePerformanceStore();
+const authStore = useAuthStore();
 
 onMounted(async () => {
     await performanceStore.getGames();
@@ -20,14 +20,19 @@ watch(isAuthenticated, () => {
 });
 
 // links
-const home = { name: 'home', label: 'home' };
-const basket = { name: 'visitor.humanity-shop.basket', label: 'basket' };
-const scan = { name: 'visitor.humanity-shop.scan', label: 'scan' };
+const home = { name: 'home', label: 'home', query: {} };
+const basket = {
+    name: 'visitor.humanity-shop.basket',
+    label: 'basket',
+    query: {},
+};
+const scan = { name: 'visitor.humanity-shop.scan', label: 'scan', query: {} };
+const quiz = { name: 'visitor.quiz', label: 'pela', query: {} };
 let navLinks = reactive({ linx: [home] });
 
 function renderLinks() {
-    console.log('render');
-
+    console.log('render links');
+    navLinks.linx = [home];
     // stuff from store
     const phases = ref(computed(() => performanceStore.phases));
     const activePhase = ref(phases.value.find((p) => p.active));
@@ -36,8 +41,8 @@ function renderLinks() {
     if (isAuthenticated.value && isAdmin) {
         navLinks.linx = [
             home,
-            { name: 'admin.humanity-shop', label: 'humanity shop' },
-            { name: 'admin.performances', label: 'performances' },
+            { name: 'admin.humanity-shop', label: 'humanity shop', query: {} },
+            { name: 'admin.performances', label: 'performances', query: {} },
         ];
     } else if (isAuthenticated.value) {
         // is authenticated as visitor
@@ -51,12 +56,14 @@ function renderLinks() {
             navLinks.linx.push(basket);
             navLinks.linx.push(scan);
             console.log(navLinks);
+        } else if (activeGame && activeGame.game_type === 'QUIZ') {
+            navLinks.linx.push(quiz);
         }
     } else {
         navLinks.linx = [
-            { name: 'home', label: 'home' },
-            { name: 'login', label: '(admin) login' },
-            { name: 'visitor.login', label: '(publik) login' },
+            { name: 'home', label: 'home', query: {} },
+            { name: 'login', label: '(admin) login', query: {} },
+            { name: 'visitor.login', label: '(publik) login', query: {} },
         ];
     }
 }
@@ -69,7 +76,7 @@ function renderLinks() {
                 class="nav-item"
                 v-for="(link, i) in navLinks.linx"
                 :key="`${navLinks.linx.length}_${i}`"
-                :to="{ name: link.name }"
+                :to="{ name: link.name, query: link.query }"
             >
                 {{ `${navLinks.linx.length}_${i}` }} {{ link.label }}
             </RouterLink>

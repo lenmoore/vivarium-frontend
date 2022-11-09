@@ -19,7 +19,6 @@ const newPhase = {
 
 async function onSubmitPhase() {
     console.log(newPhase);
-    const game = games.value.find((g) => g._id === newPhase.game);
     return await performanceStore.addPhase({
         name: newPhase.name,
         active: newPhase.active,

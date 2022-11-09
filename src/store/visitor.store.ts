@@ -2,8 +2,6 @@ import { defineStore } from 'pinia';
 import { usePerformanceStore } from '@/store/performance.store';
 import PerformanceService from '@/services/performance.service';
 import { Visitor } from '@/types/users.types';
-import { TheatrePerformance } from '@/types/performances.types';
-const performanceStore = usePerformanceStore();
 
 export type RootVisitorState = {
     visitor: Visitor;
@@ -27,6 +25,12 @@ export const useVisitorStore = defineStore({
                 // todo add visitor to performance also
                 return data;
             });
+        },
+        async editVisitor(visitor: Visitor): Promise<Visitor> {
+            const result = await PerformanceService.editVisitor(visitor);
+            console.log(result);
+            this.visitor = new Visitor(result);
+            return result;
         },
     },
     persist: true,

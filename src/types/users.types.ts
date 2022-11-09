@@ -49,6 +49,7 @@ export class Visitor implements IUser {
     wants_summary: boolean;
     performance: TheatrePerformance;
     basket?: Basket;
+    quiz_results?: [];
 
     constructor(user: any) {
         this._id = user._id;
@@ -63,6 +64,7 @@ export class Visitor implements IUser {
         this.wants_newsletter = user.wants_newsletter || false;
         this.wardrobe_number = user.wardrobe_number;
         this.basket = user.basket;
+        this.quiz_results = user.quiz_results || [];
     }
 
     static fromJSON(json: any) {
@@ -78,6 +80,7 @@ export class Visitor implements IUser {
             wants_newsletter: json.wants_newsletter,
             wardrobe_number: json.wardrobe_number,
             basket: json.basket,
+            quiz_results: json.quiz_results,
         });
     }
 
@@ -92,6 +95,7 @@ export class Visitor implements IUser {
             wants_newsletter: visitor?.wants_newsletter,
             wardrobe_number: visitor?.wardrobe_number,
             basket: visitor?.basket,
+            quiz_results: visitor?.quiz_results,
         };
     }
 }

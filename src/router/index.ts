@@ -116,6 +116,12 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('../views/VisitorAuth/VisitorLogin.vue'),
     },
     {
+        path: '/visitor/quiz',
+        name: 'visitor.quiz',
+        component: () =>
+            import('../views/HumanityQuestionnaire/QuestionnaireIndex.vue'),
+    },
+    {
         path: '/visitor',
         name: 'visitor',
         component: () =>

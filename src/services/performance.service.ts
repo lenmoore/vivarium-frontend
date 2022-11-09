@@ -89,6 +89,17 @@ class PerformanceService {
                 return data;
             });
     }
+    async editVisitor(payload: any) {
+        return await api
+            .put(`/visitors/${payload.visitorId}`, payload, {
+                params: {
+                    visitorId: payload.visitorId,
+                },
+            })
+            .then(({ data }) => {
+                return data;
+            });
+    }
 
     async deletePerformance() {}
 
