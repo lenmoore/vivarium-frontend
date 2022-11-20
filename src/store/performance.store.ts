@@ -1,12 +1,14 @@
 import { defineStore } from 'pinia';
 import PerformanceService from '@/services/performance.service';
 import { Game, Phase, TheatrePerformance } from '@/types/performances.types';
+import { Visitor } from '@/types/users.types';
 export type RootPerformanceState = {
     performances: TheatrePerformance[];
     activePerformance: TheatrePerformance;
     phases: Phase[];
     games: Game[];
     activePhase: Phase;
+    visitors: Visitor[];
 };
 export const usePerformanceStore = defineStore({
     id: 'performance',
@@ -17,6 +19,7 @@ export const usePerformanceStore = defineStore({
             games: [] as Game[],
             activePerformance: {},
             activePhase: {},
+            visitors: [] as Visitor[],
         } as RootPerformanceState),
 
     getters: {
@@ -34,6 +37,9 @@ export const usePerformanceStore = defineStore({
         },
         getActivePhase: (state) => {
             return state.phases.find((p) => p.active) || undefined;
+        },
+        getVisitors: (state) => {
+            return state.visitors;
         },
     },
     actions: {
@@ -90,6 +96,11 @@ export const usePerformanceStore = defineStore({
         async editGame(g: Game): Promise<Game> {
             console.log('game in editGame performance.store', g);
             return await PerformanceService.editGame(g);
+        },
+
+        async getCurrentPerformanceVisitors(): Promise<Visitor[]> {
+            this.visitors = await PerformanceService.getVisitors();
+            return this.visitors;
         },
     },
 });

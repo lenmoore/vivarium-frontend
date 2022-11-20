@@ -110,5 +110,11 @@ class PerformanceService {
     }
 
     async getVisitor(id: string) {}
+
+    async getVisitors() {
+        return await api.get('/visitors').then(({ data }) => {
+            return data;
+        });
+    }
 }
 export default new PerformanceService();

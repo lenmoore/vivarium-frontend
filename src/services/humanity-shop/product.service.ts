@@ -6,6 +6,11 @@ class ProductService {
             return data;
         });
     }
+    async fetchBaskets(): Promise<Basket[]> {
+        return await api.get(`/baskets`).then(({ data }) => {
+            return data;
+        });
+    }
 
     async fetchProductById(id: string): Promise<Product> {
         return await api.get(`/products/${id}`).then(({ data }) => {

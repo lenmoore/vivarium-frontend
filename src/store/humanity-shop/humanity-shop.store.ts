@@ -20,6 +20,9 @@ export const useHumanityShopStore = defineStore({
         getProducts: (state) => {
             return state.products;
         },
+        getBaskets: (state) => {
+            return state.baskets;
+        },
     },
     actions: {
         async getProductById(id: string): Promise<Product> {
@@ -27,6 +30,9 @@ export const useHumanityShopStore = defineStore({
         },
         async fetchProducts() {
             this.products = await ProductService.fetchProducts();
+        },
+        async fetchBaskets() {
+            this.baskets = await ProductService.fetchBaskets();
         },
         async getVisitorBasket() {
             console.log(

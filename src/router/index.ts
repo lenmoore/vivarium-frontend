@@ -48,6 +48,12 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('../views/Admin/AdminHome.vue'),
         children: [
             {
+                path: 'audience',
+                name: 'admin.audience',
+                component: () =>
+                    import('../views/Admin/AudienceInspector/AudienceList.vue'),
+            },
+            {
                 path: 'humanity-shop',
                 name: 'admin.humanity-shop',
                 redirect: { name: 'admin.humanity-shop.products' },
@@ -131,7 +137,7 @@ const routes: Array<RouteRecordRaw> = [
         children: [
             {
                 path: 'intro',
-                name: 'visitor-intro',
+                name: 'visitor.intro',
                 component: () =>
                     import('../views/VisitorAuth/VisitorIntro.vue'),
             },
