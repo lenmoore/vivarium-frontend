@@ -30,7 +30,7 @@ performanceStore.getPerformanceById(id);
             <div class="performance-settings">
                 <div class="d-flex">
                     <button
-                        class="btn"
+                        class="btn btn-primary"
                         v-if="performance.active"
                         @click="
                             performanceStore.setInactivePerformance(performance)
@@ -40,7 +40,7 @@ performanceStore.getPerformanceById(id);
                     </button>
                     <button
                         v-else
-                        class="btn"
+                        class="btn btn-primary"
                         @click="
                             performanceStore.setActivePerformance(performance)
                         "

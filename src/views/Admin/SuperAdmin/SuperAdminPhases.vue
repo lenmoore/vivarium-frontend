@@ -45,8 +45,8 @@ async function onSubmitPhase() {
                         />
                         <BaseInput
                             id="name"
-                            label="faas"
-                            name="game_phase"
+                            label="mäng faasi ajal"
+                            name="phase_game"
                             type="select"
                             :options="games"
                             v-model="newPhase.game"

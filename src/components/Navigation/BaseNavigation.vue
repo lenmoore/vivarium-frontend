@@ -40,6 +40,7 @@ function renderLinks() {
 
     if (isAuthenticated.value && isAdmin) {
         navLinks.linx = [
+            { name: 'superadmin', label: 'superadmin', query: {} },
             { name: 'admin.home', label: 'admin home', query: {} },
             {
                 name: 'admin.humanity-shop.products',
@@ -74,38 +75,40 @@ function renderLinks() {
 </script>
 
 <template>
-    <div class="nav-wrapper d-flex justify-content-start align-items-end">
-        <nav class="nav-wrapper d-flex flex-column">
-            <RouterLink
-                class="nav-item"
-                v-for="(link, i) in navLinks.linx"
-                :key="`${navLinks.linx.length}_${i}`"
-                :to="{ name: link.name, query: link.query }"
-            >
-                {{ `${navLinks.linx.length}_${i}` }} {{ link.label }}
-            </RouterLink>
-            <button class="btn" @click="renderLinks">XX</button>
-        </nav>
-    </div>
+    <nav class="nav-wrapper">
+        <RouterLink
+            class="nav-item"
+            v-for="(link, i) in navLinks.linx"
+            :key="`${navLinks.linx.length}_${i}`"
+            :to="{ name: link.name, query: link.query }"
+        >
+            {{ `${navLinks.linx.length}_${i}` }} {{ link.label }}
+        </RouterLink>
+    </nav>
+    <button class="btn" @click="renderLinks">XX</button>
 </template>
 
 <style lang="scss">
 @import 'src/assets/common';
 .nav-wrapper {
-    padding-left: 2rem;
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgba(255, 157, 22, 0.8);
+    padding: 1rem;
+    margin: 1rem;
 }
 .nav-item {
     text-transform: capitalize;
     text-align: left;
-    padding-bottom: 0.25rem;
-    margin: 0.25rem;
-    font-size: 1.5rem;
+    background-color: rgb(234, 216, 188);
     color: $dark-blue;
+    font-size: 0.75rem;
+    padding: 0.2rem 0.5rem;
+
     &:hover {
         background-color: rgba(255, 255, 255, 0.3);
     }
-}
-.nav-wrapper {
-    padding-bottom: 1rem;
 }
 </style>

@@ -50,7 +50,7 @@ async function onSubmitGame() {
                         {{ game.name }}
                     </div>
 
-                    add new: <br />
+                    uus: <br />
                     <BaseForm @submit="onSubmitGame">
                         <BaseInput
                             id="name"

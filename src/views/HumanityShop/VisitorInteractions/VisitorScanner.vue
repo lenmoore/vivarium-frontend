@@ -9,7 +9,7 @@ const visitor = reactive(visitorStore.getVisitor);
 const qr = reactive({
     result: 'none',
     customError: '-',
-    isValid: false,
+    isValid: true,
     camera: 'auto',
     foundProduct: null,
 });
@@ -20,6 +20,7 @@ onMounted(() => {
     humanityShopStore.getVisitorBasket();
 });
 const products = computed(() => humanityShopStore.getProducts);
+console.log(visitor.basket.products.length);
 
 async function onDecode(content) {
     console.log('dude hello?');
@@ -33,6 +34,17 @@ async function onDecode(content) {
     qr.foundProduct = products.value.find(
         (product) => product.title === content
     );
+
+    let alreadyInBasket = visitor.basket.products.some(
+        (prod) => prod === qr.foundProduct._id
+    );
+    console.log(alreadyInBasket);
+    console.log(visitor.basket.products);
+    if (alreadyInBasket) {
+        console.log('dude');
+        qr.isValid = false;
+    }
+    console.log(qr.foundProduct);
     // this.isValid = content.startsWith('http'); // todo - check if exists in products
     console.log(qr.isValid);
     // some more delay, so users have time to read the message
@@ -45,17 +57,19 @@ async function addProductToBasket() {
     let basket = reactive(visitor).basket;
 
     basket.products.push(qr.foundProduct._id);
-    await humanityShopStore.updateBasket(basket).then(() => {
-        qr.foundProduct = null;
-    });
+    await humanityShopStore.updateBasket(basket);
+    qr.foundProduct = null;
+
+    // turnCameraOn();
 }
 
-function onInit(promise) {
-    promise.catch(console.error).then(resetValidationState);
+function onInit() {
+    qr.foundProduct = null;
+    resetValidationState();
 }
 
 function resetValidationState() {
-    qr.isValid = undefined;
+    qr.isValid = true;
 }
 
 function turnCameraOn() {
@@ -82,14 +96,25 @@ function timeout(ms) {
                         <div class="product-title">
                             {{ qr.foundProduct.title }}
                         </div>
+                        <img
+                            class="product-image"
+                            :src="qr.foundProduct.image"
+                            alt=""
+                        />
 
-                        <div class="btns">
+                        <div v-if="qr.isValid" class="btns">
                             <button class="btn" @click="onInit">Cancel</button>
                             <button
                                 class="btn btn-primary"
                                 @click="addProductToBasket"
                             >
                                 Add to basket
+                            </button>
+                        </div>
+                        <div v-else>
+                            This product is already in your basket.
+                            <button class="btn btn-primary" @click="onInit">
+                                OK
                             </button>
                         </div>
                     </div>
@@ -110,10 +135,16 @@ function timeout(ms) {
         align-items: center;
         justify-content: center;
         height: 100%;
+
         .product-title {
+            margin-top: 3rem;
+            margin-bottom: -2rem;
             font-size: 1.2rem;
         }
-
+        .product-image {
+            height: 200px;
+            width: 200px;
+        }
         .btns {
             .btn {
                 margin-top: 0.5rem;

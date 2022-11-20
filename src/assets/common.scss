@@ -78,7 +78,7 @@ body {
                 -webkit-backdrop-filter: blur(5px);
                 //border: 1px solid rgba(238, 218, 200, 0.3);
                 overflow: hidden;
-                margin: 5rem;
+                margin-top: 5rem;
 
                 .app-router-view {
                     overflow: scroll;
@@ -90,7 +90,9 @@ body {
 
             .app-navigation {
                 position: fixed;
-                bottom: 0;
+                bottom: 75px;
+                padding-left: 0.5rem;
+                padding-right: 0.5rem;
             }
         }
     }

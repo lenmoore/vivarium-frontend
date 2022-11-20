@@ -12,10 +12,12 @@ function openPhases() {
     <div>
         <h2>Welcome, superadmin.</h2>
         <div class="w-25">
-            <ul>
-                <li><button @click="openGames">showGames</button></li>
-                <li><button @click="openPhases">phases</button></li>
-            </ul>
+            <button class="m-2 btn btn-outline-secondary" @click="openGames">
+                mängud
+            </button>
+            <button class="m-2 btn btn-outline-secondary" @click="openPhases">
+                faasid
+            </button>
         </div>
     </div>
     <RouterView :key="$route.fullPath" />
