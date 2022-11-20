@@ -7,9 +7,6 @@ const visitorStore = useVisitorStore();
 const visitor = reactive(visitorStore.getVisitor);
 const quizResults = visitor.quiz_results;
 const basket = reactive(visitor).basket;
-const humanityShopResults = {
-    green: 0,
-};
 </script>
 
 <template>
@@ -26,7 +23,7 @@ const humanityShopResults = {
         <h4>Valikud</h4>
         <table style="border: 1px solid black">
             <tr style="border: 1px solid black">
-                <td>red</td>
+                <td>fuchsia</td>
                 <td>green</td>
                 <td>blue</td>
                 <td>orange</td>

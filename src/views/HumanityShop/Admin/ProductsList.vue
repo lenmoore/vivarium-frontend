@@ -14,7 +14,7 @@ function sortProducts(color) {
     );
 }
 
-function sortByRed() {
+function sortByfuchsia() {
     products = sortProducts('red');
 }
 function sortByGreen() {
@@ -29,15 +29,11 @@ function sortByOrange() {
 </script>
 <template>
     <div class="products-list-wrapper w-100">
-        <div
-            class="color-buttons d-flex w-100 align-content-end justify-content-end"
-        >
-            <button class="color-btn green" @click="sortByGreen">green</button>
-            <button class="color-btn red" @click="sortByRed">red</button>
-            <button class="color-btn blue" @click="sortByBlue">blue</button>
-            <button class="color-btn orange" @click="sortByOrange">
-                orange
-            </button>
+        <div class="color-buttons">
+            <button class="color-btn green" @click="sortByGreen">^</button>
+            <button class="color-btn fuchsia" @click="sortByfuchsia">^</button>
+            <button class="color-btn blue" @click="sortByBlue">^</button>
+            <button class="color-btn orange" @click="sortByOrange">^</button>
         </div>
         <!--        <button @on-click="sortByBlue">blue</button>-->
         <ProductItem :key="p._id" v-for="p in products" :product="p" />
@@ -46,23 +42,30 @@ function sortByOrange() {
 
 <style lang="scss">
 @import 'src/assets/common.scss';
+.color-buttons {
+    width: 250px;
+    display: flex;
+    justify-content: flex-end;
+    min-width: 100%;
+}
 .color-btn {
     margin-left: 1.1rem;
     color: white;
     border: 0;
     padding: 0.5rem;
+    width: 40px !important;
 
-    &.red {
-        background-color: $red;
+    &.fuchsia {
+        background-color: $fuchsia;
     }
     &.green {
-        background-color: $green;
+        background-color: $neon-green;
     }
     &.blue {
-        background-color: $blue;
+        background-color: $silver;
     }
     &.orange {
-        background-color: $orange;
+        background-color: $blue;
     }
 }
 </style>

@@ -18,7 +18,7 @@ function addNewOptionToStep() {
         option_text: '',
         humanity_values: {
             green: 0,
-            red: 0,
+            fuchsia: 0,
             blue: 0,
             orange: 0,
         },
@@ -71,12 +71,12 @@ function deleteGameStep() {
                         v-model="option.humanity_values.green"
                     />
                     <BaseInput
-                        :id="`option_red_${i}`"
-                        label="option_red"
-                        :name="`option_red_${i}`"
+                        :id="`option_fuchsia_${i}`"
+                        label="option_fuchsia"
+                        :name="`option_fuchsia_${i}`"
                         type="number"
-                        input-class="small-number red"
-                        v-model="option.humanity_values.red"
+                        input-class="small-number fuchsia"
+                        v-model="option.humanity_values.fuchsia"
                     />
                     <BaseInput
                         :id="`option_orange_${i}`"

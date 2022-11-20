@@ -4,6 +4,8 @@ import { computed } from 'vue';
 import { useRoute } from 'vue-router';
 import QrcodeVue from 'qrcode.vue';
 const route = useRoute();
+import Chart from 'chart.js/auto';
+import ProductBar from './ProductBar.vue';
 
 const humanityStore = useHumanityShopStore();
 humanityStore.fetchProducts();
@@ -11,211 +13,96 @@ humanityStore.fetchProducts();
 const products = computed(() => humanityStore.products);
 const id = route.params.id.toString();
 let product = products.value.find((p) => p._id === id);
+
+let entryCounts = {
+    green: {
+        avg: product.humanity_values.green.average,
+        sum: product.humanity_values.green.entries.reduce((a, b) => a + b),
+        counts: {
+            1: product.humanity_values.green.entries.filter((v) => v === 1)
+                .length,
+            2: product.humanity_values.green.entries.filter((v) => v === 2)
+                .length,
+            3: product.humanity_values.green.entries.filter((v) => v === 3)
+                .length,
+            4: product.humanity_values.green.entries.filter((v) => v === 4)
+                .length,
+            5: product.humanity_values.green.entries.filter((v) => v === 5)
+                .length,
+        },
+    },
+    fuchsia: {
+        avg: product.humanity_values.red.average,
+        sum: product.humanity_values.red.entries.reduce((a, b) => a + b),
+        counts: {
+            1: product.humanity_values.red.entries.filter((v) => v === 1)
+                .length,
+            2: product.humanity_values.red.entries.filter((v) => v === 2)
+                .length,
+            3: product.humanity_values.red.entries.filter((v) => v === 3)
+                .length,
+            4: product.humanity_values.red.entries.filter((v) => v === 4)
+                .length,
+            5: product.humanity_values.red.entries.filter((v) => v === 5)
+                .length,
+        },
+    },
+    blue: {
+        avg: product.humanity_values.orange.average,
+        sum: product.humanity_values.orange.entries.reduce((a, b) => a + b),
+        counts: {
+            1: product.humanity_values.orange.entries.filter((v) => v === 1)
+                .length,
+            2: product.humanity_values.orange.entries.filter((v) => v === 2)
+                .length,
+            3: product.humanity_values.orange.entries.filter((v) => v === 3)
+                .length,
+            4: product.humanity_values.orange.entries.filter((v) => v === 4)
+                .length,
+            5: product.humanity_values.orange.entries.filter((v) => v === 5)
+                .length,
+        },
+    },
+    silver: {
+        avg: product.humanity_values.blue.average,
+        sum: product.humanity_values.blue.entries.reduce((a, b) => a + b),
+        counts: {
+            1: product.humanity_values.blue.entries.filter((v) => v === 1)
+                .length,
+            2: product.humanity_values.blue.entries.filter((v) => v === 2)
+                .length,
+            3: product.humanity_values.blue.entries.filter((v) => v === 3)
+                .length,
+            4: product.humanity_values.blue.entries.filter((v) => v === 4)
+                .length,
+            5: product.humanity_values.blue.entries.filter((v) => v === 5)
+                .length,
+        },
+    },
+};
+console.log(entryCounts);
+console.log(product);
 </script>
 
 <template>
     <div>
-        <h2>{{ product.title }}</h2>
         <div class="d-flex">
-            <div class="product-details">
-                <div>{{ product.description }}</div>
-                <div>Price: {{ product.price }}</div>
-
-                <div class="values-wrapper">
-                    <div class="values">
-                        <div class="value">
-                            <span class="green">
-                                {{
-                                    Math.round(
-                                        (product.humanity_values.green.average +
-                                            Number.EPSILON) *
-                                            100
-                                    ) / 100
-                                }}
-                            </span>
-                            {{ product.humanity_values.green.entries.length }}
-                        </div>
-                        <div class="value">
-                            <span class="red">
-                                {{
-                                    Math.round(
-                                        (product.humanity_values.red.average +
-                                            Number.EPSILON) *
-                                            100
-                                    ) / 100
-                                }}
-                            </span>
-                            {{ product.humanity_values.red.entries.length }}
-                        </div>
-                        <div class="value">
-                            <span class="blue">
-                                {{
-                                    Math.round(
-                                        (product.humanity_values.blue.average +
-                                            Number.EPSILON) *
-                                            100
-                                    ) / 100
-                                }} </span
-                            >{{ product.humanity_values.blue.entries.length }}
-                        </div>
-                        <div class="value">
-                            <span class="orange">
-                                {{
-                                    Math.round(
-                                        (product.humanity_values.orange
-                                            .average +
-                                            Number.EPSILON) *
-                                            100
-                                    ) / 100
-                                }}
-                            </span>
-                            {{ product.humanity_values.orange.entries.length }}
-                        </div>
-                    </div>
+            <div class="product-details d-flex">
+                <div>
+                    <h2>{{ product.title }}</h2>
+                    <img width="300" :src="product.image" alt="product img" />
                 </div>
-            </div>
-            <img :src="product.image" alt="product img" />
-            <QrcodeVue :value="product.title" :size="300" level="H" />
-        </div>
-        <div class="d-flex entry-counts">
-            <div class="border">
-                green: <br />
-                1:
-                {{
-                    product.humanity_values.green.entries.filter((v) => v === 1)
-                        .length
-                }}
-                <br />
-                2:
-                {{
-                    product.humanity_values.green.entries.filter((v) => v === 2)
-                        .length
-                }}
-                <br />
-                3:
-                {{
-                    product.humanity_values.green.entries.filter((v) => v === 3)
-                        .length
-                }}
-                <br />
-                4:
-                {{
-                    product.humanity_values.green.entries.filter((v) => v === 4)
-                        .length
-                }}
-                <br />
-                5:
-                {{
-                    product.humanity_values.green.entries.filter((v) => v === 5)
-                        .length
-                }}
-            </div>
-
-            <div class="border">
-                red: <br />
-                1:
-                {{
-                    product.humanity_values.red.entries.filter((v) => v === 1)
-                        .length
-                }}
-                <br />
-                2:
-                {{
-                    product.humanity_values.red.entries.filter((v) => v === 2)
-                        .length
-                }}
-                <br />
-                3:
-                {{
-                    product.humanity_values.red.entries.filter((v) => v === 3)
-                        .length
-                }}
-                <br />
-                4:
-                {{
-                    product.humanity_values.red.entries.filter((v) => v === 4)
-                        .length
-                }}
-                <br />
-                5:
-                {{
-                    product.humanity_values.red.entries.filter((v) => v === 5)
-                        .length
-                }}
-            </div>
-
-            <div class="border">
-                blue: <br />
-                1:
-                {{
-                    product.humanity_values.blue.entries.filter((v) => v === 1)
-                        .length
-                }}
-                <br />
-                2:
-                {{
-                    product.humanity_values.blue.entries.filter((v) => v === 2)
-                        .length
-                }}
-                <br />
-                3:
-                {{
-                    product.humanity_values.blue.entries.filter((v) => v === 3)
-                        .length
-                }}
-                <br />
-                4:
-                {{
-                    product.humanity_values.blue.entries.filter((v) => v === 4)
-                        .length
-                }}
-                <br />
-                5:
-                {{
-                    product.humanity_values.blue.entries.filter((v) => v === 5)
-                        .length
-                }}
-            </div>
-
-            <div class="border">
-                orange: <br />
-                1:
-                {{
-                    product.humanity_values.orange.entries.filter(
-                        (v) => v === 1
-                    ).length
-                }}
-                <br />
-                2:
-                {{
-                    product.humanity_values.orange.entries.filter(
-                        (v) => v === 2
-                    ).length
-                }}
-                <br />
-                3:
-                {{
-                    product.humanity_values.orange.entries.filter(
-                        (v) => v === 3
-                    ).length
-                }}
-                <br />
-                4:
-                {{
-                    product.humanity_values.orange.entries.filter(
-                        (v) => v === 4
-                    ).length
-                }}
-                <br />
-                5:
-                {{
-                    product.humanity_values.orange.entries.filter(
-                        (v) => v === 5
-                    ).length
-                }}
+                <QrcodeVue
+                    background="#faa17d"
+                    foreground="#3e48ad"
+                    :value="product.title"
+                    :size="300"
+                    level="H"
+                />
             </div>
         </div>
-        <br />
+
+        <ProductBar :data="entryCounts" />
     </div>
 </template>
 

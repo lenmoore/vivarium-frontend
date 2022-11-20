@@ -1,20 +1,19 @@
 <script setup>
-import { defineProps } from 'vue';
 import router from '../../../router';
+import { defineProps } from 'vue';
 defineProps(['product']);
 </script>
 <template>
-    <div class="product-wrapper">
+    <RouterLink
+        :to="{
+            name: 'admin.humanity-shop.products.details',
+            params: {
+                id: product._id,
+            },
+        }"
+        class="product-wrapper"
+    >
         <div>
-            <RouterLink
-                :to="{
-                    name: 'admin.humanity-shop.products.details',
-                    params: {
-                        id: product._id,
-                    },
-                }"
-                >info</RouterLink
-            >
             <img :src="product.imageUrl" alt="" />
             <span class="title">
                 {{ product.title }}
@@ -45,27 +44,31 @@ defineProps(['product']);
                 ) / 100
             }}</span>
         </span>
-    </div>
+    </RouterLink>
 </template>
 
 <style lang="scss">
+@import 'src/assets/common';
 .values {
+    width: 250px;
+    display: flex;
+    justify-content: space-between;
     span {
-        margin: 0.5rem;
         color: white;
-        padding: 0.5rem;
+        width: 40px !important;
+        border-radius: 0;
     }
     .red {
-        background-color: indianred;
+        background-color: $fuchsia;
     }
     .green {
-        background-color: darkseagreen;
+        background-color: $neon-green;
     }
     .blue {
-        background-color: cornflowerblue;
+        background-color: $silver;
     }
     .orange {
-        background-color: darkorange;
+        background-color: $blue;
     }
 }
 
@@ -76,6 +79,6 @@ defineProps(['product']);
     display: flex;
     justify-content: space-between;
     width: 100%;
-    border-bottom: 1px solid black;
+    background-color: rgba(255, 255, 255, 0.6);
 }
 </style>

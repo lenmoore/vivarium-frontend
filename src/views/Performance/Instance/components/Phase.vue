@@ -8,9 +8,21 @@ const props = defineProps({
 </script>
 
 <template>
-    <div class="phase">
+    <div
+        :class="{
+            active: props.phase.active,
+        }"
+        class="phase"
+    >
         <h5>Phase {{ props.phase.name }}</h5>
-        <button @click="$emit('toggle')">
+        <button
+            class="btn"
+            :class="{
+                'btn-primary active': props.phase.active,
+                'btn-outline-primary': !props.phase.active,
+            }"
+            @click="$emit('toggle')"
+        >
             {{ props.phase.active ? 'stop' : 'start' }}
         </button>
     </div>
@@ -22,5 +34,10 @@ const props = defineProps({
     margin: 0.5rem;
     padding: 0.5rem;
     display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.active {
+    background-color: #42b983;
 }
 </style>

@@ -1,68 +1,122 @@
 @import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap');
-
-* {
-    font-family: 'Chakra Petch', 'Droid Sans Mono', sans-serif;
-}
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,200;0,400;1,700&display=swap');
 // vars
 $turquoise: #11A7A7;
 $ochre: #F3A530;
 
+$neon-green: rgb(17, 243, 4);
+$silver: silver;
+$fuchsia: fuchsia;
+
+$icon-beige: #faa17d;
+$icon-blue: #3e48ad;
+
+
 $orange: #ff9d16;
+$cream: #ead8bc;
+$dark-orange: #834e0e;
 $blue: #275af8;
+$dark-blue: #112667;
 $red: #dc1a1a;
 $green: #26a107;
+$white: #ffffff;
+$light-grey: #e5e5e5;
+
 // overrides
 $enable-rounded: false;
 $enable-responsive-font-sizes: true;
 $hover-color: #c4c4c4;
 
-.btn, .btn-primary {
-    border-radius: 0;
-    background-color: white;
-    color: $turquoise;
-    border: 2px solid black;
-    display: inline-flex;
-    width: 100%;
-    justify-content: center;
+$border-radius: 12px;
+* {
+    font-family: 'Poppins', sans-serif;
+    border-radius: $border-radius;
+}
 
-    &:hover, &:active, &:focus {
-        color: white;
-        background-color: $turquoise !important;
-    }
+html {
+    height: 100%;
+    background-image: linear-gradient(180deg, #ff9d16 0%, #728fec 50%, #ff9a18 100%);
+}
+body {
+    background-image: linear-gradient(180deg, #ff9d16 0%, #728fec 50%, #ff9a18 100%);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    color: $dark-blue;
 
-    &.btn-icon {
-        //border: 0;
-        width: 8rem;
+    #app {
+        display: flex;
+        flex-direction: column;
+        //background: rgba(238, 218, 200, 0.2);
+        //border-radius: 16px;
+        //box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+        //backdrop-filter: blur(5px);
+        //-webkit-backdrop-filter: blur(5px);
+        //border: 1px solid rgba(238, 218, 200, 0.3);
+        margin: 1rem;
+
+        .page {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            overflow: hidden;
+            position: static;
+
+            .app-header {
+                position: fixed;
+                top: 0;
+                width: 100%;
+                padding-left: 5rem;
+                padding-right: 5rem;
+            }
+
+            .app-wrapper {
+                background: rgba(238, 218, 200, 0.87);
+                border-radius: 16px;
+                box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+                backdrop-filter: blur(5px);
+                -webkit-backdrop-filter: blur(5px);
+                //border: 1px solid rgba(238, 218, 200, 0.3);
+                overflow: hidden;
+                margin: 5rem;
+
+                .app-router-view {
+                    overflow: scroll;
+                    height: 90vh;
+                    padding-top: 5vh;
+                    padding-bottom: 30vh;
+                }
+            }
+
+            .app-navigation {
+                position: fixed;
+                bottom: 0;
+            }
+        }
     }
 }
-//.btn-primary {
-//    border-radius: 0;
-//    background-color: white;
-//    color: $turquoise;
-//    &:active {
-//        color: $ochre;
-//    }
-//
-//    // todo hover, focus, etc
-//}
+
 a {
-    color: $turquoise;
+    color: $dark-blue;
+    &:hover {
+        color: $dark-orange;
+    }
 }
 
 .small-number {
     width: 3rem;
 
     &.red {
-        background-color: $red;
+        background-color: $fuchsia;
     }
     &.green {
-        background-color: $green;
+        background-color: $neon-green;
     }
     &.orange {
-        background-color: $orange;
+        background-color: $blue;
     }
     &.blue {
-        background-color: $blue;
+        background-color: $silver;
     }
 }
 // common components
@@ -87,4 +141,12 @@ a {
 .hover:hover {
     background-color: $hover-color;
     cursor: pointer;
+}
+
+h1 {
+    color: white;
+}
+h5 {
+    padding: 0;
+    margin: 0;
 }

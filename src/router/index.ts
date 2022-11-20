@@ -44,11 +44,11 @@ const routes: Array<RouteRecordRaw> = [
     },
     {
         path: '/admin',
-        name: 'admin',
+        name: 'admin.home',
         component: () => import('../views/Admin/AdminHome.vue'),
         children: [
             {
-                path: '/humanity-shop',
+                path: 'humanity-shop',
                 name: 'admin.humanity-shop',
                 redirect: { name: 'admin.humanity-shop.products' },
                 component: () =>

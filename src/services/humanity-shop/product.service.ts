@@ -6,6 +6,12 @@ class ProductService {
             return data;
         });
     }
+
+    async fetchProductById(id: string): Promise<Product> {
+        return await api.get(`/products/${id}`).then(({ data }) => {
+            return data;
+        });
+    }
 }
 
 export default new ProductService();

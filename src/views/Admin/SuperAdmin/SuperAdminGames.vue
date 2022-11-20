@@ -13,7 +13,7 @@ const games = computed(() => performanceStore.games);
 const newGame = {
     name: '',
     pre_capsule: true,
-    open_for_colors: ['red', 'green', 'orange', 'blue'],
+    open_for_colors: ['fuchsia', 'green', 'orange', 'blue'],
 };
 
 async function onSubmitGame() {

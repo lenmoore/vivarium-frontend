@@ -1,8 +1,10 @@
 <template>
-    <div class="app-wrapper container">
+    <div class="page">
         <BaseHeader class="app-header" />
-        <div class="app-router-view">
-            <RouterView :key="$route.fullPath" />
+        <div class="app-wrapper container">
+            <div class="app-router-view">
+                <RouterView :key="$route.fullPath" />
+            </div>
         </div>
         <BaseNavigation class="app-navigation" />
     </div>

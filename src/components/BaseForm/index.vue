@@ -4,10 +4,14 @@
             <slot></slot>
 
             <div class="buttons">
-                <button v-if="showCancel" class="btn" @on-click="cancel">
+                <button
+                    v-if="showCancel"
+                    class="btn btn-outline-primary"
+                    @on-click="cancel"
+                >
                     Cancel
                 </button>
-                <button class="btn" @on-click="submit">OK</button>
+                <button class="btn btn-primary" @on-click="submit">OK</button>
             </div>
         </form>
     </div>
@@ -44,5 +48,8 @@ export default {
 
 .buttons {
     display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
 }
 </style>

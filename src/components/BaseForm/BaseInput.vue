@@ -1,7 +1,7 @@
 <template>
     <div v-if="editMode">
         <div>
-            <label :for="id" class="text-turquoise"> {{ label }} </label>
+            <label :for="id"> {{ label }} </label>
         </div>
 
         <select

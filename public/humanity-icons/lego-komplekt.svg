@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #fff;
+      }
+
+      .cls-1, .cls-2, .cls-3 {
+        stroke: #3e48ad;
+        stroke-miterlimit: 10;
+        stroke-width: 2px;
+      }
+
+      .cls-2 {
+        fill: #3e48ad;
+      }
+
+      .cls-3 {
+        fill: #faa17d;
+      }
+    </style>
+  </defs>
+  <g id="Layer_2" data-name="Layer 2">
+    <polyline class="cls-2" points="387.34 331.18 419.8 287.31 419.8 217.82 271.96 217.86 272.25 254.41 387.34 254.41 387.34 331.18"/>
+    <polygon class="cls-2" points="235.4 369.35 271.96 332.79 271.96 150 144.01 150 107.45 186.56 235.4 186.56 235.4 369.35"/>
+  </g>
+  <g id="Layer_1" data-name="Layer 1">
+    <rect class="cls-3" x="273.13" y="254.41" width="114.21" height="76.77"/>
+    <circle class="cls-1" cx="298.4" cy="292.75" r="18.25" transform="translate(-115.98 347.79) rotate(-52.02)"/>
+    <circle class="cls-1" cx="351.54" cy="292.75" r="18.25" transform="translate(-95.55 389.67) rotate(-52.02)"/>
+    <rect class="cls-3" x="107.45" y="186.56" width="127.95" height="182.79"/>
+    <circle class="cls-1" cx="144.04" cy="223.14" r="18.25" transform="translate(-120.49 199.35) rotate(-52.02)"/>
+    <circle class="cls-1" cx="198.87" cy="223.14" r="18.25" transform="translate(-99.4 242.57) rotate(-52.02)"/>
+    <circle class="cls-1" cx="144.04" cy="277.92" r="18.25" transform="translate(-163.67 220.42) rotate(-52.02)"/>
+    <circle class="cls-1" cx="198.87" cy="277.92" r="18.25" transform="translate(-142.58 263.64) rotate(-52.02)"/>
+    <circle class="cls-1" cx="144.04" cy="332.76" r="18.25" transform="translate(-206.89 241.51) rotate(-52.02)"/>
+    <circle class="cls-1" cx="198.87" cy="332.76" r="18.25" transform="translate(-185.8 284.73) rotate(-52.02)"/>
+  </g>
+</svg>

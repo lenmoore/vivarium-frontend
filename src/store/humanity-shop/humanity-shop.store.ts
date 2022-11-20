@@ -22,6 +22,9 @@ export const useHumanityShopStore = defineStore({
         },
     },
     actions: {
+        async getProductById(id: string): Promise<Product> {
+            return await ProductService.fetchProductById(id);
+        },
         async fetchProducts() {
             this.products = await ProductService.fetchProducts();
         },

@@ -40,8 +40,12 @@ function renderLinks() {
 
     if (isAuthenticated.value && isAdmin) {
         navLinks.linx = [
-            home,
-            { name: 'admin.humanity-shop', label: 'humanity shop', query: {} },
+            { name: 'admin.home', label: 'admin home', query: {} },
+            {
+                name: 'admin.humanity-shop.products',
+                label: 'humanity shop',
+                query: {},
+            },
             { name: 'admin.performances', label: 'performances', query: {} },
         ];
     } else if (isAuthenticated.value) {
@@ -80,19 +84,26 @@ function renderLinks() {
             >
                 {{ `${navLinks.linx.length}_${i}` }} {{ link.label }}
             </RouterLink>
-            <button @click="renderLinks">XX</button>
+            <button class="btn" @click="renderLinks">XX</button>
         </nav>
     </div>
 </template>
 
 <style lang="scss">
 @import 'src/assets/common';
+.nav-wrapper {
+    padding-left: 2rem;
+}
 .nav-item {
     text-transform: capitalize;
     text-align: left;
     padding-bottom: 0.25rem;
+    margin: 0.25rem;
     font-size: 1.5rem;
-    color: $ochre;
+    color: $dark-blue;
+    &:hover {
+        background-color: rgba(255, 255, 255, 0.3);
+    }
 }
 .nav-wrapper {
     padding-bottom: 1rem;
