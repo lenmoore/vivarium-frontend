@@ -87,11 +87,7 @@ console.log(product);
 <template>
     <div>
         <div class="d-flex">
-            <div class="product-details d-flex">
-                <div>
-                    <h2>{{ product.title }}</h2>
-                    <img width="300" :src="product.image" alt="product img" />
-                </div>
+            <div class="product-details d-flex w-100">
                 <QrcodeVue
                     background="#faa17d"
                     foreground="#3e48ad"
@@ -99,8 +95,19 @@ console.log(product);
                     :size="300"
                     level="H"
                 />
+                <div class="d-flex flex-column align-items-center p-4">
+                    <img
+                        class="product-image"
+                        width="300"
+                        :src="product.image"
+                        alt="product img"
+                    />
+                    <h2>{{ product.title }}</h2>
+                </div>
             </div>
         </div>
+
+        <div class="py-4">{{ product.description }}</div>
 
         <ProductBar :data="entryCounts" />
     </div>
@@ -111,21 +118,8 @@ console.log(product);
     margin-right: 1rem;
     border: 1px solid black;
     padding: 1rem;
-    width: 60%;
 }
-
-.values-wrapper {
-    margin-top: 1rem;
-    .values {
-        .value {
-            margin: 1rem;
-        }
-    }
-}
-
-.entry-counts {
-    div {
-        margin: 1rem;
-    }
+.product-image {
+    margin: -2rem;
 }
 </style>

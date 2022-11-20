@@ -35,10 +35,10 @@ $border-radius: 12px;
 
 html {
     height: 100%;
-    background-image: linear-gradient(180deg, #ff9d16 0%, #728fec 50%, #ff9a18 100%);
+    background-image: linear-gradient(180deg, #865500 0%, #728fec 50%, #ff9a18 100%);
 }
 body {
-    background-image: linear-gradient(180deg, #ff9d16 0%, #728fec 50%, #ff9a18 100%);
+    background-image: linear-gradient(180deg, #865500 0%, #163394 50%, #ffb618 100%);
     display: flex;
     flex-direction: column;
     height: 100%;
@@ -71,7 +71,7 @@ body {
             }
 
             .app-wrapper {
-                background: rgba(238, 218, 200, 0.87);
+                background: rgba(253, 154, 70, 0.44);
                 border-radius: 16px;
                 box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
                 backdrop-filter: blur(5px);

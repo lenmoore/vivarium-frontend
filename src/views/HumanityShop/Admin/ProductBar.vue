@@ -26,7 +26,12 @@ onMounted(() => {
             responsive: true,
         },
         data: {
-            labels: ['lime', 'blue', 'silver', 'fuchsia'],
+            labels: [
+                'lime (' + data.green.sum + ' pts)',
+                'blue (' + data.blue.sum + ' pts)',
+                'silver (' + data.silver.sum + ' pts)',
+                'fuchsia (' + data.fuchsia.sum + ' pts)',
+            ],
             datasets: [
                 {
                     label: 'averages',
@@ -37,10 +42,10 @@ onMounted(() => {
                         data.fuchsia.avg,
                     ],
                     backgroundColor: [
-                        'rgb(151,255,99, 0.2)',
-                        'rgb(75, 192, 192, 0.2)',
-                        'rgb(162,160,155, 0.2)',
-                        'rgb(244,86,255, 0.2)',
+                        'rgb(151,255,99, 0.6)',
+                        'rgb(75, 192, 192, 0.6)',
+                        'rgb(162,160,155, 0.6)',
+                        'rgb(244,86,255, 0.6)',
                     ],
                     borderColor: [
                         'rgb(151,255,99)',
@@ -49,6 +54,7 @@ onMounted(() => {
                         'rgb(244,86,255)',
                     ],
                     borderWidth: 1,
+                    maxBarThickness: 20,
                 },
             ],
         },
@@ -69,6 +75,6 @@ onMounted(() => {
     //height: 400px;
     width: 400px;
     padding: 2rem;
-    margin: 2rem;
+    margin-top: 2rem;
 }
 </style>

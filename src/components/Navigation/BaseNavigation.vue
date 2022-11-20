@@ -92,10 +92,11 @@ function renderLinks() {
 @import 'src/assets/common';
 .nav-wrapper {
     display: flex;
-    width: 100%;
+    width: 80%;
     justify-content: space-between;
     align-items: center;
-    background-color: rgba(255, 157, 22, 0.8);
+    background-color: $dark-blue;
+    opacity: 80%;
     padding: 1rem;
     margin: 1rem;
 }
@@ -103,14 +104,17 @@ function renderLinks() {
     text-transform: capitalize;
     text-align: left;
     text-decoration: none;
-    background-color: rgb(234, 216, 188);
-    color: $dark-blue;
+    background-color: $dark-blue;
+    color: white;
     font-size: 0.75rem;
     padding: 0.2rem 0.5rem;
     border: $dark-blue solid 1px;
 
+    box-shadow: 1px 1px 30px $orange;
+
     &:hover {
-        background-color: rgba(255, 255, 255, 0.3);
+        //background-color: rgba(255, 255, 255, 0.3);
+        color: $orange;
     }
 }
 </style>

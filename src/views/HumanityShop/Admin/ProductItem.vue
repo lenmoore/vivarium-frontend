@@ -56,19 +56,19 @@ defineProps(['product']);
     span {
         color: white;
         width: 40px !important;
-        border-radius: 0;
+        text-decoration: none;
     }
     .red {
-        background-color: $fuchsia;
+        color: $fuchsia;
     }
     .green {
-        background-color: $neon-green;
+        color: $neon-green;
     }
     .blue {
-        background-color: $silver;
+        color: $silver;
     }
     .orange {
-        background-color: $blue;
+        color: $blue;
     }
 }
 
@@ -79,6 +79,11 @@ defineProps(['product']);
     display: flex;
     justify-content: space-between;
     width: 100%;
-    background-color: rgba(255, 255, 255, 0.6);
+    background-color: rgba(98, 53, 53, 0.67);
+    color: white;
+    text-decoration: none;
+    &:hover {
+        color: $orange;
+    }
 }
 </style>
