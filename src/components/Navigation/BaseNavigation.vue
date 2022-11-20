@@ -102,10 +102,12 @@ function renderLinks() {
 .nav-item {
     text-transform: capitalize;
     text-align: left;
+    text-decoration: none;
     background-color: rgb(234, 216, 188);
     color: $dark-blue;
     font-size: 0.75rem;
     padding: 0.2rem 0.5rem;
+    border: $dark-blue solid 1px;
 
     &:hover {
         background-color: rgba(255, 255, 255, 0.3);

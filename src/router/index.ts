@@ -130,6 +130,12 @@ const routes: Array<RouteRecordRaw> = [
             ),
         children: [
             {
+                path: 'intro',
+                name: 'visitor-intro',
+                component: () =>
+                    import('../views/VisitorAuth/VisitorIntro.vue'),
+            },
+            {
                 path: 'humanity-shop',
                 name: 'visitor.humanity-shop',
                 component: () =>

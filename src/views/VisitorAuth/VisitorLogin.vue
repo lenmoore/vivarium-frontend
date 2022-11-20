@@ -35,7 +35,7 @@ async function onLogin() {
     await visitorStore.login(visitor).then((data) => {
         console.log(data);
         localStorage.setItem('accessToken', data.accessToken);
-        router.push({ name: 'visitor.humanity-shop' });
+        router.push({ name: 'visitor.intro' });
     });
 }
 </script>
