@@ -10,6 +10,7 @@ console.log('18->', data.green);
 onMounted(() => {
     const ctx = document.getElementById('general-chart');
 
+    // todo make chart for distribution of grades for each color + display sum of all responses
     new Chart(ctx, {
         type: 'bar',
         options: {
