@@ -18,8 +18,8 @@ function onLogin() {
             console.log(data);
         })
         .finally(() => {
-            console.log('jou');
             router.push({ name: 'admin.performances' });
+            this.$forceUpdate();
         });
 }
 </script>
@@ -28,17 +28,17 @@ function onLogin() {
     <BaseForm :show-cancel="false" @submit="onLogin">
         <BaseInput
             :id="'email'"
+            v-model="user.username"
             :label="'Your email'"
             :type="'text'"
             name="username"
-            v-model="user.username"
         />
         <BaseInput
             :id="'password'"
+            v-model="user.password"
             :label="'Your password'"
             :type="'text'"
             name="password"
-            v-model="user.password"
         />
     </BaseForm>
 </template>

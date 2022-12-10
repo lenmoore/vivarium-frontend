@@ -22,15 +22,14 @@ const pageTitles = {
 <template>
     <div class="d-flex align-items-center justify-content-between">
         <h1>{{ pageTitles[router.currentRoute.value.name] }}</h1>
-        <div>
-            isadmin: {{ isAdmin }}
-            <button
-                class="btn btn-primary"
-                v-if="isAuthenticated"
-                @click="authStore.logout()"
-            >
-                log out
-            </button>
-        </div>
+        <!--        <div>-->
+        <!--            <button-->
+        <!--                class="btn btn-primary"-->
+        <!--                v-if="isAuthenticated"-->
+        <!--                @click="authStore.logout()"-->
+        <!--            >-->
+        <!--                log out-->
+        <!--            </button>-->
+        <!--        </div>-->
     </div>
 </template>

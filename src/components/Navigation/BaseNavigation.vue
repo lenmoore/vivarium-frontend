@@ -67,7 +67,7 @@ function renderLinks() {
     } else {
         navLinks.linx = [
             { name: 'home', label: 'home', query: {} },
-            { name: 'login', label: '(admin) login', query: {} },
+            // { name: 'login', label: '(admin) login', query: {} },
             { name: 'visitor.login', label: '(publik) login', query: {} },
         ];
     }
@@ -75,46 +75,30 @@ function renderLinks() {
 </script>
 
 <template>
-    <nav class="nav-wrapper">
+    <nav class="container nav-wrapper">
         <RouterLink
-            class="nav-item"
             v-for="(link, i) in navLinks.linx"
             :key="`${navLinks.linx.length}_${i}`"
             :to="{ name: link.name, query: link.query }"
+            class="nav-item"
         >
             {{ `${navLinks.linx.length}_${i}` }} {{ link.label }}
         </RouterLink>
     </nav>
-    <button class="btn" @click="renderLinks">XX</button>
+    <!--    <button class="btn" @click="renderLinks">XX</button>-->
 </template>
 
 <style lang="scss">
 @import 'src/assets/common';
-.nav-wrapper {
-    display: flex;
-    width: 80%;
-    justify-content: space-between;
-    align-items: center;
-    background-color: $dark-blue;
-    opacity: 80%;
-    padding: 1rem;
-    margin: 1rem;
-}
+
 .nav-item {
     text-transform: capitalize;
     text-align: left;
     text-decoration: none;
-    background-color: $dark-blue;
-    color: white;
-    font-size: 0.75rem;
+    background-color: $orange;
+    color: black;
     padding: 0.2rem 0.5rem;
-    border: $dark-blue solid 1px;
-
-    box-shadow: 1px 1px 30px $orange;
-
-    &:hover {
-        //background-color: rgba(255, 255, 255, 0.3);
-        color: $orange;
-    }
+    //border: $dark-blue solid 1px;
+    //box-shadow: 1px 1px 20px #ffffff;
 }
 </style>

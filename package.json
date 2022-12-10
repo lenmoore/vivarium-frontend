@@ -34,7 +34,7 @@
     "qrcode.vue": "^3.3.3",
     "vee-validate": "^4.6.7",
     "vite": "^3.1.4",
-    "vue": "^3.2.38",
+    "vue": "^3.2.45",
     "vue-class-component": "^8.0.0-0",
     "vue-jwt-decode": "^0.1.0",
     "vue-router": "^4.0.3",

@@ -46,13 +46,16 @@ function authHeader() {
 const gonsiori = 'https://192.168.8.102:3000/api';
 // const vatteater = 'https://192.168.1.153:3000/api';
 const vatteater = 'https://192.168.1.187:3000/api';
+const localHttps = 'https://localhost:3000/api';
+const tina = 'https://10.0.0.244:3000/api';
+
 const instance: AxiosInstance = axios.create({
     headers: {
         'Content-Type': 'application/json',
         Authorization: authHeader().toString(),
         'X-Refresh': refreshHeader().toString(),
     },
-    baseURL: gonsiori,
+    baseURL: tina,
 });
 
 export default instance;

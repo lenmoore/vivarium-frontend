@@ -1,6 +1,6 @@
 <template>
     <div v-if="editMode">
-        <div>
+        <div v-if="type !== 'checkbox'">
             <label :for="id"> {{ label }} </label>
         </div>
 
@@ -21,6 +21,22 @@
                 {{ option.name }}
             </option>
         </select>
+        <div
+            class="font-size-xs d-flex align-items-center justify-content-start"
+            v-else-if="type === 'checkbox'"
+        >
+            <span class="d-flex align-items-center">
+                <input
+                    :name="name"
+                    :placeholder="placeholder || label"
+                    :id="id"
+                    :type="type"
+                    :value="modelValue"
+                    @input="updateValue"
+                />
+            </span>
+            <span class="px-2 pb-3">{{ label }}</span>
+        </div>
         <input
             v-else
             :name="name"
@@ -123,6 +139,10 @@ input {
     margin-bottom: 1rem;
     display: inline-flex;
     width: 100%;
+    background-color: transparent;
+    border: 0;
+    border-bottom: 1px solid black;
+    border-radius: 0;
     &::placeholder {
         font-size: 0.75rem;
     }

@@ -11,7 +11,9 @@
                 >
                     Cancel
                 </button>
-                <button class="btn btn-primary" @on-click="submit">OK</button>
+                <button class="btn btn-primary" @on-click="submit">
+                    {{ submitLabel }}
+                </button>
             </div>
         </form>
     </div>
@@ -24,6 +26,10 @@ export default {
         showCancel: {
             type: Boolean,
             default: true,
+        },
+        submitLabel: {
+            type: String,
+            default: 'OK',
         },
     },
     methods: {
@@ -42,7 +48,7 @@ export default {
 <style lang="scss">
 .form-wrapper {
     form {
-        width: 20rem;
+        width: 100%;
     }
 }
 
@@ -51,5 +57,9 @@ export default {
     width: 100%;
     align-items: center;
     justify-content: space-between;
+
+    .btn {
+        width: 100%;
+    }
 }
 </style>

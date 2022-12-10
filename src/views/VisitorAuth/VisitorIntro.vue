@@ -1,13 +1,14 @@
 <script setup></script>
 
 <template>
+    <!--    <img-->
+    <!--        alt="Tahaks siia vivaariumi logo v midagi"-->
+    <!--        height="200"-->
+    <!--        src="/public/img.png"-->
+    <!--        width="200"-->
+    <!--    />-->
     <h2>Tere tulemast Vivaariumisse.</h2>
-    <img
-        width="400"
-        height="400"
-        src=""
-        alt="Tahaks siia vivaariumi logo v midagi"
-    />
+
     <p class="pt-4">
         Inimkonnal on käes rasked ajad, sest Maakera atmosfäär on alla andmas.
     </p>

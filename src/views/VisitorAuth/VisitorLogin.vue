@@ -7,8 +7,8 @@ import { computed, defineEmits, onMounted, watchEffect } from 'vue';
 import router from '../../router/index';
 
 const performanceStore = usePerformanceStore();
-onMounted(() => {
-    performanceStore.getPerformances();
+onMounted(async () => {
+    await performanceStore.getPerformances();
 });
 const activePerformance = computed(() => {
     return performanceStore.getActivePerformance;
@@ -41,27 +41,35 @@ async function onLogin() {
 </script>
 
 <template>
-    <BaseForm :show-cancel="false" @submit="onLogin">
+    <h1>Sisene Vivaariumisse</h1>
+    <BaseForm
+        v-if="activePerformance"
+        :show-cancel="false"
+        :submit-label="'Sisene'"
+        @submit="onLogin"
+    >
         <BaseInput
             :id="'wardrobe_number'"
-            :label="'Garderoobinumber'"
+            v-model="visitor.wardrobe_number"
+            :label="'Sinu garderoobinumber *'"
             :type="'number'"
             name="wardrobe_number"
-            v-model="visitor.wardrobe_number"
         />
         <BaseInput
             :id="'email'"
-            :label="'Sinu email'"
+            v-model="visitor.email"
+            :label="'Sinu email (vabatahtlik)'"
             :type="'text'"
             name="email"
-            v-model="visitor.email"
         />
-        <BaseInput
-            :id="'newsletter'"
-            :label="'Tahan newsletterit'"
-            :type="'checkbox'"
-            name="newsletter"
-            v-model="visitor.wants_newsletter"
-        />
+        <span class="py-2">
+            <BaseInput
+                :id="'newsletter'"
+                v-model="visitor.wants_newsletter"
+                :label="'Tahan saada VAT teatri uudiskirja'"
+                :type="'checkbox'"
+                name="newsletter"
+            />
+        </span>
     </BaseForm>
 </template>

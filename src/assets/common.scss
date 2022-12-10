@@ -10,13 +10,14 @@ $fuchsia: fuchsia;
 
 $icon-beige: #faa17d;
 $icon-blue: #3e48ad;
-
+$bg-blue: #1e1f3f;
 
 $orange: #ff9d16;
+$bg-orange: #ffba63;
 $cream: #ead8bc;
 $dark-orange: #834e0e;
-$blue: #275af8;
-$dark-blue: #112667;
+$blue: $turquoise;
+$dark-blue: $turquoise;
 $red: #dc1a1a;
 $green: #26a107;
 $white: #ffffff;
@@ -35,14 +36,17 @@ $border-radius: 12px;
 
 html {
     height: 100%;
-    background-image: linear-gradient(180deg, #865500 0%, #728fec 50%, #ff9a18 100%);
+    background-color: $bg-blue;
+    //background-image: linear-gradient(180deg, #ffffff 0%, #728fec 50%, rgba(199, 167, 125, 0.6) 100%);
 }
+
 body {
-    background-image: linear-gradient(180deg, #865500 0%, #163394 50%, #ffb618 100%);
+    //background-image: linear-gradient(180deg, #ffffff 0%, #748bdc 50%, rgba(255, 182, 24, 0.5) 100%);
     display: flex;
     flex-direction: column;
+    background-color: $bg-blue;
     height: 100%;
-    color: $dark-blue;
+    //color: white;
 
     #app {
         display: flex;
@@ -53,7 +57,6 @@ body {
         //backdrop-filter: blur(5px);
         //-webkit-backdrop-filter: blur(5px);
         //border: 1px solid rgba(238, 218, 200, 0.3);
-        margin: 1rem;
 
         .page {
             display: flex;
@@ -61,6 +64,7 @@ body {
             flex-direction: column;
             overflow: hidden;
             position: static;
+            margin: 0.25rem;
 
             .app-header {
                 position: fixed;
@@ -71,38 +75,54 @@ body {
             }
 
             .app-wrapper {
-                background: rgba(253, 154, 70, 0.44);
+                background: $bg-orange;
                 border-radius: 16px;
                 box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
                 backdrop-filter: blur(5px);
                 -webkit-backdrop-filter: blur(5px);
                 //border: 1px solid rgba(238, 218, 200, 0.3);
                 overflow: hidden;
-                margin-top: 5rem;
 
                 .app-router-view {
                     overflow: scroll;
-                    height: 90vh;
+                    height: 95vh;
                     padding-top: 5vh;
                     padding-bottom: 30vh;
                 }
-            }
 
-            .app-navigation {
-                position: fixed;
-                bottom: 75px;
-                padding-left: 0.5rem;
-                padding-right: 0.5rem;
             }
         }
     }
 }
 
+.nav-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: $bg-orange;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    margin-top: 1rem;
+    padding: 1rem;
+    bottom: 0;
+}
+
 a {
     color: $dark-blue;
+
     &:hover {
         color: $dark-orange;
     }
+}
+
+.btn-primary {
+    background-color: $turquoise;
+    border-color: $turquoise;
+
+    &:hover {
+        background-color: darkturquoise;
+    }
+
 }
 
 .small-number {
@@ -111,16 +131,20 @@ a {
     &.red {
         background-color: $fuchsia;
     }
+
     &.green {
         background-color: $neon-green;
     }
+
     &.orange {
         background-color: $blue;
     }
+
     &.blue {
         background-color: $silver;
     }
 }
+
 // common components
 .menu-item {
     font-size: 1.2rem;
@@ -145,9 +169,9 @@ a {
     cursor: pointer;
 }
 
-h1 {
-    color: white;
-}
+//h1 {
+//    color: white;
+//}
 h5 {
     padding: 0;
     margin: 0;

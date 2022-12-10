@@ -18,7 +18,7 @@ const basket = reactive(visitor).basket;
     <div>Aktiivse faasi nimi:</div>
     <div>Aktiivse m2ngu nimi:</div>
 
-    <div>
+    <div v-if="visitor && basket && quizResults">
         <h3>Kasutaja ylevaade</h3>
         <h4>Valikud</h4>
         <table style="border: 1px solid black">
@@ -36,17 +36,17 @@ const basket = reactive(visitor).basket;
             </tr>
         </table>
         <div>
-            <div :key="'selected' + i" v-for="(res, i) in quizResults">
+            <div v-for="(res, i) in quizResults" :key="'selected' + i">
                 {{ res.selected_value }}
             </div>
         </div>
 
         <h4>Humanity shopi korv</h4>
         <RouterLink :to="{ name: 'visitor.humanity-shop.basket' }"
-            >mine paris korvi</RouterLink
-        >
+            >mine paris korvi
+        </RouterLink>
         <div>
-            <div :key="'product' + i" v-for="(res, i) in basket.products">
+            <div v-for="(res, i) in basket.products" :key="'product' + i">
                 tooteID {{ res }}
             </div>
         </div>
