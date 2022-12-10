@@ -32,10 +32,6 @@ let navLinks = ref({ linx: [home] });
 
 function renderLinks() {
     const isAuthenticated = localStorage.accessToken != null;
-    console.log('>>>>>isauthenticated', isAuthenticated);
-
-    console.log('render links');
-    console.log(isAuthenticated);
     navLinks.value.linx = [home];
     // stuff from store
     const phases = ref(computed(() => performanceStore.phases));
@@ -55,16 +51,13 @@ function renderLinks() {
         ];
     } else if (isAuthenticated) {
         // is authenticated as visitor
-        console.log('activephase', activePhase.value);
         const activeGame = games.value.find(
             (game) => game?._id === activePhase?.value?.phase_game?._id
         );
 
         if (activeGame && activeGame.game_type === 'SHOP') {
-            // navLinks = [home, basket, scan];
             navLinks.value.linx.push(basket);
             navLinks.value.linx.push(scan);
-            console.log(navLinks);
         } else if (activeGame && activeGame.game_type === 'QUIZ') {
             navLinks.value.linx.push(quiz);
         }

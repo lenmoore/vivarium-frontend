@@ -165,6 +165,14 @@ const routes: Array<RouteRecordRaw> = [
                                 '../views/HumanityShop/VisitorInteractions/VisitorScanner.vue'
                             ),
                     },
+                    {
+                        path: 'done',
+                        name: 'basket-done',
+                        component: () =>
+                            import(
+                                '../views/HumanityShop/VisitorInteractions/BasketIsDone.vue'
+                            ),
+                    },
                 ],
             },
         ],

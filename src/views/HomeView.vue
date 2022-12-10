@@ -1,12 +1,27 @@
 <script setup>
 import { useVisitorStore } from '@/store/visitor.store';
-import { onMounted, reactive } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
 
 const visitorStore = useVisitorStore();
 
-const visitor = reactive(visitorStore.getVisitor);
+let visitor = reactive(visitorStore.getVisitor);
 const quizResults = visitor.quiz_results;
 const basket = reactive(visitor).basket;
+console.log('visitor', visitor);
+
+onMounted(() => {
+    console.log('kas see pole see?');
+    visitorStore.fetchVisitor(visitor.visitorId);
+});
+
+function deleteAllQuizResults() {
+    const updateVisitor = ref(visitor);
+    updateVisitor.value.quiz_results = [];
+    // updateVisitor.value.quiz_results = [];
+    console.log('update visitor:', updateVisitor.value);
+    const viss = visitorStore.editVisitor(updateVisitor.value);
+    console.log(viss);
+}
 </script>
 
 <template>
@@ -36,8 +51,14 @@ const basket = reactive(visitor).basket;
             </tr>
         </table>
         <div>
+            <button
+                class="btn btn-outline-primary"
+                @click="deleteAllQuizResults"
+            >
+                Kustuta koik results
+            </button>
             <div v-for="(res, i) in quizResults" :key="'selected' + i">
-                {{ res.selected_value }}
+                {{ res.result_text }}
             </div>
         </div>
 

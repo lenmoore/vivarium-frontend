@@ -10,16 +10,18 @@ const humanityStore = useHumanityShopStore();
 
 let showWantToRemoveModal = ref(false);
 let removeItemId = ref('');
-onMounted(() => {
-    humanityStore.getVisitorBasket();
-    humanityStore.fetchProducts();
-});
+let showConfirmBasketConfirmation = ref(false);
 
 let basket = reactive(visitor).basket;
 const products = ref(humanityStore.getProducts);
 let productsInBasket = ref(
     products.value.filter((p) => basket.products.includes(p._id))
 );
+
+onMounted(() => {
+    humanityStore.getVisitorBasket();
+    humanityStore.fetchProducts();
+});
 
 async function removeProduct(item) {
     showWantToRemoveModal.value = false;
@@ -44,9 +46,19 @@ async function removeProduct(item) {
     console.log(data);
     removeItemId = '';
 }
+
+async function confirmBasket() {
+    const data = await humanityStore.updateBasket({
+        ...basket,
+        confirmed: true,
+    });
+    if (data) {
+        await router.push({ name: 'basket-done' });
+    }
+}
 </script>
 <template>
-    <div>
+    <div class="h-100 d-flex flex-column justify-content-between">
         <div class="basket-items-wrapper">
             <div
                 v-for="(item, i) in productsInBasket"
@@ -102,6 +114,47 @@ async function removeProduct(item) {
                 </div>
             </div>
         </div>
+        <div
+            class="d-flex flex-column w-100 align-items-center justify-content-center confirm-wrapper"
+        >
+            <div v-if="!showConfirmBasketConfirmation" class="m-4">
+                <div>Kas oled valmis?</div>
+                <div class="d-flex flex-column w-100 justify-content-center">
+                    <button
+                        class="w-100 btn btn-primary"
+                        @click="showConfirmBasketConfirmation = true"
+                    >
+                        Kinnita korv
+                    </button>
+                </div>
+            </div>
+            <div
+                v-else
+                class="w-100 d-flex align-items-center justify-content-between flex-column"
+            >
+                <div
+                    v-if="productsInBasket.length < 10"
+                    class="d-flex justify-content-center align-items-center text-center"
+                >
+                    Kas oled kindel? Sa saaksid veel kaasa votta
+                    {{ 10 - productsInBasket.length }} asja.
+                </div>
+                <div class="d-flex w-100">
+                    <button
+                        class="p-2 m-2 w-100 d-flex align-items-center justify-content-center btn btn-outline-primary"
+                        @click="showConfirmBasketConfirmation = false"
+                    >
+                        Ei
+                    </button>
+                    <button
+                        class="p-2 m-2 w-100 align-items-center justify-content-center d-flex btn btn-primary"
+                        @click="confirmBasket"
+                    >
+                        Kinnita korv
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -116,5 +169,9 @@ async function removeProduct(item) {
         align-items: center;
         border: 1px solid orange;
     }
+}
+
+.confirm-wrapper {
+    bottom: 0;
 }
 </style>

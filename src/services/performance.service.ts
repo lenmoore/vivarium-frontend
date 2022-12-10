@@ -12,6 +12,7 @@ class PerformanceService {
                 return data;
             });
     }
+
     async addPhase(newPhase: Phase): Promise<Phase> {
         return await api.post(`/phases`, newPhase).then(({ data }) => {
             return data;
@@ -29,16 +30,19 @@ class PerformanceService {
             return data;
         });
     }
+
     async getGames(): Promise<Game[]> {
         return await api.get(`/games`).then(({ data }) => {
             return data;
         });
     }
+
     async getPerformances(): Promise<TheatrePerformance[]> {
         return await api.get(`/performances`).then(({ data }) => {
             return data;
         });
     }
+
     async getPerformanceById(id: string): Promise<TheatrePerformance> {
         return await api.get(`/performances/${id}`, {}).then(({ data }) => {
             return data;
@@ -89,13 +93,25 @@ class PerformanceService {
                 return data;
             });
     }
+
     async editVisitor(payload: any) {
+        console.log('------------------------payload', payload);
         return await api
-            .put(`/visitors/${payload.visitorId}`, payload, {
-                params: {
-                    visitorId: payload.visitorId,
+            .put(
+                `/visitors/${payload.visitorId}`,
+                {
+                    ...payload,
+                    basket: {
+                        ...payload.basket,
+                        basket_id: payload.basket.basketId,
+                    },
                 },
-            })
+                {
+                    params: {
+                        visitorId: payload.visitorId,
+                    },
+                }
+            )
             .then(({ data }) => {
                 return data;
             });
@@ -109,7 +125,11 @@ class PerformanceService {
         });
     }
 
-    async getVisitor(id: string) {}
+    async getVisitor(id: string) {
+        return await api.get(`/visitors/${id}`).then(({ data }) => {
+            return data;
+        });
+    }
 
     async getVisitors() {
         return await api.get('/visitors').then(({ data }) => {
@@ -117,4 +137,5 @@ class PerformanceService {
         });
     }
 }
+
 export default new PerformanceService();

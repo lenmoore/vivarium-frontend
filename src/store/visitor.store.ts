@@ -22,6 +22,7 @@ export const useVisitorStore = defineStore({
             return await PerformanceService.addVisitor(visitor).then((data) => {
                 console.log(data);
                 localStorage.accessToken = data.accessToken;
+                localStorage.visitorId = data._id;
                 this.visitor = new Visitor(data);
                 // todo add visitor to performance also
                 return data;
@@ -29,9 +30,17 @@ export const useVisitorStore = defineStore({
         },
         async editVisitor(visitor: Visitor): Promise<Visitor> {
             const result = await PerformanceService.editVisitor(visitor);
-            console.log(result);
+            console.log('editvisitor result', result);
             this.visitor = new Visitor(result);
             return result;
+        },
+        async fetchVisitor(id: string): Promise<Visitor> {
+            console.log(id);
+            return await PerformanceService.getVisitor(id).then((data) => {
+                this.visitor = new Visitor(data);
+                console.log(data);
+                return data;
+            });
         },
     },
     persist: true,
