@@ -21,6 +21,7 @@ export const useVisitorStore = defineStore({
         async login(visitor: Visitor) {
             return await PerformanceService.addVisitor(visitor).then((data) => {
                 console.log(data);
+                localStorage.accessToken = data.accessToken;
                 this.visitor = new Visitor(data);
                 // todo add visitor to performance also
                 return data;

@@ -2,6 +2,7 @@
 import { useAuthStore } from '@/store/auth.store';
 import { computed, onMounted, reactive, ref, watch } from 'vue';
 import { usePerformanceStore } from '@/store/performance.store';
+import router from '@/router';
 
 const performanceStore = usePerformanceStore();
 const authStore = useAuthStore();
@@ -12,13 +13,12 @@ onMounted(async () => {
     await performanceStore.getPerformances();
     renderLinks();
 });
-const isAuthenticated = computed(() => authStore.isAuthenticated);
-
 const isAdmin = localStorage.admin;
-watch(isAuthenticated, () => {
-    console.log('idk what to do', isAuthenticated);
-});
 
+watch(router.currentRoute, () => {
+    console.log('route change');
+    renderLinks();
+});
 // links
 const home = { name: 'home', label: 'home', query: {} };
 const basket = {
@@ -28,18 +28,22 @@ const basket = {
 };
 const scan = { name: 'visitor.humanity-shop.scan', label: 'scan', query: {} };
 const quiz = { name: 'visitor.quiz', label: 'pela', query: {} };
-let navLinks = reactive({ linx: [home] });
+let navLinks = ref({ linx: [home] });
 
 function renderLinks() {
+    const isAuthenticated = localStorage.accessToken != null;
+    console.log('>>>>>isauthenticated', isAuthenticated);
+
     console.log('render links');
-    navLinks.linx = [home];
+    console.log(isAuthenticated);
+    navLinks.value.linx = [home];
     // stuff from store
     const phases = ref(computed(() => performanceStore.phases));
     const activePhase = ref(phases.value.find((p) => p.active));
     const games = ref(computed(() => performanceStore.games));
 
-    if (isAuthenticated.value && isAdmin) {
-        navLinks.linx = [
+    if (isAuthenticated && isAdmin) {
+        navLinks.value.linx = [
             { name: 'superadmin', label: 'superadmin', query: {} },
             { name: 'admin.home', label: 'admin home', query: {} },
             {
@@ -49,7 +53,7 @@ function renderLinks() {
             },
             { name: 'admin.performances', label: 'performances', query: {} },
         ];
-    } else if (isAuthenticated.value) {
+    } else if (isAuthenticated) {
         // is authenticated as visitor
         console.log('activephase', activePhase.value);
         const activeGame = games.value.find(
@@ -58,31 +62,33 @@ function renderLinks() {
 
         if (activeGame && activeGame.game_type === 'SHOP') {
             // navLinks = [home, basket, scan];
-            navLinks.linx.push(basket);
-            navLinks.linx.push(scan);
+            navLinks.value.linx.push(basket);
+            navLinks.value.linx.push(scan);
             console.log(navLinks);
         } else if (activeGame && activeGame.game_type === 'QUIZ') {
-            navLinks.linx.push(quiz);
+            navLinks.value.linx.push(quiz);
         }
     } else {
-        navLinks.linx = [
+        navLinks.value.linx = [
             { name: 'home', label: 'home', query: {} },
             // { name: 'login', label: '(admin) login', query: {} },
             { name: 'visitor.login', label: '(publik) login', query: {} },
         ];
     }
 }
+
+const isIntroView = router.currentRoute.value.name === 'visitor.intro';
 </script>
 
 <template>
-    <nav class="container nav-wrapper">
+    <nav v-if="!isIntroView" class="container nav-wrapper">
         <RouterLink
             v-for="(link, i) in navLinks.linx"
             :key="`${navLinks.linx.length}_${i}`"
             :to="{ name: link.name, query: link.query }"
             class="nav-item"
         >
-            {{ `${navLinks.linx.length}_${i}` }} {{ link.label }}
+            {{ link.label }}
         </RouterLink>
     </nav>
     <!--    <button class="btn" @click="renderLinks">XX</button>-->
@@ -95,10 +101,10 @@ function renderLinks() {
     text-transform: capitalize;
     text-align: left;
     text-decoration: none;
-    background-color: $orange;
+    background-color: white;
     color: black;
     padding: 0.2rem 0.5rem;
-    //border: $dark-blue solid 1px;
+    border: $dark-blue solid 1px;
     //box-shadow: 1px 1px 20px #ffffff;
 }
 </style>

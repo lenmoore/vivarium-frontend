@@ -15,9 +15,9 @@ const qr = reactive({
 });
 
 const humanityShopStore = useHumanityShopStore();
-onMounted(() => {
-    humanityShopStore.fetchProducts();
-    humanityShopStore.getVisitorBasket();
+onMounted(async () => {
+    await humanityShopStore.fetchProducts();
+    await humanityShopStore.getVisitorBasket();
 });
 const products = computed(() => humanityShopStore.getProducts);
 console.log(visitor.basket.products.length);
@@ -97,9 +97,9 @@ function timeout(ms) {
                             {{ qr.foundProduct.title }}
                         </div>
                         <img
-                            class="product-image"
                             :src="qr.foundProduct.image"
                             alt=""
+                            class="product-image"
                         />
 
                         <div v-if="qr.isValid" class="btns">
@@ -128,6 +128,7 @@ function timeout(ms) {
 .validation-success {
     height: 100%;
     width: 100%;
+
     .product-add {
         background-color: darkseagreen;
         display: flex;
@@ -141,10 +142,12 @@ function timeout(ms) {
             margin-bottom: -2rem;
             font-size: 1.2rem;
         }
+
         .product-image {
             height: 200px;
             width: 200px;
         }
+
         .btns {
             .btn {
                 margin-top: 0.5rem;

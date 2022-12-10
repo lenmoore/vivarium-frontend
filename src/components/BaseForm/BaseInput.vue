@@ -5,31 +5,32 @@
         </div>
 
         <select
-            :value="modelValue"
             v-if="type === 'select'"
-            :name="name"
-            @input="updateValue"
             :id="id"
+            :name="name"
+            :value="modelValue"
+            @input="updateValue"
         >
             <option
-                :key="i + ' ' + option"
-                :id="i + ' ' + option"
                 v-for="(option, i) in options"
-                :value="option._id"
+                :id="i + ' ' + option"
+                :key="i + ' ' + option"
                 :name="name"
+                :value="option._id"
             >
                 {{ option.name }}
             </option>
         </select>
         <div
-            class="font-size-xs d-flex align-items-center justify-content-start"
             v-else-if="type === 'checkbox'"
+            class="font-size-xs d-flex align-items-center justify-content-start"
+            @click="updateValue"
         >
             <span class="d-flex align-items-center">
                 <input
+                    :id="id"
                     :name="name"
                     :placeholder="placeholder || label"
-                    :id="id"
                     :type="type"
                     :value="modelValue"
                     @input="updateValue"
@@ -39,12 +40,12 @@
         </div>
         <input
             v-else
+            :id="id"
+            :class="inputClass"
             :name="name"
             :placeholder="placeholder || label"
-            :id="id"
             :type="type"
             :value="modelValue"
-            :class="inputClass"
             @input="updateValue"
         />
     </div>
@@ -140,11 +141,14 @@ input {
     display: inline-flex;
     width: 100%;
     background-color: transparent;
+    padding-top: 1rem;
+    padding-bottom: 0.5rem;
     border: 0;
     border-bottom: 1px solid black;
     border-radius: 0;
+
     &::placeholder {
-        font-size: 0.75rem;
+        font-size: 1rem;
     }
 }
 </style>

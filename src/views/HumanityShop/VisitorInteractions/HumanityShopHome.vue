@@ -1,8 +1,7 @@
 <script setup></script>
 <template>
-    <div class="container">
+    <div>
         <h1>Humanity shop</h1>
-
         <RouterView />
     </div>
 </template>

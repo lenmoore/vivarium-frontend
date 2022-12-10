@@ -29,14 +29,11 @@ async function onLogin() {
     if (visitor.email.length === 0) {
         visitor.email = 'n@o.pe';
     }
-    console.log(activePerformance);
+    console.log(activePerformance.value);
     visitor.performance = activePerformance.value._id;
 
-    await visitorStore.login(visitor).then((data) => {
-        console.log(data);
-        localStorage.setItem('accessToken', data.accessToken);
-        router.push({ name: 'visitor.intro' });
-    });
+    await visitorStore.login(visitor);
+    router.push({ name: 'visitor.intro' });
 }
 </script>
 
@@ -58,18 +55,10 @@ async function onLogin() {
         <BaseInput
             :id="'email'"
             v-model="visitor.email"
-            :label="'Sinu email (vabatahtlik)'"
+            :label="'Email, kui soovid VAT teatri uudiskirja'"
+            :placeholder="'Email'"
             :type="'text'"
             name="email"
         />
-        <span class="py-2">
-            <BaseInput
-                :id="'newsletter'"
-                v-model="visitor.wants_newsletter"
-                :label="'Tahan saada VAT teatri uudiskirja'"
-                :type="'checkbox'"
-                name="newsletter"
-            />
-        </span>
     </BaseForm>
 </template>

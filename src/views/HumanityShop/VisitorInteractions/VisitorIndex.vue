@@ -5,6 +5,8 @@ const visitorStore = useVisitorStore();
 const visitor = visitorStore.getVisitor;
 </script>
 <template>
-    <h1>NR {{ visitor.wardrobe_number }}</h1>
+    <h1 class="d-flex justify-content-center">
+        NR {{ visitor.wardrobe_number }}
+    </h1>
     <RouterView />
 </template>

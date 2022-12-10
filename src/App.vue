@@ -1,26 +1,21 @@
 <template>
     <div class="page">
         <BaseHeader class="app-header" />
-        <div class="app-wrapper container">
+        <div class="app-wrapper">
             <div class="app-router-view">
                 <RouterView :key="$route.fullPath" />
             </div>
         </div>
-        <BaseNavigation class="app-navigation" />
+        <BaseNavigation ref="nav" class="app-navigation" />
     </div>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import BaseNavigation from '@/components/Navigation/BaseNavigation.vue';
 import BaseHeader from '@/components/Navigation/BaseHeader.vue';
 import { usePerformanceStore } from '@/store/performance.store';
-import { computed, nextTick } from 'vue';
+import { computed, nextTick, ref, watch } from 'vue';
 
-const performanceStore = usePerformanceStore();
-
-const activePhase = computed(() => performanceStore.getActivePhase);
-console.log(activePhase);
-console.log(activePhase);
 nextTick();
 </script>
 
@@ -38,7 +33,6 @@ body,
     height: available;
 }
 
-.app-router-view,
 .app-header {
     padding: 1rem;
 }
@@ -46,6 +40,7 @@ body,
 .app-router-view {
     overflow: scroll;
 }
+
 .app-navigation {
     --bs-gutter-x: 1.5rem;
     --bs-gutter-y: 0;

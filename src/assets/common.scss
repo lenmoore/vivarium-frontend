@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,200;0,400;1,700&display=swap');
 // vars
-$turquoise: #11A7A7;
+$turquoise: #14214f;
 $ochre: #F3A530;
 
 $neon-green: rgb(17, 243, 4);
@@ -10,10 +10,10 @@ $fuchsia: fuchsia;
 
 $icon-beige: #faa17d;
 $icon-blue: #3e48ad;
-$bg-blue: #1e1f3f;
+$bg-blue: #ffffff;
 
 $orange: #ff9d16;
-$bg-orange: #ffba63;
+$bg-color: #ffffff;
 $cream: #ead8bc;
 $dark-orange: #834e0e;
 $blue: $turquoise;
@@ -28,7 +28,7 @@ $enable-rounded: false;
 $enable-responsive-font-sizes: true;
 $hover-color: #c4c4c4;
 
-$border-radius: 12px;
+$border-radius: 6px;
 * {
     font-family: 'Poppins', sans-serif;
     border-radius: $border-radius;
@@ -75,8 +75,8 @@ body {
             }
 
             .app-wrapper {
-                background: $bg-orange;
-                border-radius: 16px;
+                background: $bg-color;
+                border-radius: $border-radius;
                 box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
                 backdrop-filter: blur(5px);
                 -webkit-backdrop-filter: blur(5px);
@@ -99,7 +99,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: $bg-orange;
+    background: $bg-color;
     margin-left: 1rem;
     margin-right: 1rem;
     margin-top: 1rem;
@@ -116,7 +116,7 @@ a {
 }
 
 .btn-primary {
-    background-color: $turquoise;
+    background-color: $dark-blue;
     border-color: $turquoise;
 
     &:hover {
