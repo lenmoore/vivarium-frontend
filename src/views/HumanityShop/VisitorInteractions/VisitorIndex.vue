@@ -6,7 +6,7 @@ const visitor = visitorStore.getVisitor;
 </script>
 <template>
     <h1 class="d-flex justify-content-center">
-        NR {{ visitor.wardrobe_number }}
+        ID {{ visitor.wardrobe_number }}
     </h1>
     <RouterView />
 </template>

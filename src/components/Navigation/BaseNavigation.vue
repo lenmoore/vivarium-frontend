@@ -23,10 +23,10 @@ watch(router.currentRoute, () => {
 const home = { name: 'home', label: 'home', query: {} };
 const basket = {
     name: 'visitor.humanity-shop.basket',
-    label: 'basket',
+    label: 'Korv',
     query: {},
 };
-const scan = { name: 'visitor.humanity-shop.scan', label: 'scan', query: {} };
+const scan = { name: 'visitor.humanity-shop.scan', label: 'Pood', query: {} };
 const quiz = { name: 'visitor.quiz', label: 'pela', query: {} };
 let navLinks = ref({ linx: [home] });
 
@@ -99,12 +99,17 @@ const isIntroView = router.currentRoute.value.name === 'visitor.intro';
 
 .nav-item {
     text-transform: capitalize;
-    text-align: left;
     text-decoration: none;
     background-color: white;
     color: black;
+    width: 100%;
+    margin: 0.5rem;
+    text-align: center;
+
     padding: 0.2rem 0.5rem;
     border: $dark-blue solid 1px;
+    display: flex;
+    justify-content: center;
     //box-shadow: 1px 1px 20px #ffffff;
 }
 </style>

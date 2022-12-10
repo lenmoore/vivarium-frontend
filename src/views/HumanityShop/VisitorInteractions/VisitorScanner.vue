@@ -103,18 +103,23 @@ function timeout(ms) {
                         />
 
                         <div v-if="qr.isValid" class="btns">
-                            <button class="btn" @click="onInit">Cancel</button>
+                            <button
+                                class="btn btn-outline-primary"
+                                @click="onInit"
+                            >
+                                Tühista
+                            </button>
                             <button
                                 class="btn btn-primary"
                                 @click="addProductToBasket"
                             >
-                                Add to basket
+                                Lisa korvi
                             </button>
                         </div>
                         <div v-else>
-                            This product is already in your basket.
+                            See toode on juba sinu korvis.
                             <button class="btn btn-primary" @click="onInit">
-                                OK
+                                Olgu
                             </button>
                         </div>
                     </div>
@@ -130,7 +135,7 @@ function timeout(ms) {
     width: 100%;
 
     .product-add {
-        background-color: darkseagreen;
+        background-color: white;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -144,13 +149,13 @@ function timeout(ms) {
         }
 
         .product-image {
-            height: 200px;
-            width: 200px;
+            height: 250px;
+            width: 250px;
         }
 
         .btns {
             .btn {
-                margin-top: 0.5rem;
+                margin: 0.5rem;
             }
         }
     }

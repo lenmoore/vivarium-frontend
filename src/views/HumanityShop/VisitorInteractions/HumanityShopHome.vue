@@ -1,7 +1,7 @@
 <script setup></script>
 <template>
     <div>
-        <h1>Humanity shop</h1>
+        <h2 class="d-flex justify-content-center">Faas I</h2>
         <RouterView />
     </div>
 </template>
