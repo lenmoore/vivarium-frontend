@@ -2,6 +2,7 @@ import { defineStore } from 'pinia';
 import PerformanceService from '@/services/performance.service';
 import { Game, Phase, TheatrePerformance } from '@/types/performances.types';
 import { Visitor } from '@/types/users.types';
+
 export type RootPerformanceState = {
     performances: TheatrePerformance[];
     activePerformance: TheatrePerformance;

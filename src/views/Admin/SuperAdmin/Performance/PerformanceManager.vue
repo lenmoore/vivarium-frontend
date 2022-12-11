@@ -1,12 +1,11 @@
 <script setup>
-import { usePerformanceStore } from '../../store/performance.store';
+import { usePerformanceStore } from '../../../../store/performance.store';
 import { computed, ref } from 'vue';
-import BaseForm from '../../components/BaseForm/index.vue';
-import BaseInput from '../../components/BaseForm/BaseInput.vue';
+import BaseForm from '../../../../components/BaseForm/index.vue';
+import BaseInput from '../../../../components/BaseForm/BaseInput.vue';
 import moment from 'moment';
 import PerformanceMenu from './Menu/PerformanceMenu.vue';
-
-import router from '../../router';
+import router from '../../../../router/index';
 
 const performanceStore = usePerformanceStore();
 performanceStore.getPerformances();

@@ -15,6 +15,8 @@ export class User implements IUser {
     accessToken: string;
     refreshToken: string;
     admin: boolean;
+    actor: boolean;
+    actor_color: string;
 
     constructor(user: any) {
         this._id = user._id;
@@ -23,6 +25,8 @@ export class User implements IUser {
         this.accessToken = user.accessToken;
         this.refreshToken = user.refreshToken;
         this.admin = user.admin;
+        this.actor = user.actor;
+        this.actor_color = user.actor_color;
     }
 
     static fromJSON(json: any): User {
@@ -50,6 +54,7 @@ export class Visitor implements IUser {
     performance: TheatrePerformance;
     basket?: Basket;
     quiz_results?: [];
+    humanity_value: '';
 
     constructor(user: any) {
         this._id = user._id;
@@ -65,6 +70,7 @@ export class Visitor implements IUser {
         this.wardrobe_number = user.wardrobe_number;
         this.basket = user.basket;
         this.quiz_results = user.quiz_results || [];
+        this.humanity_value = user.humanity_value || 'none';
     }
 
     static fromJSON(json: any) {
@@ -81,6 +87,7 @@ export class Visitor implements IUser {
             wardrobe_number: json.wardrobe_number,
             basket: json.basket,
             quiz_results: json.quiz_results,
+            humanity_value: json.humanity_value,
         });
     }
 
@@ -96,6 +103,7 @@ export class Visitor implements IUser {
             wardrobe_number: visitor?.wardrobe_number,
             basket: visitor?.basket,
             quiz_results: visitor?.quiz_results,
+            humanity_value: visitor?.humanity_value,
         };
     }
 }

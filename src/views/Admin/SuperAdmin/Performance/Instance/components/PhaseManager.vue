@@ -1,11 +1,12 @@
 <script setup>
 import { defineProps } from 'vue';
 import Phase from './Phase.vue';
-import { usePerformanceStore } from '../../../../store/performance.store';
+import { usePerformanceStore } from '../../../../../../store/performance.store';
 
 const props = defineProps({
     phases: Array,
 });
+
 function onToggle(phase) {
     console.log(phase);
 
@@ -16,8 +17,8 @@ function onToggle(phase) {
 
 <template>
     <div>
-        <div :key="phase._id" v-for="phase in props.phases">
-            <Phase @toggle="onToggle(phase)" :phase="phase" />
+        <div v-for="phase in props.phases" :key="phase._id">
+            <Phase :phase="phase" @toggle="onToggle(phase)" />
         </div>
     </div>
 </template>

@@ -1,24 +1,33 @@
 <script setup>
 import router from '../../../router/index';
 
-function openGames() {
-    router.push({ name: 'superadmin.games' });
-}
-function openPhases() {
-    router.push({ name: 'superadmin.phases' });
-}
+let isInSuperadminIndex = router.currentRoute.value.name === 'superadmin';
 </script>
 <template>
-    <div>
-        <h2>Welcome, superadmin.</h2>
-        <div class="w-25">
-            <button class="m-2 btn btn-outline-secondary" @click="openGames">
-                mängud
-            </button>
-            <button class="m-2 btn btn-outline-secondary" @click="openPhases">
-                faasid
-            </button>
+    <div class="container">
+        <h2>Tsau, superadmin.</h2>
+        <div v-if="isInSuperadminIndex" class="d-flex w-25">
+            <RouterLink
+                :to="{ name: 'superadmin.settings' }"
+                class="btn btn-outline-primary m-1"
+            >
+                Seaded
+            </RouterLink>
+            <RouterLink
+                :to="{ name: 'superadmin.performances' }"
+                class="btn btn-outline-primary m-1"
+            >
+                Etendused
+            </RouterLink>
+        </div>
+        <div v-else class="pb-4">
+            <RouterLink
+                :to="{ name: 'superadmin' }"
+                class="btn btn-outline-primary m-1"
+            >
+                {{ '<   ' }} Tagasi
+            </RouterLink>
         </div>
     </div>
-    <RouterView :key="$route.fullPath" />
+    <RouterView :key="$route.fullPath" class="container" />
 </template>

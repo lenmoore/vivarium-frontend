@@ -7,15 +7,14 @@ const authStore = useAuthStore();
 const isAuthenticated = computed(() => authStore.isAuthenticated);
 const isAdmin = localStorage.admin;
 const pageTitles = {
-    'admin.humanity-shop': 'Humanity shop',
     products: 'Products',
     home: 'Hello',
     login: 'Logi sisse',
-    'admin.humanity-shop.products': 'Tooted',
-    'admin.humanity-shop.products.details': 'Toode',
-    'admin.performances': 'Etendused',
-    'admin.performance-manager': 'Etendused',
-    'admin.performance-manager.performance': 'Etendus',
+    'superadmin.games.humanity-shop.products': 'Tooted',
+    'superadmin.games.humanity-shop.details': 'Toode',
+    'superadmin.performances': 'Etendused',
+    'superadmin.performance-manager': 'Etendused',
+    'superadmin.performance-manager.performance': 'Etendus',
 };
 </script>
 

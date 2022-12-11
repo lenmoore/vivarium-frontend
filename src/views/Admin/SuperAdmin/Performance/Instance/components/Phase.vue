@@ -1,6 +1,6 @@
 <script setup>
 import { defineProps } from 'vue';
-import { Phase } from '../../../../types/performances.types';
+import { Phase } from '../../../../../../types/performances.types';
 
 const props = defineProps({
     phase: Phase,
@@ -16,11 +16,11 @@ const props = defineProps({
     >
         <h5>Phase {{ props.phase.name }}</h5>
         <button
-            class="btn"
             :class="{
                 'btn-primary active': props.phase.active,
                 'btn-outline-primary': !props.phase.active,
             }"
+            class="btn"
             @click="$emit('toggle')"
         >
             {{ props.phase.active ? 'stop' : 'start' }}
@@ -37,6 +37,7 @@ const props = defineProps({
     align-items: center;
     justify-content: space-between;
 }
+
 .active {
     background-color: #42b983;
 }

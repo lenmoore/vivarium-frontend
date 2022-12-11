@@ -1,5 +1,6 @@
 <template>
     <div class="page">
+        <h1 class="h1-color">VIVAARIUM</h1>
         <BaseHeader class="app-header" />
         <div class="app-wrapper">
             <div class="app-router-view">

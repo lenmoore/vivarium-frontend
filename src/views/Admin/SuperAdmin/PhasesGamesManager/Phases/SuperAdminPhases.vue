@@ -1,12 +1,10 @@
 <script setup>
 import { computed, reactive } from 'vue';
-import BaseForm from '../../../components/BaseForm/index.vue';
-import BaseInput from '../../../components/BaseForm/BaseInput.vue';
-import { usePerformanceStore } from '../../../store/performance.store';
-import router from '../../../router/index';
-import { Game } from '../../../types/performances.types';
+import BaseForm from '../../../../../components/BaseForm/index.vue';
+import BaseInput from '../../../../../components/BaseForm/BaseInput.vue';
+import { usePerformanceStore } from '../../../../../store/performance.store';
+import { Game } from '../../../../../types/performances.types';
 
-console.log(router);
 const performanceStore = usePerformanceStore();
 performanceStore.getGames();
 const games = computed(() => performanceStore.games);
@@ -38,18 +36,18 @@ async function onSubmitPhase() {
                     <BaseForm @submit="onSubmitPhase">
                         <BaseInput
                             id="name"
+                            v-model="newPhase.name"
                             label="faasi nimi"
                             name="phase_name"
                             type="text"
-                            v-model="newPhase.name"
                         />
                         <BaseInput
                             id="name"
+                            v-model="newPhase.game"
+                            :options="games"
                             label="mäng faasi ajal"
                             name="phase_game"
                             type="select"
-                            :options="games"
-                            v-model="newPhase.game"
                         />
                     </BaseForm>
                 </div>

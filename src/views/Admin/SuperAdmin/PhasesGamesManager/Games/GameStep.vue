@@ -1,8 +1,8 @@
 <script setup>
 import { defineProps, ref } from 'vue';
 
-import { Step } from '../../../types/performances.types';
-import BaseInput from '../../../components/BaseForm/BaseInput.vue';
+import BaseInput from '../../../../../components/BaseForm/BaseInput.vue';
+import { Step } from '../../../../../types/performances.types';
 
 console.log('gamestep');
 const props = defineProps({
@@ -24,6 +24,7 @@ function addNewOptionToStep() {
         },
     });
 }
+
 function deleteGameStep() {
     console.log('todo delete step');
 }
@@ -40,59 +41,59 @@ function deleteGameStep() {
         <div>
             <BaseInput
                 id="question_text"
+                v-model="step.question_text"
                 label="question_text"
                 name="question_text"
                 type="text"
-                v-model="step.question_text"
             />
         </div>
         <div>
             variandid
             <div
-                :key="`option_${i}`"
                 v-for="(option, i) in step.question_options"
+                :key="`option_${i}`"
                 class="d-flex align-items-center justify-content-between"
             >
                 <BaseInput
                     :id="`option_${i}`"
-                    label="option_text"
-                    class="w-100 mr-2"
-                    :name="`option_${i}`"
-                    type="text"
                     v-model="option.option_text"
+                    :name="`option_${i}`"
+                    class="w-100 mr-2"
+                    label="option_text"
+                    type="text"
                 />
-                <span class="values d-flex">
+                <span class="values d-flex w-25 justify-content-between">
                     <BaseInput
                         :id="`option_green_${i}`"
-                        label="option_green"
-                        :name="`option_green_${i}`"
-                        type="number"
-                        input-class="small-number green"
                         v-model="option.humanity_values.green"
-                    />
-                    <BaseInput
-                        :id="`option_fuchsia_${i}`"
-                        label="option_fuchsia"
-                        :name="`option_fuchsia_${i}`"
+                        :name="`option_green_${i}`"
+                        input-class="small-number green"
+                        label="laim"
                         type="number"
-                        input-class="small-number fuchsia"
-                        v-model="option.humanity_values.fuchsia"
-                    />
-                    <BaseInput
-                        :id="`option_orange_${i}`"
-                        label="option_orange"
-                        :name="`option_orange_${i}`"
-                        type="number"
-                        input-class="small-number orange"
-                        v-model="option.humanity_values.orange"
                     />
                     <BaseInput
                         :id="`option_blue_${i}`"
-                        label="option_blue"
-                        :name="`option_blue_${i}`"
-                        type="number"
-                        input-class="small-number blue"
                         v-model="option.humanity_values.blue"
+                        :name="`option_blue_${i}`"
+                        input-class="small-number blue"
+                        label="silver"
+                        type="number"
+                    />
+                    <BaseInput
+                        :id="`option_fuchsia_${i}`"
+                        v-model="option.humanity_values.fuchsia"
+                        :name="`option_fuchsia_${i}`"
+                        input-class="small-number fuchsia"
+                        label="fchs"
+                        type="number"
+                    />
+                    <BaseInput
+                        :id="`option_orange_${i}`"
+                        v-model="option.humanity_values.orange"
+                        :name="`option_orange_${i}`"
+                        input-class="small-number orange"
+                        label="blue"
+                        type="number"
                     />
                 </span>
             </div>
@@ -103,8 +104,8 @@ function deleteGameStep() {
             </div>
         </div>
         <div class="">
-            <span> </span
-            ><button class="btn btn-primary" @click="$emit('submit', step)">
+            <span> </span>
+            <button class="btn btn-primary" @click="$emit('submit', step)">
                 salvesta
             </button>
         </div>

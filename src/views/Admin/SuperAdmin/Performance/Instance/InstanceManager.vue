@@ -1,8 +1,8 @@
 <script setup>
-import { usePerformanceStore } from '../../../store/performance.store';
 import { useRoute } from 'vue-router';
 import { computed, onMounted, reactive, ref } from 'vue';
 import PhaseManager from './components/PhaseManager.vue';
+import { usePerformanceStore } from '../../../../../store/performance.store';
 
 const route = useRoute();
 const id = route.params.id;
@@ -30,8 +30,8 @@ performanceStore.getPerformanceById(id);
             <div class="performance-settings">
                 <div class="d-flex">
                     <button
-                        class="btn btn-primary"
                         v-if="performance.active"
+                        class="btn btn-primary"
                         @click="
                             performanceStore.setInactivePerformance(performance)
                         "

@@ -8,7 +8,7 @@ $silver: silver;
 $fuchsia: fuchsia;
 
 $icon-beige: #faa17d;
-$icon-blue: #3e48ad;
+$icon-blue: #02e5dd;
 $bg-blue: #ffffff;
 
 $orange: #ff9d16;
@@ -31,6 +31,7 @@ $border-radius: 6px;
 * {
     font-family: 'Poppins', sans-serif;
     border-radius: $border-radius;
+    color: $blue;
 }
 
 html {
@@ -126,9 +127,14 @@ a {
 }
 
 .small-number {
-    width: 3rem;
+    width: 2.5rem;
+    border-radius: $border-radius;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-    &.red {
+    &.fuchsia {
         background-color: $fuchsia;
     }
 
@@ -137,7 +143,7 @@ a {
     }
 
     &.orange {
-        background-color: $blue;
+        background-color: $icon-blue;
     }
 
     &.blue {
@@ -167,6 +173,11 @@ a {
 .text-turquoise {
     color: $turquoise;
 }
+
+.h1-color {
+    color: $orange;
+}
+
 
 .hover:hover {
     background-color: $hover-color;

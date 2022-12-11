@@ -1,12 +1,13 @@
 <script setup>
 import router from '../../../router';
 import { defineProps } from 'vue';
+
 defineProps(['product']);
 </script>
 <template>
     <RouterLink
         :to="{
-            name: 'admin.humanity-shop.products.details',
+            name: 'superadmin.games.humanity-shop.details',
             params: {
                 id: product._id,
             },
@@ -49,24 +50,30 @@ defineProps(['product']);
 
 <style lang="scss">
 @import 'src/assets/common';
+
 .values {
     width: 250px;
     display: flex;
     justify-content: space-between;
+
     span {
         color: white;
         width: 40px !important;
         text-decoration: none;
     }
+
     .red {
         color: $fuchsia;
     }
+
     .green {
         color: $neon-green;
     }
+
     .blue {
         color: $silver;
     }
+
     .orange {
         color: $blue;
     }
@@ -79,11 +86,13 @@ defineProps(['product']);
     display: flex;
     justify-content: space-between;
     width: 100%;
-    background-color: rgba(98, 53, 53, 0.67);
+    border: 1px solid black;
     color: white;
     text-decoration: none;
+
     &:hover {
         color: $orange;
+        background-color: #e5e5e5;
     }
 }
 </style>

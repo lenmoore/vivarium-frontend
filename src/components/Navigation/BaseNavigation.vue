@@ -41,13 +41,7 @@ function renderLinks() {
     if (isAuthenticated && isAdmin) {
         navLinks.value.linx = [
             { name: 'superadmin', label: 'superadmin', query: {} },
-            { name: 'admin.home', label: 'admin home', query: {} },
-            {
-                name: 'admin.humanity-shop.products',
-                label: 'humanity shop',
-                query: {},
-            },
-            { name: 'admin.performances', label: 'performances', query: {} },
+            { name: 'admin.home', label: 'näitleja dashboard', query: {} },
         ];
     } else if (isAuthenticated) {
         // is authenticated as visitor

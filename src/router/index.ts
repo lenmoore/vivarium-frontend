@@ -23,24 +23,108 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('../views/Admin/SuperAdmin/index.vue'),
         children: [
             {
-                path: 'games',
-                name: 'superadmin.games',
+                path: 'settings',
+                name: 'superadmin.settings',
                 component: () =>
-                    import('../views/Admin/SuperAdmin/SuperAdminGames.vue'),
+                    import(
+                        '../views/Admin/SuperAdmin/PhasesGamesManager/PhasesGamesManagerIndex.vue'
+                    ),
+                children: [
+                    {
+                        name: 'superadmin.games',
+                        path: 'games',
+                        component: () =>
+                            import(
+                                '../views/Admin/SuperAdmin/PhasesGamesManager/Games/SuperAdminGames.vue'
+                            ),
+                        children: [
+                            {
+                                path: 'game-details/:id',
+                                name: 'superadmin.games.game-details',
+                                component: () =>
+                                    import(
+                                        '../views/Admin/SuperAdmin/PhasesGamesManager/Games/GameSetup.vue'
+                                    ),
+                            },
+                            {
+                                path: 'humanity-shop',
+                                name: 'superadmin.games.humanity-shop',
+                                redirect: {
+                                    name: 'superadmin.games.humanity-shop.products',
+                                },
+                                component: () =>
+                                    import(
+                                        '../views/HumanityShop/HumanityShopHome.vue'
+                                    ),
+                                children: [
+                                    {
+                                        path: 'products',
+                                        name: 'superadmin.games.humanity-shop.products',
+                                        component: () =>
+                                            import(
+                                                '../views/HumanityShop/Admin/ProductsList.vue'
+                                            ),
+                                        children: [],
+                                    },
+                                    {
+                                        path: 'product/:id',
+                                        name: 'superadmin.games.humanity-shop.details',
+                                        component: () =>
+                                            import(
+                                                '../views/HumanityShop/Admin/ProductDetails.vue'
+                                            ),
+                                    },
+                                    {
+                                        path: 'shop-data',
+                                        name: 'superadmin.games.humanity-shop.shop-data',
+                                        component: () =>
+                                            import(
+                                                '../views/HumanityShop/Admin/ShopDataVisualization.vue'
+                                            ),
+                                    },
+                                ],
+                            },
+                        ],
+                    },
+                    {
+                        name: 'superadmin.phases',
+                        path: 'phases',
+                        component: () =>
+                            import(
+                                '../views/Admin/SuperAdmin/PhasesGamesManager/Phases/SuperAdminPhases.vue'
+                            ),
+                    },
+                ],
             },
             {
-                path: 'phases',
-                name: 'superadmin.phases',
+                path: 'performances',
+                name: 'superadmin.performances',
                 component: () =>
-                    import('../views/Admin/SuperAdmin/SuperAdminPhases.vue'),
+                    import(
+                        '../views/Admin/SuperAdmin/Performance/PerformanceIndex.vue'
+                    ),
+                redirect: { name: 'superadmin.performance-manager' },
+                children: [
+                    {
+                        path: 'manage',
+                        name: 'superadmin.performance-manager',
+                        component: () =>
+                            import(
+                                '../views/Admin/SuperAdmin/Performance/PerformanceManager.vue'
+                            ),
+                        children: [],
+                    },
+                    {
+                        path: ':id',
+                        name: 'superadmin.performance-manager.performance',
+                        component: () =>
+                            import(
+                                '../views/Admin/SuperAdmin/Performance/Instance/InstanceManager.vue'
+                            ),
+                    },
+                ],
             },
         ],
-    },
-
-    {
-        path: '/superadmin/game/:id',
-        name: 'superadmin.game-details',
-        component: () => import('../views/Admin/SuperAdmin/GameSetup.vue'),
     },
     {
         path: '/admin',
@@ -52,66 +136,6 @@ const routes: Array<RouteRecordRaw> = [
                 name: 'admin.audience',
                 component: () =>
                     import('../views/Admin/AudienceInspector/AudienceList.vue'),
-            },
-            {
-                path: 'humanity-shop',
-                name: 'admin.humanity-shop',
-                redirect: { name: 'admin.humanity-shop.products' },
-                component: () =>
-                    import('../views/HumanityShop/HumanityShopHome.vue'),
-                children: [
-                    {
-                        path: 'products',
-                        name: 'admin.humanity-shop.products',
-                        component: () =>
-                            import(
-                                '../views/HumanityShop/Admin/ProductsList.vue'
-                            ),
-                        children: [],
-                    },
-                    {
-                        path: 'product/:id',
-                        name: 'admin.humanity-shop.products.details',
-                        component: () =>
-                            import(
-                                '../views/HumanityShop/Admin/ProductDetails.vue'
-                            ),
-                    },
-                    {
-                        path: 'shop-data',
-                        name: 'admin.humanity-shop.shop-data',
-                        component: () =>
-                            import(
-                                '../views/HumanityShop/Admin/ShopDataVisualization.vue'
-                            ),
-                    },
-                ],
-            },
-            {
-                path: 'performances',
-                name: 'admin.performances',
-                component: () =>
-                    import('../views/Performance/PerformanceIndex.vue'),
-                redirect: { name: 'admin.performance-manager' },
-                children: [
-                    {
-                        path: 'manage',
-                        name: 'admin.performance-manager',
-                        component: () =>
-                            import(
-                                '../views/Performance/PerformanceManager.vue'
-                            ),
-                        children: [],
-                    },
-                    {
-                        path: ':id',
-                        name: 'admin.performance-manager.performance',
-                        component: () =>
-                            import(
-                                '../views/Performance/Instance/InstanceManager.vue'
-                            ),
-                    },
-                ],
             },
         ],
     },
