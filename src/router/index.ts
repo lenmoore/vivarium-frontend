@@ -128,6 +128,12 @@ const routes: Array<RouteRecordRaw> = [
             import('../views/HumanityQuestionnaire/QuestionnaireIndex.vue'),
     },
     {
+        path: '/quiz-done',
+        name: 'visitor.quiz.done',
+        component: () =>
+            import('../views/HumanityQuestionnaire/PhaseTwoIsDone.vue'),
+    },
+    {
         path: '/visitor',
         name: 'visitor',
         component: () =>

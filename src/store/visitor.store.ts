@@ -24,7 +24,6 @@ export const useVisitorStore = defineStore({
                 localStorage.accessToken = data.accessToken;
                 localStorage.visitorId = data._id;
                 this.visitor = new Visitor(data);
-                // todo add visitor to performance also
                 return data;
             });
         },

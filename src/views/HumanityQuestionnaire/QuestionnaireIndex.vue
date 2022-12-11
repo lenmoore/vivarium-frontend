@@ -2,6 +2,7 @@
 import { usePerformanceStore } from '../../store/performance.store';
 import { computed, onMounted, reactive, ref } from 'vue';
 import { useVisitorStore } from '../../store/visitor.store';
+import router from '../../router/index';
 
 const performanceStore = usePerformanceStore();
 const visitorStore = useVisitorStore();
@@ -9,11 +10,11 @@ const visitor = reactive(visitorStore.getVisitor);
 
 const games = computed(() => performanceStore.games);
 
-const activePhase = reactive(performanceStore.getActivePhase);
+let activePhase = reactive(performanceStore.getActivePhase);
 console.log(activePhase);
 const activeGameId = ref(activePhase.phase_game?._id);
 
-const activeGame = ref(
+let activeGame = reactive(
     games.value.find((game) => game._id === activeGameId.value)
 );
 const state = reactive({
@@ -28,9 +29,31 @@ onMounted(async () => {
     await performanceStore.getPhases();
 });
 
-function startGame() {
-    state.game_started = true;
-    state.current_step = activeGame.value.game_steps[0];
+async function startGame() {
+    await performanceStore.getPhases();
+    activePhase = reactive(performanceStore.getActivePhase);
+    await performanceStore.getGames();
+
+    activeGame = performanceStore.games.find(
+        (game) => game._id === activeGameId.value
+    );
+    console.log(activeGame);
+    console.log(activePhase.phase_game.game_type);
+    if (
+        localStorage.getItem(activeGame?._id) === 'done' ||
+        activeGame.game_type === 'SHOP'
+    ) {
+        alert('Uus faas pole veel alanud. Proovi varsti uuesti');
+    } else {
+        state.game_started = true;
+        state.current_step = activeGame.game_steps[0];
+    }
+}
+
+function quizIsDone() {
+    console.log('done');
+    localStorage.setItem(activeGame._id, 'done');
+    router.push({ name: 'visitor.quiz.done' });
 }
 
 function submitAndNext(val) {
@@ -48,8 +71,8 @@ function submitAndNext(val) {
     const viss = visitorStore.editVisitor(updateVisitor.value);
     console.log(viss);
     state.step_counter++;
-    if (state.step_counter < activeGame.value.game_steps.length) {
-        state.current_step = activeGame.value.game_steps[state.step_counter];
+    if (state.step_counter < activeGame.game_steps.length) {
+        state.current_step = activeGame.game_steps[state.step_counter];
     } else {
         state.last_step = true;
     }
@@ -57,7 +80,6 @@ function submitAndNext(val) {
 </script>
 <template>
     <div
-        v-if="activeGame"
         class="h-100 d-flex flex-column justify-content-between align-content-around"
     >
         <div v-if="state.game_started" class="game-steps-wrapper">
@@ -86,7 +108,9 @@ function submitAndNext(val) {
                 </div>
             </div>
             <div v-else>
-                <button class="btn btn-primary">Valmis</button>
+                <button class="btn btn-primary" @click="quizIsDone">
+                    Valmis
+                </button>
             </div>
         </div>
         <div
