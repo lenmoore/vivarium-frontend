@@ -154,6 +154,24 @@ button {
     }
 }
 
+.visitor-wrapper {
+    &.fuchsia {
+        border: 2px solid $fuchsia;
+    }
+
+    &.green, &.lime {
+        border: 2px solid $neon-green;
+    }
+
+    &.orange, &.blue-sky {
+        border: 2px solid $icon-blue;
+    }
+
+    &.blue, &.silver {
+        border: 2px solid $silver;
+    }
+}
+
 // common components
 .menu-item {
     font-size: 1.2rem;

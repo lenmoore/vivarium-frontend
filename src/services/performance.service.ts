@@ -139,6 +139,15 @@ class PerformanceService {
             });
     }
 
+    async updateVisitors(visitors: Array<Visitor>) {
+        console.log(visitors);
+        return await api
+            .put('/visitors-update/colors', visitors)
+            .then(({ data }) => {
+                return data;
+            });
+    }
+
     async getVisitors() {
         return await api.get('/visitors').then(({ data }) => {
             return data;

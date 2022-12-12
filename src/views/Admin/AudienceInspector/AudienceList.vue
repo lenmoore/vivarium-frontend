@@ -44,10 +44,80 @@ function toggleViewOptions(show) {
     }
 }
 
-const mappedVisitors = visitors.map((visitor) => ({
-    ...visitor,
-    basket: baskets.value.find((b) => b._id === visitor.basket._id),
-}));
+const mappedVisitors = visitors.map((visitor) => {
+    let basket = baskets.value.find((b) => b._id === visitor.basket._id);
+
+    let redQuiz =
+        visitor.quiz_results
+            .map((qR) => {
+                return qR.result_humanity_values.red;
+            })
+            .reduce((a, b) => a + b) || 0;
+    let greenQuiz =
+        visitor.quiz_results
+            .map((qR) => {
+                return qR.result_humanity_values.green;
+            })
+            .reduce((a, b) => a + b) || 0;
+    let blueQuiz =
+        visitor.quiz_results
+            .map((qR) => {
+                return qR.result_humanity_values.blue;
+            })
+            .reduce((a, b) => a + b) || 0;
+    let orangeQuiz =
+        visitor.quiz_results
+            .map((qR) => {
+                return qR.result_humanity_values.orange;
+            })
+            .reduce((a, b) => a + b) || 0;
+    let avg_hum_values = [
+        {
+            color: 'fuchsia',
+            val:
+                basket.products
+                    .map((p) => p.humanity_values.red.average)
+                    .reduce((a, b) => a + b) + redQuiz,
+        },
+        {
+            color: 'lime',
+            val:
+                basket.products
+                    .map((p) => p.humanity_values.green.average)
+                    .reduce((a, b) => a + b) + greenQuiz,
+        },
+        {
+            color: 'silver',
+            val:
+                basket.products
+                    .map((p) => p.humanity_values.blue.average)
+                    .reduce((a, b) => a + b) + blueQuiz,
+        },
+        {
+            color: 'blue-sky',
+            val:
+                basket.products
+                    .map((p) => p.humanity_values.orange.average)
+                    .reduce((a, b) => a + b) + orangeQuiz,
+        },
+    ];
+    let highest = avg_hum_values.find(
+        (value) => value.val === Math.max(...avg_hum_values.map((o) => o.val))
+    );
+    if (visitor.confirmed_humanity_value !== 'none') {
+        return {
+            ...visitor,
+            basket,
+            avg_hum_values,
+        };
+    }
+    return {
+        ...visitor,
+        basket,
+        avg_hum_values,
+        highest,
+    };
+});
 const allProductsEverSelected = [];
 mappedVisitors.forEach((visitor) =>
     visitor.basket.products.forEach((prod) =>
@@ -65,7 +135,15 @@ products.value.forEach((product) => {
 });
 let sortedCountedProducts = countedProducts.sort((a, b) => a.count < b.count);
 
-console.log(mappedVisitors);
+async function confirmColors() {
+    console.log(mappedVisitors);
+    let visitors = mappedVisitors.map((visitor) => ({
+        ...visitor,
+        avg_hum_values: null,
+        confirmed_humanity_value: visitor.highest.color,
+    }));
+    await performanceStore.updateVisitors(visitors);
+}
 </script>
 
 <template>
@@ -74,7 +152,6 @@ console.log(mappedVisitors);
             <div class="info-block">
                 Saalis inimesi: {{ mappedVisitors.length }}
             </div>
-
             <div class="d-flex align-items-center justify-content-around">
                 <button
                     class="btn btn-outline-primary"
@@ -100,10 +177,21 @@ console.log(mappedVisitors);
                 <div
                     v-for="visitor in mappedVisitors"
                     :key="visitor._id"
+                    :class="
+                        (visitor.highest && visitor.highest.color) ||
+                        visitor.confirmed_humanity_value
+                    "
                     class="visitor-wrapper"
                 >
                     <h6>Garderoobinumber: {{ visitor.wardrobe_number }}</h6>
-                    Tooteid korvis: {{ visitor.basket.products.length }}
+                    Tooteid korvis: {{ visitor.basket.products.length }},
+                    {{
+                        (visitor.highest && visitor.highest.color) ||
+                        visitor.confirmed_humanity_value
+                    }}
+                    <br /><small style="font-size: 10px">{{
+                        visitor.avg_hum_values
+                    }}</small>
                 </div>
             </div>
 
@@ -131,14 +219,16 @@ console.log(mappedVisitors);
                     </div>
                 </div>
             </div>
+
+            <h4 style="margin-top: 20rem">
+                Ära vajuta neid nuppe, kui sul siia asja pole. Helena paneb need
+                hiljem peitu
+            </h4>
+            <div>
+                <button class="btn btn-primary" @click="confirmColors">
+                    pane värvid lukku
+                </button>
+            </div>
         </div>
     </div>
 </template>
-
-<style lang="scss">
-.visitor-wrapper {
-    margin-bottom: 1rem;
-    padding-bottom: 1rem;
-    background-color: #e5e5e5;
-}
-</style>

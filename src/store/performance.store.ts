@@ -105,5 +105,11 @@ export const usePerformanceStore = defineStore({
                 await PerformanceService.getCurrentPerformanceVisitors(id);
             return this.visitors;
         },
+
+        async updateVisitors(visitors: Array<any>): Promise<Visitor[]> {
+            console.log(visitors);
+            this.visitors = await PerformanceService.updateVisitors(visitors);
+            return this.visitors;
+        },
     },
 });
