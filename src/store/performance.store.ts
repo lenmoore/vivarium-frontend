@@ -58,6 +58,7 @@ export const usePerformanceStore = defineStore({
         },
         async getPerformances() {
             this.performances = await PerformanceService.getPerformances();
+            this.getActivePerformance;
         },
         async getPhases() {
             this.phases = await PerformanceService.getPhases();
@@ -99,8 +100,9 @@ export const usePerformanceStore = defineStore({
             return await PerformanceService.editGame(g);
         },
 
-        async getCurrentPerformanceVisitors(): Promise<Visitor[]> {
-            this.visitors = await PerformanceService.getVisitors();
+        async getCurrentPerformanceVisitors(id: string): Promise<Visitor[]> {
+            this.visitors =
+                await PerformanceService.getCurrentPerformanceVisitors(id);
             return this.visitors;
         },
     },

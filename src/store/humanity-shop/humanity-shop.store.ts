@@ -3,7 +3,6 @@ import ProductService from '@/services/humanity-shop/product.service';
 import { useVisitorStore } from '@/store/visitor.store';
 import BasketService from '@/services/humanity-shop/basket.service';
 
-const visitorStore = useVisitorStore();
 export type RootHumanityShopState = {
     products: Product[];
     baskets: Basket[];
@@ -35,6 +34,8 @@ export const useHumanityShopStore = defineStore({
             this.baskets = await ProductService.fetchBaskets();
         },
         async getVisitorBasket() {
+            const visitorStore = useVisitorStore();
+
             console.log(
                 'visitorStore.getVisitor._id',
                 visitorStore.getVisitor._id
@@ -42,7 +43,7 @@ export const useHumanityShopStore = defineStore({
             return await BasketService.getBasketByVisitorId(
                 visitorStore.getVisitor._id
             ).then((data) => {
-                console.log(data);
+                // console.log(data);
                 visitorStore.visitor.basket = data;
                 return data;
             });

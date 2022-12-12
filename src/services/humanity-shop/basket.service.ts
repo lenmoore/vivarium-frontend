@@ -5,7 +5,7 @@ class BasketService {
         return await api
             .get(`/baskets/visitor/${visitorId}`)
             .then(({ data }) => {
-                console.log(data);
+                // console.log(data);
                 return data;
             });
     }

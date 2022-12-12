@@ -2,6 +2,9 @@
     <div class="page">
         <h1 class="h1-color">VIVAARIUM</h1>
         <BaseHeader class="app-header" />
+        <a href="https://192.168.237.106:3000/api/games">
+            kliki mind kui ei saa apiga yhendust
+        </a>
         <div class="app-wrapper">
             <div class="app-router-view">
                 <RouterView :key="$route.fullPath" />

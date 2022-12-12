@@ -5,45 +5,35 @@ import { useHumanityShopStore } from '../../../store/humanity-shop/humanity-shop
 import router from '../../../router/index';
 
 const visitorStore = useVisitorStore();
-const visitor = reactive(visitorStore.getVisitor);
 const humanityStore = useHumanityShopStore();
 
 let showWantToRemoveModal = ref(false);
 let removeItemId = ref('');
 let showConfirmBasketConfirmation = ref(false);
 
-let basket = reactive(visitor).basket;
-const products = ref(humanityStore.getProducts);
-let productsInBasket = ref(
-    products.value.filter((p) => basket.products.includes(p._id))
-);
-
-onMounted(() => {
-    humanityStore.getVisitorBasket();
-    humanityStore.fetchProducts();
+onMounted(async () => {
+    await humanityStore.getVisitorBasket();
+    await humanityStore.fetchProducts();
 });
+let visitor = ref(visitorStore.getVisitor);
+let basket = reactive(visitor.value.basket);
+const products = ref(humanityStore.getProducts);
+let productsInBasket = reactive(
+    products?.value.filter((p) => basket?.products?.includes(p._id))
+);
 
 async function removeProduct(item) {
     showWantToRemoveModal.value = false;
-    console.log(item._id);
-    console.log(productsInBasket);
-    let newBasketProducts = productsInBasket.value.filter(
+    let newBasketProducts = basket.products.filter(
         (product) => product._id !== item._id
     );
 
     console.log('newBasketProducts', newBasketProducts);
-    const data = await humanityStore.updateBasket({
+    await humanityStore.updateBasket({
         ...basket,
         products: newBasketProducts,
     });
-    // productsInBasket.value = products.value.filter((p) =>
-    //     data.products.includes(p._id)
-    // );
-    productsInBasket.value = productsInBasket.value.filter(
-        (p) => p._id !== item._id
-    );
-    console.log(productsInBasket.value.length, productsInBasket);
-    console.log(data);
+    basket.products = newBasketProducts;
     removeItemId = '';
 }
 
@@ -58,10 +48,10 @@ async function confirmBasket() {
 }
 </script>
 <template>
-    <div class="h-100 d-flex flex-column justify-content-between">
+    <div class="container h-100 d-flex flex-column justify-content-between">
         <div class="basket-items-wrapper">
             <div
-                v-for="(item, i) in productsInBasket"
+                v-for="(item, i) in basket.products"
                 :key="item._id + i"
                 class="hover basket-item"
             >
@@ -114,7 +104,12 @@ async function confirmBasket() {
                 </div>
             </div>
         </div>
+        <div v-if="basket && basket.confirmed">
+            Su korv on juba kinnitatud.
+            <RouterLink :to="{ name: 'home' }">Vaata</RouterLink>
+        </div>
         <div
+            v-if="basket && !basket.confirmed"
             class="d-flex flex-column w-100 align-items-center justify-content-center confirm-wrapper"
         >
             <div v-if="!showConfirmBasketConfirmation" class="m-4">
@@ -133,11 +128,11 @@ async function confirmBasket() {
                 class="w-100 d-flex align-items-center justify-content-between flex-column"
             >
                 <div
-                    v-if="productsInBasket.length < 10"
+                    v-if="basket.products.length < 10"
                     class="d-flex justify-content-center align-items-center text-center"
                 >
                     Kas oled kindel? Sa saaksid veel kaasa votta
-                    {{ 10 - productsInBasket.length }} asja.
+                    {{ 10 - basket.products.length }} asja.
                 </div>
                 <div class="d-flex w-100">
                     <button

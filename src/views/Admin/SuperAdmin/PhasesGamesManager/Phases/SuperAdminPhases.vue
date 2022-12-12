@@ -7,7 +7,9 @@ import { Game } from '../../../../../types/performances.types';
 
 const performanceStore = usePerformanceStore();
 performanceStore.getGames();
+performanceStore.getPhases();
 const games = computed(() => performanceStore.games);
+const phases = computed(() => performanceStore.phases);
 
 const newPhase = {
     name: '',
@@ -28,11 +30,16 @@ async function onSubmitPhase() {
 <template>
     <div>
         <div class="d-flex">
-            <div class="w-25 p-4 m-4">
+            <div class="p-4 m-4">
                 <div>
                     <div>phases.</div>
 
-                    add new: <br />
+                    Lisa uus siit> <br />
+                    <small
+                        >TODO kui lisad, siis vajuta ainult 1x, see parempoolne
+                        list ei update ja mingit tagasisidet ei tule, aga faas
+                        luuakse
+                    </small>
                     <BaseForm @submit="onSubmitPhase">
                         <BaseInput
                             id="name"
@@ -50,6 +57,17 @@ async function onSubmitPhase() {
                             type="select"
                         />
                     </BaseForm>
+                </div>
+            </div>
+            <div>
+                olemas faasid:
+                <div v-for="phase in phases" :key="phase._id">
+                    <strong>{{ phase.name }}</strong>
+                    <small>
+                        | aktiivne: {{ phase.active }} | mäng ={{
+                            phase.phase_game.name
+                        }}</small
+                    >
                 </div>
             </div>
         </div>

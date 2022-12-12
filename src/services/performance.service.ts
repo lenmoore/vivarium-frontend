@@ -131,6 +131,14 @@ class PerformanceService {
         });
     }
 
+    async getCurrentPerformanceVisitors(performance: string) {
+        return await api
+            .get(`/performance-visitors/${performance}`)
+            .then(({ data }) => {
+                return data;
+            });
+    }
+
     async getVisitors() {
         return await api.get('/visitors').then(({ data }) => {
             return data;

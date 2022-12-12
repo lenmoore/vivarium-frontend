@@ -49,17 +49,29 @@ function renderLinks() {
             (game) => game?._id === activePhase?.value?.phase_game?._id
         );
 
+        navLinks.value.linx.push({
+            name: 'home',
+            label: 'mina',
+            query: {},
+        });
         if (activeGame && activeGame.game_type === 'SHOP') {
             navLinks.value.linx.push(basket);
             navLinks.value.linx.push(scan);
         } else if (activeGame && activeGame.game_type === 'QUIZ') {
             navLinks.value.linx.push(quiz);
+        } else {
+            //    meaning they're waiting on something to happen, e.g phase to change
+            navLinks.value.linx.push({
+                name: 'visitor.quiz.done',
+                label: 'edasi',
+                query: {},
+            });
         }
     } else {
         navLinks.value.linx = [
-            { name: 'home', label: 'home', query: {} },
+            { name: 'home', label: 'mina', query: {} },
             // { name: 'login', label: '(admin) login', query: {} },
-            { name: 'visitor.login', label: '(publik) login', query: {} },
+            { name: 'visitor.login', label: '(publik) logi sisse', query: {} },
         ];
     }
 }
@@ -85,7 +97,6 @@ const isIntroView = router.currentRoute.value.name === 'visitor.intro';
 @import 'src/assets/common';
 
 .nav-item {
-    text-transform: capitalize;
     text-decoration: none;
     background-color: white;
     color: black;

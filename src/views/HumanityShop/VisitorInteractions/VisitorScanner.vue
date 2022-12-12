@@ -20,7 +20,6 @@ onMounted(async () => {
     await humanityShopStore.getVisitorBasket();
 });
 const products = computed(() => humanityShopStore.getProducts);
-console.log(visitor.basket.products.length);
 
 async function onDecode(content) {
     console.log('dude hello?');
@@ -35,12 +34,12 @@ async function onDecode(content) {
         (product) => product.title === content
     );
 
-    let alreadyInBasket = visitor.basket.products.some(
+    let alreadyInBasket = visitor.basket?.products?.some(
         (prod) => prod === qr.foundProduct._id
     );
     console.log(alreadyInBasket);
-    console.log(visitor.basket.products);
-    if (alreadyInBasket) {
+    console.log(visitor.basket?.confirmed);
+    if (alreadyInBasket || visitor.basket?.confirmed) {
         console.log('dude');
         qr.isValid = false;
     }
@@ -116,11 +115,17 @@ function timeout(ms) {
                                 Lisa korvi
                             </button>
                         </div>
-                        <div v-else>
+                        <div
+                            v-else-if="!qr.isValid && !visitor.basket.confirmed"
+                        >
                             See toode on juba sinu korvis.
                             <button class="btn btn-primary" @click="onInit">
                                 Olgu
                             </button>
+                        </div>
+                        <div v-else-if="!qr.isValid">
+                            Su korv on juba kinnitatud ja enam tooteid lisada ei
+                            saa.
                         </div>
                     </div>
                 </div>

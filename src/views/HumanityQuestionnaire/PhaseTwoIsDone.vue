@@ -36,13 +36,13 @@ async function startNextGame() {
 </script>
 <template>
     <div>
-        Tore, II m2ng on nyyd samuti valmis. Kui III faas on alanud, vajuta seda
+        See faas on nyyd samuti valmis. Kui jrgmine faas on alanud, vajuta seda
         nuppu.
 
         <div v-if="showWarning">
-            III faas pole veel alanud. Proovi varsti uuesti.
+            jrgmine faas pole veel alanud. Proovi varsti uuesti.
         </div>
 
-        <button class="btn btn-primary" @click="startNextGame">Nupp</button>
+        <button class="btn btn-primary" @click="startNextGame">Nupp :D</button>
     </div>
 </template>

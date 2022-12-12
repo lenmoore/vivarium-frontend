@@ -22,7 +22,7 @@ export const useVisitorStore = defineStore({
             return await PerformanceService.addVisitor(visitor).then((data) => {
                 console.log(data);
                 localStorage.accessToken = data.accessToken;
-                localStorage.visitorId = data._id;
+                localStorage.visitorId = data.visitorId;
                 this.visitor = new Visitor(data);
                 return data;
             });
@@ -37,7 +37,7 @@ export const useVisitorStore = defineStore({
             console.log(id);
             return await PerformanceService.getVisitor(id).then((data) => {
                 this.visitor = new Visitor(data);
-                console.log(data);
+                // console.log(data);
                 return data;
             });
         },

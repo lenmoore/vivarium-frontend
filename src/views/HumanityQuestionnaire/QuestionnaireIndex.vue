@@ -117,6 +117,12 @@ function submitAndNext(val) {
             v-else
             class="d-flex align-items-center w-100 h-100 justify-content-center"
         >
+            <button
+                class="w-75 btn btn-outline-primary"
+                @click="window.location.reload"
+            >
+                Varskenda lehte
+            </button>
             <button class="w-75 btn btn-primary" @click="startGame">
                 Alusta
             </button>

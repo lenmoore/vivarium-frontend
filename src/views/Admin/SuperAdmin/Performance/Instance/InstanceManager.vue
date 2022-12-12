@@ -8,8 +8,11 @@ const route = useRoute();
 const id = route.params.id;
 
 const performanceStore = usePerformanceStore();
-performanceStore.getPhases();
-performanceStore.getPerformances();
+onMounted(async () => {
+    await performanceStore.getPhases();
+    await performanceStore.getPerformances();
+});
+
 const performances = computed(() => performanceStore.performances);
 const phases = computed(() => performanceStore.phases);
 
@@ -28,10 +31,13 @@ performanceStore.getPerformanceById(id);
             <PhaseManager :phases="phases" />
 
             <div class="performance-settings">
+                <button class="btn btn-primary m-1">
+                    Jaga publik gruppidesse
+                </button>
                 <div class="d-flex">
                     <button
                         v-if="performance.active"
-                        class="btn btn-primary"
+                        class="btn btn-outline-primary"
                         @click="
                             performanceStore.setInactivePerformance(performance)
                         "
@@ -40,7 +46,7 @@ performanceStore.getPerformanceById(id);
                     </button>
                     <button
                         v-else
-                        class="btn btn-primary"
+                        class="btn btn-outline-primary"
                         @click="
                             performanceStore.setActivePerformance(performance)
                         "
@@ -49,10 +55,12 @@ performanceStore.getPerformanceById(id);
                     </button>
                 </div>
             </div>
-
-            <small>
-                {{ performance }}
-            </small>
         </div>
     </div>
 </template>
+
+<style lang="scss">
+.performance-settings {
+    margin-top: 10rem;
+}
+</style>

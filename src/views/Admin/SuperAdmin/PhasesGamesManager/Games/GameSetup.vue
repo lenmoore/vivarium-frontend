@@ -22,7 +22,19 @@ let newStep = new Step({
 
 async function addStep(val) {
     let gameToSend = game.value;
-    gameToSend.game_steps.push(val);
+    let parsedInts = [];
+    val.question_options.forEach((opt) => {
+        parsedInts.push({
+            ...opt,
+            humanity_values: {
+                red: parseInt(opt.humanity_values.fuchsia || 0),
+                green: parseInt(opt.humanity_values.green || 0),
+                blue: parseInt(opt.humanity_values.blue || 0),
+                orange: parseInt(opt.humanity_values.orange || 0),
+            },
+        });
+    });
+    gameToSend.game_steps.push({ ...val, question_options: parsedInts });
     await performanceStore.editGame(gameToSend);
 }
 
