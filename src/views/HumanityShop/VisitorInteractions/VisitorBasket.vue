@@ -35,6 +35,7 @@ async function removeProduct(item) {
     });
     basket.products = newBasketProducts;
     removeItemId = '';
+    await humanityStore.getVisitorBasket();
 }
 
 async function confirmBasket() {
@@ -149,6 +150,9 @@ async function confirmBasket() {
                     </button>
                 </div>
             </div>
+            <small class="bg-dark text-white"
+                >ps. kui tootenimed ei ilmu, tee refresh</small
+            >
         </div>
     </div>
 </template>

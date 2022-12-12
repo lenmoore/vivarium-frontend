@@ -151,4 +151,8 @@ input {
         font-size: 1rem;
     }
 }
+
+label {
+    font-size: 0.85rem;
+}
 </style>

@@ -38,11 +38,12 @@ async function onLogin() {
 </script>
 
 <template>
-    <h1>Sisene Vivaariumisse</h1>
+    <h1 class="container">Sisene Vivaariumisse</h1>
     <BaseForm
         v-if="activePerformance"
         :show-cancel="false"
         :submit-label="'Sisene'"
+        class="container"
         @submit="onLogin"
     >
         <BaseInput

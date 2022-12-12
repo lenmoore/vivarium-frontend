@@ -39,14 +39,14 @@ async function onSubmitGame() {
             <div>
                 <div
                     v-if="router.currentRoute.value.name === 'superadmin.games'"
-                    class="w-25 p-4 m-4"
+                    class="p-2"
                 >
-                    <div>olemasolevad mangud:</div>
+                    <h4>olemasolevad mangud:</h4>
 
                     <div
                         v-for="game in games"
                         :key="game._id"
-                        class="border p-2 m-2"
+                        class="border p-2 mb-1 hover"
                         @click="
                             router.push({
                                 name: 'superadmin.games.game-details',
@@ -57,8 +57,8 @@ async function onSubmitGame() {
                         {{ game.name }}
                     </div>
 
-                    uus: <br />
-                    <BaseForm @submit="onSubmitGame">
+                    <h4 class="mt-4">Lisa uus:</h4>
+                    <BaseForm class="border p-2 w-100" @submit="onSubmitGame">
                         <BaseInput
                             id="name"
                             v-model="newGame.name"
@@ -67,11 +67,16 @@ async function onSubmitGame() {
                             type="text"
                         />
 
+                        <small class="mt-4">
+                            (lime=green,fuchsia=fuchsia,blue=orange,silver=blue!!)"
+                        </small>
                         <BaseInput
                             id="for_colors"
                             v-model="newGame.open_for_colors"
-                            label=">>(lime=green,fuchsia=fuchsia,blue=orange,silver=blue!!)"
+                            class="mb-4"
+                            label="vali varvid"
                         />
+
                         <BaseInput
                             v-model="newGame.pre_capsule"
                             label="Enne kapslisse minekut"

@@ -2,19 +2,31 @@
 
 <template>
     <div>
-        <h3>Seadistus</h3>
+        <div class="d-flex align-items-center">
+            <RouterLink
+                v-if="$route.name !== 'superadmin.settings'"
+                :to="{ name: 'superadmin.settings' }"
+                class="btn btn-outline-primary m-1 pr-4"
+            >
+                {{ '<   ' }} Tagasi
+            </RouterLink>
+            <h4 class="mb-0">Etenduse käik</h4>
+        </div>
 
         <div>Igal etendusel on samad mängud ja samad faasid.</div>
         <div>
-            Helena tegi juba praeguse briifi jargi koik mangud ara, aga void
-            vaadata ikka, mis siin toimub. Ara ainult muutma hakka asju, eks.
+            Helena tegi juba praeguse briifi järgi kõik mängud ära. Ära midagi
+            muuta ürita praegu.
         </div>
-        <RouterLink :to="{ name: 'superadmin.games' }" class="m-1"
-            >m2ngud
-        </RouterLink>
-        <RouterLink :to="{ name: 'superadmin.phases' }" class="m-1"
-            >faasid
-        </RouterLink>
+        <div v-if="$route.name === 'superadmin.settings'">
+            <RouterLink :to="{ name: 'superadmin.games' }" class="pr-2 mr-2"
+                >Mängud->
+            </RouterLink>
+            <br />
+            <RouterLink :to="{ name: 'superadmin.phases' }"
+                >Faasid->
+            </RouterLink>
+        </div>
         <RouterView :key="$route.fullPath" />
     </div>
 </template>

@@ -56,13 +56,15 @@ class PerformanceService {
     }
 
     async editPerformance(payload: any) {
+        console.log(payload);
         return await api
-            .put(`/performances/${payload.performanceId}`, payload, {
+            .put(`/performances/${payload._id}`, payload, {
                 params: {
-                    performanceId: payload.performanceId,
+                    performanceId: payload._id,
                 },
             })
             .then(({ data }) => {
+                console.log(data);
                 return data;
             });
     }

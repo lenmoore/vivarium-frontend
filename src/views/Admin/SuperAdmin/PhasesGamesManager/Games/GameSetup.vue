@@ -36,6 +36,7 @@ async function addStep(val) {
     });
     gameToSend.game_steps.push({ ...val, question_options: parsedInts });
     await performanceStore.editGame(gameToSend);
+    window.location.reload();
 }
 
 async function editStep(val) {

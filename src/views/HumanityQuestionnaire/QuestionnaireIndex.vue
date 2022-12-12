@@ -53,7 +53,7 @@ async function startGame() {
     activePhase = reactive(performanceStore.getActivePhase);
     await performanceStore.getGames();
 
-    activeGame = games.value.find((game) => game._id === activeGameId.value);
+    activeGame = games?.value.find((game) => game._id === activeGameId?.value);
 
     if (
         localStorage.getItem(activeGame?._id) === 'done' ||
@@ -133,12 +133,6 @@ function submitAndNext(val) {
             v-else
             class="d-flex align-items-center w-100 h-100 justify-content-center"
         >
-            <button
-                class="w-75 btn btn-outline-primary"
-                @click="window.location.reload"
-            >
-                Varskenda lehte
-            </button>
             <button class="w-75 btn btn-primary" @click="startGame">
                 Alusta
             </button>

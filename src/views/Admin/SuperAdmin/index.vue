@@ -20,14 +20,6 @@ let isInSuperadminIndex = router.currentRoute.value.name === 'superadmin';
                 Etendused
             </RouterLink>
         </div>
-        <div v-else class="pb-4">
-            <RouterLink
-                :to="{ name: 'superadmin' }"
-                class="btn btn-outline-primary m-1"
-            >
-                {{ '<   ' }} Tagasi
-            </RouterLink>
-        </div>
     </div>
     <RouterView :key="$route.fullPath" class="container" />
 </template>

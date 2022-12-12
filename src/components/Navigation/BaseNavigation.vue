@@ -20,18 +20,18 @@ watch(router.currentRoute, () => {
     renderLinks();
 });
 // links
-const home = { name: 'home', label: 'home', query: {} };
+const home = { name: 'home', label: 'mina', query: {} };
 const basket = {
     name: 'visitor.humanity-shop.basket',
     label: 'Korv',
     query: {},
 };
 const scan = { name: 'visitor.humanity-shop.scan', label: 'Pood', query: {} };
-const quiz = { name: 'visitor.quiz', label: 'pela', query: {} };
+const quiz = { name: 'visitor.quiz', label: 'vasta', query: {} };
 let navLinks = ref({ linx: [home] });
+let isAuthenticated = localStorage.accessToken != null;
 
 function renderLinks() {
-    const isAuthenticated = localStorage.accessToken != null;
     navLinks.value.linx = [home];
     // stuff from store
     const phases = ref(computed(() => performanceStore.phases));
@@ -49,11 +49,6 @@ function renderLinks() {
             (game) => game?._id === activePhase?.value?.phase_game?._id
         );
 
-        navLinks.value.linx.push({
-            name: 'home',
-            label: 'mina',
-            query: {},
-        });
         if (activeGame && activeGame.game_type === 'SHOP') {
             navLinks.value.linx.push(basket);
             navLinks.value.linx.push(scan);
@@ -68,12 +63,14 @@ function renderLinks() {
             });
         }
     } else {
-        navLinks.value.linx = [
-            { name: 'home', label: 'mina', query: {} },
-            // { name: 'login', label: '(admin) login', query: {} },
-            { name: 'visitor.login', label: '(publik) logi sisse', query: {} },
-        ];
+        navLinks.value.linx = [];
     }
+}
+
+function logout() {
+    localStorage.clear();
+    sessionStorage.clear();
+    router.push('/');
 }
 
 const isIntroView = router.currentRoute.value.name === 'visitor.intro';
@@ -89,6 +86,9 @@ const isIntroView = router.currentRoute.value.name === 'visitor.intro';
         >
             {{ link.label }}
         </RouterLink>
+        <!--        <button v-if="isAuthenticated" class="btn" @click="logout">-->
+        <!--            logout-->
+        <!--        </button>-->
     </nav>
     <!--    <button class="btn" @click="renderLinks">XX</button>-->
 </template>

@@ -19,11 +19,12 @@ const newPhase = {
 
 async function onSubmitPhase() {
     console.log(newPhase);
-    return await performanceStore.addPhase({
+    await performanceStore.addPhase({
         name: newPhase.name,
         active: newPhase.active,
         phase_game: newPhase.game,
     });
+    window.location.reload();
 }
 </script>
 
@@ -32,14 +33,7 @@ async function onSubmitPhase() {
         <div class="d-flex">
             <div class="p-4 m-4">
                 <div>
-                    <div>phases.</div>
-
-                    Lisa uus siit> <br />
-                    <small
-                        >TODO kui lisad, siis vajuta ainult 1x, see parempoolne
-                        list ei update ja mingit tagasisidet ei tule, aga faas
-                        luuakse
-                    </small>
+                    Uus
                     <BaseForm @submit="onSubmitPhase">
                         <BaseInput
                             id="name"
@@ -60,6 +54,10 @@ async function onSubmitPhase() {
                 </div>
             </div>
             <div>
+                <small
+                    >Faasi aktiveerimine=m2ngu aktiveerimine kaib etenduse
+                    halduse alt.</small
+                >
                 olemas faasid:
                 <div v-for="phase in phases" :key="phase._id">
                     <strong>{{ phase.name }}</strong>
