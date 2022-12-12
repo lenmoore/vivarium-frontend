@@ -54,7 +54,7 @@ export class Visitor implements IUser {
     performance: TheatrePerformance;
     basket?: Basket;
     quiz_results?: [];
-    humanity_value: '';
+    confirmed_humanity_value: '';
 
     constructor(user: any) {
         this._id = user._id;
@@ -70,7 +70,7 @@ export class Visitor implements IUser {
         this.wardrobe_number = user.wardrobe_number;
         this.basket = user.basket;
         this.quiz_results = user.quiz_results || [];
-        this.humanity_value = user.humanity_value || 'none';
+        this.confirmed_humanity_value = user.confirmed_humanity_value || 'none';
     }
 
     static fromJSON(json: any) {
@@ -87,7 +87,7 @@ export class Visitor implements IUser {
             wardrobe_number: json.wardrobe_number,
             basket: json.basket,
             quiz_results: json.quiz_results,
-            humanity_value: json.humanity_value,
+            confirmed_humanity_value: json.confirmed_humanity_value,
         });
     }
 
@@ -103,7 +103,7 @@ export class Visitor implements IUser {
             wardrobe_number: visitor?.wardrobe_number,
             basket: visitor?.basket,
             quiz_results: visitor?.quiz_results,
-            humanity_value: visitor?.humanity_value,
+            confirmed_humanity_value: visitor?.confirmed_humanity_value,
         };
     }
 }

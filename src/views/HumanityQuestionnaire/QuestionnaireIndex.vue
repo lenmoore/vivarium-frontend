@@ -6,17 +6,7 @@ import router from '../../router/index';
 
 const performanceStore = usePerformanceStore();
 const visitorStore = useVisitorStore();
-const visitor = reactive(visitorStore.getVisitor);
 
-const games = computed(() => performanceStore.games);
-
-let activePhase = reactive(performanceStore.getActivePhase);
-console.log(activePhase);
-const activeGameId = ref(activePhase.phase_game?._id);
-
-let activeGame = reactive(
-    games.value.find((game) => game._id === activeGameId.value)
-);
 const state = reactive({
     game_started: false,
     current_step: null,
@@ -25,20 +15,43 @@ const state = reactive({
 });
 
 onMounted(async () => {
+    await visitorStore.fetchVisitor(localStorage.getItem('visitorId'));
     await performanceStore.getGames();
     await performanceStore.getPhases();
 });
+
+const phases = computed(() => performanceStore.phases);
+const games = computed(() => performanceStore.games);
+console.log(phases);
+let visitor = reactive(visitorStore.getVisitor);
+let colors = {
+    'blue-sky': 'orange',
+    fuchsia: 'fuchsia',
+    silver: 'blue',
+    lime: 'green',
+};
+// todo this is a little hack, it should be stricter
+let capsuleColor = colors[visitor.confirmed_humanity_value];
+let activePhase = ref(
+    phases?.value.find(
+        (phase) =>
+            phase.active &&
+            phase.phase_game.open_for_colors.includes(capsuleColor)
+    )
+);
+const activeGameId = ref(activePhase.value?.phase_game?._id);
+
+let activeGame = reactive(
+    games.value.find((game) => game._id === activeGameId?.value)
+);
 
 async function startGame() {
     await performanceStore.getPhases();
     activePhase = reactive(performanceStore.getActivePhase);
     await performanceStore.getGames();
 
-    activeGame = performanceStore.games.find(
-        (game) => game._id === activeGameId.value
-    );
-    console.log(activeGame);
-    console.log(activePhase.phase_game.game_type);
+    activeGame = games.value.find((game) => game._id === activeGameId.value);
+
     if (
         localStorage.getItem(activeGame?._id) === 'done' ||
         activeGame.game_type === 'SHOP'
@@ -82,6 +95,8 @@ function submitAndNext(val) {
     <div
         class="h-100 d-flex flex-column justify-content-between align-content-around"
     >
+        {{ activePhase }}
+        cxsdds jou tere
         <div v-if="state.game_started" class="game-steps-wrapper">
             <div v-if="!state.last_step">
                 <h4 class="text-center">

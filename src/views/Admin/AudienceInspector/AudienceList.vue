@@ -2,9 +2,13 @@
 import { usePerformanceStore } from '../../../store/performance.store';
 import { computed, onMounted, ref, reactive } from 'vue';
 import { useHumanityShopStore } from '../../../store/humanity-shop/humanity-shop.store';
+import router from '../../../router/index';
 
 const performanceStore = usePerformanceStore();
 const humanityStore = useHumanityShopStore();
+console.log(router.currentRoute.value);
+const showOnlyColor = router.currentRoute.value.query.color;
+
 onMounted(async () => {
     await humanityStore.fetchBaskets();
     await performanceStore.getPerformances();
@@ -16,7 +20,13 @@ onMounted(async () => {
     );
 });
 
-const visitors = reactive(performanceStore.visitors);
+let visitors = reactive(performanceStore.visitors);
+if (showOnlyColor) {
+    visitors = visitors?.filter(
+        (visitor) => visitor.confirmed_humanity_value === showOnlyColor
+    );
+}
+
 const baskets = computed(() => humanityStore.getBaskets);
 const products = computed(() => humanityStore.getProducts);
 let viewOptions = ref({
@@ -186,8 +196,8 @@ async function confirmColors() {
                     <h6>Garderoobinumber: {{ visitor.wardrobe_number }}</h6>
                     Tooteid korvis: {{ visitor.basket.products.length }},
                     {{
-                        (visitor.highest && visitor.highest.color) ||
-                        visitor.confirmed_humanity_value
+                        visitor.confirmed_humanity_value ||
+                        (visitor.highest && visitor.highest.color)
                     }}
                     <br /><small style="font-size: 10px">{{
                         visitor.avg_hum_values
@@ -201,9 +211,11 @@ async function confirmColors() {
                     v-for="product in sortedCountedProducts"
                     :key="product._id"
                 >
-                    {{ product.title }}
-                    <img :src="product.image" alt="" height="100" />
-                    {{ product.count }}
+                    <div v-if="product.count > 0">
+                        {{ product.title }}
+                        <img :src="product.image" alt="" height="100" />
+                        {{ product.count }}
+                    </div>
                 </div>
             </div>
             <div v-else-if="viewOptions.showQuizSummary">

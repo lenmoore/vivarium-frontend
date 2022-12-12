@@ -62,9 +62,11 @@ export const usePerformanceStore = defineStore({
         },
         async getPhases() {
             this.phases = await PerformanceService.getPhases();
+            return this.phases;
         },
         async getGames() {
             this.games = await PerformanceService.getGames();
+            return this.games;
         },
         async setActivePerformance(
             p: TheatrePerformance

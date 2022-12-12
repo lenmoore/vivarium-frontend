@@ -66,6 +66,7 @@ if (visitor && basket && quizResults) {
         </div>
         <div v-if="visitor">
             <h2>ID {{ visitor.wardrobe_number }} Character sheet</h2>
+            {{ visitor.confirmed_humanity_value }}
         </div>
 
         <div v-else>Siin pole sulle praegu midagi. Logi parem sisse.</div>
