@@ -32,11 +32,14 @@ let colors = {
 };
 // todo this is a little hack, it should be stricter
 let capsuleColor = colors[visitor.confirmed_humanity_value];
+
 let activePhase = ref(
     phases?.value.find(
         (phase) =>
             phase.active &&
-            phase.phase_game.open_for_colors.includes(capsuleColor)
+            ((visitor.confirmed_humanity_value &&
+                phase.phase_game.open_for_colors.includes(capsuleColor)) ||
+                visitor.confirmed_humanity_value === 'none')
     )
 );
 const activeGameId = ref(activePhase.value?.phase_game?._id);
@@ -95,8 +98,6 @@ function submitAndNext(val) {
     <div
         class="h-100 d-flex flex-column justify-content-between align-content-around"
     >
-        {{ activePhase }}
-        cxsdds jou tere
         <div v-if="state.game_started" class="game-steps-wrapper">
             <div v-if="!state.last_step">
                 <h4 class="text-center">
