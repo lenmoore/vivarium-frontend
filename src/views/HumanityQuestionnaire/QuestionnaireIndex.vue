@@ -59,8 +59,10 @@ async function startGame() {
         activeGame?.value?.game_type === 'SHOP'
     ) {
         alert('Uus faas pole veel alanud. Proovi varsti uuesti');
+        window.location.reload();
     } else {
         if (localStorage.getItem(activeGame.value._id) === null) {
+            console.log('null');
             await addEmptyStepsToVisitor();
         } else {
             console.log('visitor.quiz_results', visitor.quiz_results);
@@ -95,10 +97,13 @@ function quizIsDone() {
 }
 
 async function selectValue(val) {
+    await visitorStore.fetchVisitor(localStorage.getItem('visitorId'));
     let updateVisitor = ref(visitor);
+    console.log(updateVisitor);
     let stepToUpdate = updateVisitor.value.quiz_results.find(
         (qR) => qR.step === state.current_step._id
     );
+    console.log(stepToUpdate);
     stepToUpdate.result_text = val.option_text;
     stepToUpdate.result_humanity_values = val.humanity_values;
     state.visitor_current_step_selected_option_text = val.option_text;
@@ -123,7 +128,6 @@ function step(i) {
     <div
         class="h-100 d-flex flex-column justify-content-between w-100 align-content-around"
     >
-        {{ state.visitor_current_step_selected_option_text }}
         <div v-if="state.game_loading">Arvutan...</div>
         <div v-else-if="state.game_started" class="game-steps-wrapper w-100">
             <div v-if="!state.last_step">

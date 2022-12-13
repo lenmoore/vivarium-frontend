@@ -38,7 +38,7 @@ function getHumanityResults() {
     quizResults.forEach((product) => {
         productsAndQuizAnswers.push(product);
         humanity_values.green +=
-            parseInt(product.result_humanity_values['green']) || 0;
+            parseInt(product.result_humanity_values['green'] || 0) || 0;
         humanity_values.red +=
             parseInt(
                 product.result_humanity_values['red'] ||
