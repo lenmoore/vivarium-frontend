@@ -3,7 +3,7 @@
         <h1 class="h1-color">VIVAARIUM</h1>
         <BaseHeader class="app-header" />
         <a class="font-size-xs" href="https://192.168.8.102:3000/api/games">
-            kliki mind kui ei saa apiga yhendust
+            kliki mind kui login lehte pole ja advanced -> proceed
         </a>
         <div class="app-wrapper">
             <div class="app-router-view">

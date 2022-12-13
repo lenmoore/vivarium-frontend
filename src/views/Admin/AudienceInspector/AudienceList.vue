@@ -54,82 +54,86 @@ function toggleViewOptions(show) {
     }
 }
 
-const mappedVisitors = visitors.map((visitor) => {
-    let basket = baskets.value.find((b) => b._id === visitor.basket._id);
+const mappedVisitors = ref(
+    visitors.map((visitor) => {
+        console.log(visitor);
+        let basket = baskets.value.find((b) => b._id === visitor?.basket?._id);
 
-    let redQuiz =
-        visitor.quiz_results
-            .map((qR) => {
-                return qR.result_humanity_values.red;
-            })
-            .reduce((a, b) => a + b) || 0;
-    let greenQuiz =
-        visitor.quiz_results
-            .map((qR) => {
-                return qR.result_humanity_values.green;
-            })
-            .reduce((a, b) => a + b) || 0;
-    let blueQuiz =
-        visitor.quiz_results
-            .map((qR) => {
-                return qR.result_humanity_values.blue;
-            })
-            .reduce((a, b) => a + b) || 0;
-    let orangeQuiz =
-        visitor.quiz_results
-            .map((qR) => {
-                return qR.result_humanity_values.orange;
-            })
-            .reduce((a, b) => a + b) || 0;
-    let avg_hum_values = [
-        {
-            color: 'fuchsia',
-            val:
-                basket.products
-                    .map((p) => p.humanity_values.red.average)
-                    .reduce((a, b) => a + b) + redQuiz,
-        },
-        {
-            color: 'lime',
-            val:
-                basket.products
-                    .map((p) => p.humanity_values.green.average)
-                    .reduce((a, b) => a + b) + greenQuiz,
-        },
-        {
-            color: 'silver',
-            val:
-                basket.products
-                    .map((p) => p.humanity_values.blue.average)
-                    .reduce((a, b) => a + b) + blueQuiz,
-        },
-        {
-            color: 'blue-sky',
-            val:
-                basket.products
-                    .map((p) => p.humanity_values.orange.average)
-                    .reduce((a, b) => a + b) + orangeQuiz,
-        },
-    ];
-    let highest = avg_hum_values.find(
-        (value) => value.val === Math.max(...avg_hum_values.map((o) => o.val))
-    );
-    if (visitor.confirmed_humanity_value !== 'none') {
+        let redQuiz =
+            visitor.quiz_results
+                .map((qR) => {
+                    return qR.result_humanity_values.fuchsia;
+                })
+                .reduce((a, b) => a + b) || 0;
+        let greenQuiz =
+            visitor.quiz_results
+                .map((qR) => {
+                    return qR.result_humanity_values.green;
+                })
+                .reduce((a, b) => a + b) || 0;
+        let blueQuiz =
+            visitor.quiz_results
+                .map((qR) => {
+                    return qR.result_humanity_values.blue;
+                })
+                .reduce((a, b) => a + b) || 0;
+        let orangeQuiz =
+            visitor.quiz_results
+                .map((qR) => {
+                    return qR.result_humanity_values.orange;
+                })
+                .reduce((a, b) => a + b) || 0;
+        let avg_hum_values = [
+            {
+                color: 'fuchsia',
+                val:
+                    basket.products
+                        .map((p) => p.humanity_values.red.average)
+                        .reduce((a, b) => a + b) + redQuiz,
+            },
+            {
+                color: 'lime',
+                val:
+                    basket.products
+                        .map((p) => p.humanity_values.green.average)
+                        .reduce((a, b) => a + b) + greenQuiz,
+            },
+            {
+                color: 'silver',
+                val:
+                    basket.products
+                        .map((p) => p.humanity_values.blue.average)
+                        .reduce((a, b) => a + b) + blueQuiz,
+            },
+            {
+                color: 'blue-sky',
+                val:
+                    basket.products
+                        .map((p) => p.humanity_values.orange.average)
+                        .reduce((a, b) => a + b) + orangeQuiz,
+            },
+        ];
+        let highest = avg_hum_values.find(
+            (value) =>
+                value.val === Math.max(...avg_hum_values.map((o) => o.val))
+        );
+        if (visitor.confirmed_humanity_value !== 'none') {
+            return {
+                ...visitor,
+                basket,
+                avg_hum_values,
+            };
+        }
         return {
             ...visitor,
             basket,
             avg_hum_values,
+            highest,
         };
-    }
-    return {
-        ...visitor,
-        basket,
-        avg_hum_values,
-        highest,
-    };
-});
+    })
+);
 const allProductsEverSelected = [];
-mappedVisitors.forEach((visitor) =>
+mappedVisitors.value.forEach((visitor) =>
     visitor.basket.products.forEach((prod) =>
         allProductsEverSelected.push(prod)
     )
@@ -147,7 +151,7 @@ let sortedCountedProducts = countedProducts.sort((a, b) => a.count < b.count);
 
 async function confirmColors() {
     console.log(mappedVisitors);
-    let visitors = mappedVisitors.map((visitor) => ({
+    let visitors = mappedVisitors.value.map((visitor) => ({
         ...visitor,
         avg_hum_values: null,
         confirmed_humanity_value: visitor.highest.color,
