@@ -33,6 +33,12 @@ export const useVisitorStore = defineStore({
             this.visitor = new Visitor(result);
             return result;
         },
+        async editVisitorStep(visitor: Visitor): Promise<Visitor> {
+            const result = await PerformanceService.editVisitorStep(visitor);
+            console.log('editvisitor step result', result);
+            this.visitor = new Visitor(result);
+            return result;
+        },
         async fetchVisitor(id: string): Promise<Visitor> {
             console.log(id);
             return await PerformanceService.getVisitor(id).then((data) => {

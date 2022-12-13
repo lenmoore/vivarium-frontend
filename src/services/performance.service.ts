@@ -119,6 +119,26 @@ class PerformanceService {
             });
     }
 
+    async editVisitorStep(payload: any) {
+        console.log('------------------------payload', payload);
+        return await api
+            .put(
+                `/visitors/${payload.visitorId}/quiz-results/${payload.step.stepId}`,
+                {
+                    ...payload,
+                },
+                {
+                    params: {
+                        visitorId: payload.visitorId,
+                        stepId: payload.stepId,
+                    },
+                }
+            )
+            .then(({ data }) => {
+                return data;
+            });
+    }
+
     async deletePerformance() {}
 
     async addVisitor(newVisitor: Visitor) {

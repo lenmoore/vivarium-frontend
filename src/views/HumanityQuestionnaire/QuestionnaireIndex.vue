@@ -9,9 +9,11 @@ const visitorStore = useVisitorStore();
 
 const state = reactive({
     game_started: false,
+    game_loading: false,
     current_step: null,
-    step_counter: 0,
+    step_counter: -1,
     last_step: false,
+    visitor_current_step_selected_option_text: '',
 });
 
 onMounted(async () => {
@@ -30,7 +32,7 @@ let colors = {
     silver: 'blue',
     lime: 'green',
 };
-// todo this is a little hack, it should be stricter
+// todo this is a little hack for determining the correct color capsule game when in the capsule, the check should be stricter and come from the store.
 let capsuleColor = colors[visitor.confirmed_humanity_value];
 
 let activePhase = ref(
@@ -44,83 +46,113 @@ let activePhase = ref(
 );
 const activeGameId = ref(activePhase.value?.phase_game?._id);
 
-let activeGame = reactive(
+let activeGame = ref(
     games.value.find((game) => game._id === activeGameId?.value)
 );
 
+let gameStepsWithVisitorSelectedValues = ref(activeGame.value.game_steps);
+
 async function startGame() {
-    await performanceStore.getPhases();
-    activePhase = reactive(performanceStore.getActivePhase);
-    await performanceStore.getGames();
-
-    activeGame = games?.value.find((game) => game._id === activeGameId?.value);
-
+    state.game_loading = true;
     if (
-        localStorage.getItem(activeGame?._id) === 'done' ||
-        activeGame.game_type === 'SHOP'
+        localStorage.getItem(activeGame.value?._id) === 'done' ||
+        activeGame?.value?.game_type === 'SHOP'
     ) {
         alert('Uus faas pole veel alanud. Proovi varsti uuesti');
     } else {
+        if (localStorage.getItem(activeGame.value._id) === null) {
+            await addEmptyStepsToVisitor();
+        } else {
+            console.log('visitor.quiz_results', visitor.quiz_results);
+        }
+        localStorage.setItem(activeGame.value._id, 'started');
+
+        state.game_loading = false;
         state.game_started = true;
-        state.current_step = activeGame.game_steps[0];
+
+        state.current_step = gameStepsWithVisitorSelectedValues.value[0];
     }
+    step(1);
+}
+
+async function addEmptyStepsToVisitor() {
+    for (const step1 of gameStepsWithVisitorSelectedValues.value) {
+        visitor.quiz_results.push({
+            step: step1,
+            result_text: '-',
+            result_humanity_values: {},
+        });
+    }
+    await visitorStore.editVisitor(visitor);
+    await performanceStore.getPhases();
+    activePhase = reactive(performanceStore.getActivePhase);
+    await performanceStore.getGames();
 }
 
 function quizIsDone() {
-    console.log('done');
-    localStorage.setItem(activeGame._id, 'done');
+    localStorage.setItem(activeGame.value._id, 'done');
     router.push({ name: 'visitor.quiz.done' });
 }
 
-function submitAndNext(val) {
+async function selectValue(val) {
     let updateVisitor = ref(visitor);
-    console.log(val);
-    console.log(updateVisitor);
+    let stepToUpdate = updateVisitor.value.quiz_results.find(
+        (qR) => qR.step === state.current_step._id
+    );
+    stepToUpdate.result_text = val.option_text;
+    stepToUpdate.result_humanity_values = val.humanity_values;
+    state.visitor_current_step_selected_option_text = val.option_text;
+    visitor = await visitorStore.editVisitor(updateVisitor.value);
+}
 
-    updateVisitor.value.quiz_results = visitorStore.getVisitor.quiz_results;
-    updateVisitor.value.quiz_results.push({
-        step: state.current_step,
-        result_text: val.option_text,
-        result_humanity_values: val.humanity_values,
-    });
-    console.log('update visitor:', updateVisitor.value);
-    const viss = visitorStore.editVisitor(updateVisitor.value);
-    console.log(viss);
-    state.step_counter++;
-    if (state.step_counter < activeGame.game_steps.length) {
-        state.current_step = activeGame.game_steps[state.step_counter];
+function step(i) {
+    state.step_counter += i;
+    if (state.step_counter < gameStepsWithVisitorSelectedValues.value.length) {
+        state.current_step =
+            gameStepsWithVisitorSelectedValues.value[state.step_counter];
     } else {
         state.last_step = true;
     }
+    state.visitor_current_step_selected_option_text = ref(
+        visitor.quiz_results.find((qr) => qr.step === state.current_step._id)
+            .result_text
+    );
 }
 </script>
 <template>
     <div
-        class="h-100 d-flex flex-column justify-content-between align-content-around"
+        class="h-100 d-flex flex-column justify-content-between w-100 align-content-around"
     >
-        <div v-if="state.game_started" class="game-steps-wrapper">
+        {{ state.visitor_current_step_selected_option_text }}
+        <div v-if="state.game_loading">Arvutan...</div>
+        <div v-else-if="state.game_started" class="game-steps-wrapper w-100">
             <div v-if="!state.last_step">
                 <h4 class="text-center">
                     {{ state.current_step.question_text }}
                 </h4>
-                <div class="options-wrapper">
+                <div class="options-wrapper w-100">
                     <div
                         v-for="(step, i) in state.current_step.question_options"
                         :key="i"
-                        class="option"
-                        @click="submitAndNext(step)"
+                        :class="{
+                            selected:
+                                state.visitor_current_step_selected_option_text ===
+                                step.option_text,
+                        }"
+                        class="option w-100"
+                        @click="selectValue(step)"
                     >
                         {{ step.option_text }}
                     </div>
                 </div>
 
                 <div class="buttons">
-                    <button class="btn">eelmine</button>
+                    <button class="btn" @click="step(-1)">eelmine</button>
                     <span
                         >{{ state.step_counter + 1 }} /
                         {{ activeGame.game_steps.length }}</span
                     >
-                    <button class="btn">jargmine</button>
+                    <button class="btn" @click="step(1)">jargmine</button>
                 </div>
             </div>
             <div v-else>
@@ -143,7 +175,7 @@ function submitAndNext(val) {
 <style lang="scss">
 .option {
     border: 1px solid black;
-    margin: 1rem;
+    margin-bottom: 1rem;
     padding: 0.5rem;
 }
 
@@ -161,5 +193,9 @@ function submitAndNext(val) {
     width: 100%;
     justify-content: space-between;
     margin-top: 3rem;
+}
+
+.selected {
+    background-color: #ff9d16;
 }
 </style>
