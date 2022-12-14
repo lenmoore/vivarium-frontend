@@ -75,6 +75,14 @@ const routes: Array<RouteRecordRaw> = [
                                             ),
                                     },
                                     {
+                                        path: 'product/:id/edit',
+                                        name: 'superadmin.games.humanity-shop.edit',
+                                        component: () =>
+                                            import(
+                                                '../views/HumanityShop/Admin/ProductEdit.vue'
+                                            ),
+                                    },
+                                    {
                                         path: 'shop-data',
                                         name: 'superadmin.games.humanity-shop.shop-data',
                                         component: () =>

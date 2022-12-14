@@ -40,7 +40,7 @@ onMounted(() => {
                         data.green.avg,
                         data.blue.avg,
                         data.silver.avg,
-                        data.red.avg,
+                        data.fuchsia.avg,
                     ],
                     backgroundColor: [
                         'rgb(151,255,99, 0.6)',

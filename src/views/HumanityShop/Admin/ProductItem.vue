@@ -29,7 +29,8 @@ defineProps(['product']);
             }}</span>
             <span class="red">{{
                 Math.round(
-                    (product.humanity_values?.red?.average + Number.EPSILON) *
+                    (product.humanity_values?.fuchsia?.average +
+                        Number.EPSILON) *
                         100
                 ) / 100
             }}</span>

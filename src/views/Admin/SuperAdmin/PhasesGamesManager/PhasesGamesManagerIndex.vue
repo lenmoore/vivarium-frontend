@@ -8,7 +8,7 @@
                 :to="{ name: 'superadmin.settings' }"
                 class="btn btn-outline-primary m-1 pr-4"
             >
-                {{ '<   ' }} Tagasi
+                {{ '<   ' }} Seaded
             </RouterLink>
             <h4 class="mb-0">Etenduse käik</h4>
         </div>

@@ -1,3 +1,27 @@
+<script setup>
+import { computed, onMounted, ref } from 'vue';
+import { useHumanityShopStore } from '../../store/humanity-shop/humanity-shop.store';
+import { usePerformanceStore } from '../../store/performance.store';
+
+const performanceStore = usePerformanceStore();
+const humanityStore = useHumanityShopStore();
+
+let viewOptions = ref({
+    showSummaryList: true,
+    showProductsSummary: false,
+    showQuizSummary: false,
+});
+onMounted(async () => {
+    await humanityStore.fetchBaskets();
+    await performanceStore.getPerformances();
+    const activePerformance = computed(() => {
+        return performanceStore.getActivePerformance;
+    });
+    await performanceStore.getCurrentPerformanceVisitors(
+        activePerformance.value._id
+    );
+});
+</script>
 <template>
     <div class="admin-home container">
         <h2>Tsau, admin.</h2>

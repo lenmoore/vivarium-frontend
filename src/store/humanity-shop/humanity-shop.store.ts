@@ -51,6 +51,14 @@ export const useHumanityShopStore = defineStore({
         async updateBasket(basket: Basket) {
             return await BasketService.updateBasket(basket);
         },
+        async updateProduct(product: any) {
+            console.log(product);
+            return await BasketService.updateProduct(product);
+        },
+        async updateProductFuchsia(fuchsia: any, product: any) {
+            console.log(product);
+            return await BasketService.updateProductFuchsia(fuchsia, product);
+        },
     },
     persist: true,
 });

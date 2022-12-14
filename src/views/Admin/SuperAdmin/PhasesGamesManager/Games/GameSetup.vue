@@ -28,6 +28,7 @@ async function addStep(val) {
             ...opt,
             humanity_values: {
                 red: parseInt(opt.humanity_values.fuchsia || 0),
+                fuchsia: parseInt(opt.humanity_values.fuchsia || 0),
                 green: parseInt(opt.humanity_values.green || 0),
                 blue: parseInt(opt.humanity_values.blue || 0),
                 orange: parseInt(opt.humanity_values.orange || 0),

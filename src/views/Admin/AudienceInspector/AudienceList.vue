@@ -1,14 +1,17 @@
 <script setup>
 import { usePerformanceStore } from '../../../store/performance.store';
-import { computed, onMounted, ref, reactive } from 'vue';
+import { computed, onMounted, ref, reactive, watch } from 'vue';
 import { useHumanityShopStore } from '../../../store/humanity-shop/humanity-shop.store';
 import router from '../../../router/index';
 
 const performanceStore = usePerformanceStore();
 const humanityStore = useHumanityShopStore();
-console.log(router.currentRoute.value);
-const showOnlyColor = router.currentRoute.value.query.color;
 
+let viewOptions = ref({
+    showSummaryList: true,
+    showProductsSummary: false,
+    showQuizSummary: false,
+});
 onMounted(async () => {
     await humanityStore.fetchBaskets();
     await performanceStore.getPerformances();
@@ -19,21 +22,17 @@ onMounted(async () => {
         activePerformance.value._id
     );
 });
+const baskets = computed(() => humanityStore.getBaskets);
+const products = computed(() => humanityStore.getProducts);
+const showOnlyColor = router.currentRoute.value.query.color;
 
-let visitors = reactive(performanceStore.visitors);
+let visitors = computed(() => performanceStore.getVisitors);
+console.log(visitors);
 if (showOnlyColor) {
-    visitors = visitors?.filter(
+    visitors = visitors.value?.filter(
         (visitor) => visitor.confirmed_humanity_value === showOnlyColor
     );
 }
-
-const baskets = computed(() => humanityStore.getBaskets);
-const products = computed(() => humanityStore.getProducts);
-let viewOptions = ref({
-    showSummaryList: true,
-    showProductsSummary: false,
-    showQuizSummary: false,
-});
 
 function toggleViewOptions(show) {
     viewOptions.value.showSummaryList = false;
@@ -54,90 +53,98 @@ function toggleViewOptions(show) {
     }
 }
 
-const mappedVisitors = ref(
-    visitors.map((visitor) => {
-        console.log(visitor);
-        let basket = baskets.value.find((b) => b._id === visitor?.basket?._id);
+let mappedVisitors = ref([]);
+watch(visitors, () => {
+    mappedVisitors = ref(
+        visitors.value?.map((visitor) => {
+            console.log(visitor);
+            let basket = baskets.value.find(
+                (b) => b._id === visitor?.basket?._id
+            );
 
-        let redQuiz =
-            visitor.quiz_results
-                .map((qR) => {
-                    return qR.result_humanity_values.fuchsia;
-                })
-                .reduce((a, b) => a + b) || 0;
-        let greenQuiz =
-            visitor.quiz_results
-                .map((qR) => {
-                    return qR.result_humanity_values.green;
-                })
-                .reduce((a, b) => a + b) || 0;
-        let blueQuiz =
-            visitor.quiz_results
-                .map((qR) => {
-                    return qR.result_humanity_values.blue;
-                })
-                .reduce((a, b) => a + b) || 0;
-        let orangeQuiz =
-            visitor.quiz_results
-                .map((qR) => {
-                    return qR.result_humanity_values.orange;
-                })
-                .reduce((a, b) => a + b) || 0;
-        let avg_hum_values = [
-            {
-                color: 'fuchsia',
-                val:
-                    basket.products
-                        .map((p) => p.humanity_values.red.average)
-                        .reduce((a, b) => a + b) + redQuiz,
-            },
-            {
-                color: 'lime',
-                val:
-                    basket.products
-                        .map((p) => p.humanity_values.green.average)
-                        .reduce((a, b) => a + b) + greenQuiz,
-            },
-            {
-                color: 'silver',
-                val:
-                    basket.products
-                        .map((p) => p.humanity_values.blue.average)
-                        .reduce((a, b) => a + b) + blueQuiz,
-            },
-            {
-                color: 'blue-sky',
-                val:
-                    basket.products
-                        .map((p) => p.humanity_values.orange.average)
-                        .reduce((a, b) => a + b) + orangeQuiz,
-            },
-        ];
-        let highest = avg_hum_values.find(
-            (value) =>
-                value.val === Math.max(...avg_hum_values.map((o) => o.val))
-        );
-        if (visitor.confirmed_humanity_value !== 'none') {
+            let redQuiz =
+                visitor?.quiz_results
+                    ?.map((qR) => {
+                        return qR?.result_humanity_values?.fuchsia;
+                    })
+                    ?.reduce((a, b) => a + b) || 0;
+            let greenQuiz =
+                visitor?.quiz_results
+                    ?.map((qR) => {
+                        return qR?.result_humanity_values?.green;
+                    })
+                    ?.reduce((a, b) => a + b) || 0;
+            let blueQuiz =
+                visitor?.quiz_results
+                    ?.map((qR) => {
+                        return qR?.result_humanity_values?.blue;
+                    })
+                    ?.reduce((a, b) => a + b) || 0;
+            let orangeQuiz =
+                visitor?.quiz_results
+                    ?.map((qR) => {
+                        return qR?.result_humanity_values?.orange;
+                    })
+                    ?.reduce((a, b) => a + b) || 0;
+            let avg_hum_values = [
+                {
+                    color: 'fuchsia',
+                    val:
+                        basket.products
+                            .map((p) => p.humanity_values?.fuchsia?.average)
+                            .reduce((a, b) => a + b) + redQuiz,
+                },
+                {
+                    color: 'lime',
+                    val:
+                        basket.products
+                            .map((p) => p.humanity_values.green.average)
+                            .reduce((a, b) => a + b) + greenQuiz,
+                },
+                {
+                    color: 'silver',
+                    val:
+                        basket.products
+                            .map((p) => p.humanity_values.blue.average)
+                            .reduce((a, b) => a + b) + blueQuiz,
+                },
+                {
+                    color: 'blue-sky',
+                    val:
+                        basket.products
+                            .map((p) => p.humanity_values.orange.average)
+                            .reduce((a, b) => a + b) + orangeQuiz,
+                },
+            ];
+            let highest = avg_hum_values.find(
+                (value) =>
+                    value.val === Math.max(...avg_hum_values.map((o) => o.val))
+            );
+            if (visitor.confirmed_humanity_value !== 'none') {
+                return {
+                    ...visitor,
+                    basket,
+                    avg_hum_values,
+                };
+            }
             return {
                 ...visitor,
                 basket,
                 avg_hum_values,
+                highest,
             };
-        }
-        return {
-            ...visitor,
-            basket,
-            avg_hum_values,
-            highest,
-        };
-    })
-);
-const allProductsEverSelected = [];
-mappedVisitors.value.forEach((visitor) =>
-    visitor.basket.products.forEach((prod) =>
-        allProductsEverSelected.push(prod)
-    )
-);
+        })
+    );
+});
+console.log(mappedVisitors);
+const allProductsEverSelected = reactive([]);
+watch(mappedVisitors, () => {
+    mappedVisitors.value.forEach((visitor) =>
+        visitor.basket.products.forEach((prod) =>
+            allProductsEverSelected.push(prod)
+        )
+    );
+});
 let countedProducts = reactive([]);
 products.value.forEach((product) => {
     let count = allProductsEverSelected.filter(
@@ -147,8 +154,6 @@ products.value.forEach((product) => {
         countedProducts.push({ ...product, count: count });
     }
 });
-
-// let sortedCountedProducts = countedProducts.sort((a, b) => a.count < b.count);
 
 async function confirmColors() {
     console.log(mappedVisitors);
@@ -163,9 +168,9 @@ async function confirmColors() {
 
 <template>
     <div>
-        <div v-if="visitors && baskets && mappedVisitors">
+        <div v-if="visitors && baskets">
             <div class="info-block">
-                Saalis inimesi: {{ mappedVisitors.length }}
+                Saalis inimesi: {{ mappedVisitors && mappedVisitors.length }}
             </div>
             <div class="d-flex align-items-center justify-content-around">
                 <button
@@ -211,7 +216,7 @@ async function confirmColors() {
             </div>
 
             <div v-else-if="viewOptions.showProductsSummary">
-                Kokku {{ allProductsEverSelected.length }} toodet
+                Kokku {{ allProductsEverSelected.length }} toodet.
                 <div v-for="product in countedProducts" :key="product._id">
                     <div v-if="product.count > 0">
                         {{ product.title }}
