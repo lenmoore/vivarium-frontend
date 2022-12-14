@@ -1,6 +1,6 @@
 <script setup>
 import { usePerformanceStore } from '../../store/performance.store';
-import { computed, onMounted, reactive, ref } from 'vue';
+import { computed, onMounted, reactive, ref, watch } from 'vue';
 import { useVisitorStore } from '../../store/visitor.store';
 import router from '../../router/index';
 
@@ -59,23 +59,25 @@ async function startGame() {
         activeGame?.value?.game_type === 'SHOP'
     ) {
         alert('Uus faas pole veel alanud. Proovi varsti uuesti');
-        window.location.reload();
+        location.reload();
     } else {
         if (localStorage.getItem(activeGame.value._id) === null) {
-            console.log('null');
             await addEmptyStepsToVisitor();
         } else {
             console.log('visitor.quiz_results', visitor.quiz_results);
         }
-        localStorage.setItem(activeGame.value._id, 'started');
-
-        state.game_loading = false;
         state.game_started = true;
 
         state.current_step = gameStepsWithVisitorSelectedValues.value[0];
     }
     step(1);
 }
+
+watch(state, async () => {
+    visitor = await visitorStore.fetchVisitor(
+        localStorage.getItem('visitorId')
+    );
+});
 
 async function addEmptyStepsToVisitor() {
     for (const step1 of gameStepsWithVisitorSelectedValues.value) {
@@ -86,9 +88,13 @@ async function addEmptyStepsToVisitor() {
         });
     }
     await visitorStore.editVisitor(visitor);
+    localStorage.setItem(activeGame.value._id, 'started');
+
     await performanceStore.getPhases();
     activePhase = reactive(performanceStore.getActivePhase);
     await performanceStore.getGames();
+    // location.reload();
+    state.game_loading = false;
 }
 
 function quizIsDone() {

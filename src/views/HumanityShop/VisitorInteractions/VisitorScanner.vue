@@ -6,10 +6,11 @@ import { useVisitorStore } from '../../../store/visitor.store';
 
 const visitorStore = useVisitorStore();
 const visitor = reactive(visitorStore.getVisitor);
-const qr = reactive({
+const qr = ref({
     result: 'none',
     customError: '-',
     isValid: true,
+    basketFull: false,
     camera: 'auto',
     foundProduct: null,
 });
@@ -24,59 +25,63 @@ const products = computed(() => humanityShopStore.getProducts);
 async function onDecode(content) {
     console.log('dude hello?');
     console.log(content);
-    qr.result = content;
+    qr.value.result = content;
     turnCameraOff();
 
     // pretend it's taking really long
     // await timeout(1000);
 
-    qr.foundProduct = products.value.find(
-        (product) => product.title === content
+    qr.value.foundProduct = products.value.find(
+        (product) => product._id === content
     );
+    console.log(qr.value.foundProduct);
 
     let alreadyInBasket = visitor.basket?.products?.some(
-        (prod) => prod === qr.foundProduct._id
+        (prod) => prod === qr.value.foundProduct._id
     );
     console.log(alreadyInBasket);
     console.log(visitor.basket?.confirmed);
     if (alreadyInBasket || visitor.basket?.confirmed) {
         console.log('dude');
-        qr.isValid = false;
+        qr.value.isValid = false;
     }
-    console.log(qr.foundProduct);
-    // this.isValid = content.startsWith('http'); // todo - check if exists in products
-    console.log(qr.isValid);
-    // some more delay, so users have time to read the message
+
+    if (visitor.basket?.products.length === 9) {
+        qr.value.basketFull = true;
+        qr.value.isValid = false;
+    }
+    console.log(qr.value.foundProduct);
+    console.log(qr.value.isValid);
     // await timeout(2000);
     // turnCameraOn();
 }
 
 async function addProductToBasket() {
-    console.log('gonna try and add this to the basket', qr.foundProduct);
+    console.log('gonna try and add this to the basket', qr.value.foundProduct);
     let basket = reactive(visitor).basket;
 
-    basket.products.push(qr.foundProduct._id);
+    basket.products.push(qr.value.foundProduct._id);
     await humanityShopStore.updateBasket(basket);
-    qr.foundProduct = null;
+    qr.value.foundProduct = null;
 
     // turnCameraOn();
 }
 
 function onInit() {
-    qr.foundProduct = null;
+    qr.value.foundProduct = null;
     resetValidationState();
 }
 
 function resetValidationState() {
-    qr.isValid = true;
+    qr.value.isValid = true;
 }
 
 function turnCameraOn() {
-    qr.camera = 'auto';
+    qr.value.camera = 'auto';
 }
 
 function turnCameraOff() {
-    qr.camera = 'off';
+    qr.value.camera = 'off';
 }
 
 function timeout(ms) {
@@ -115,17 +120,19 @@ function timeout(ms) {
                                 Lisa korvi
                             </button>
                         </div>
-                        <div
-                            v-else-if="!qr.isValid && !visitor.basket.confirmed"
-                        >
+                        <div v-else-if="qr.basketFull">
+                            Su korv on tais. Mine korvi lehele ning saad korvist
+                            tooteid eemaldada, kui soovid.
+                        </div>
+                        <div v-else-if="basket.confirmed">
+                            Su korv on juba kinnitatud ja enam tooteid lisada ei
+                            saa.
+                        </div>
+                        <div v-else-if="!qr.isValid">
                             See toode on juba sinu korvis.
                             <button class="btn btn-primary" @click="onInit">
                                 Olgu
                             </button>
-                        </div>
-                        <div v-else-if="!qr.isValid">
-                            Su korv on juba kinnitatud ja enam tooteid lisada ei
-                            saa.
                         </div>
                     </div>
                 </div>
@@ -149,7 +156,6 @@ function timeout(ms) {
 
         .product-title {
             margin-top: 3rem;
-            margin-bottom: -2rem;
             font-size: 1.2rem;
         }
 

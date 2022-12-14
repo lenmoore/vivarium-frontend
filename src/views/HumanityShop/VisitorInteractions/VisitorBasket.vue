@@ -16,15 +16,12 @@ onMounted(async () => {
     await humanityStore.fetchProducts();
 });
 let visitor = ref(visitorStore.getVisitor);
-let basket = reactive(visitor.value.basket);
-const products = ref(humanityStore.getProducts);
-let productsInBasket = reactive(
-    products?.value.filter((p) => basket?.products?.includes(p._id))
-);
+let basket = ref(visitor.value.basket);
+let productsInBasket = ref(basket.value.products);
 
 async function removeProduct(item) {
     showWantToRemoveModal.value = false;
-    let newBasketProducts = basket.products.filter(
+    let newBasketProducts = basket.value.products.filter(
         (product) => product._id !== item._id
     );
 
@@ -33,26 +30,27 @@ async function removeProduct(item) {
         ...basket,
         products: newBasketProducts,
     });
-    basket.products = newBasketProducts;
+    productsInBasket = newBasketProducts;
     removeItemId = '';
     await humanityStore.getVisitorBasket();
+    location.reload();
 }
 
 async function confirmBasket() {
-    const data = await humanityStore.updateBasket({
-        ...basket,
+    console.log(basket);
+    await humanityStore.updateBasket({
+        ...basket.value,
         confirmed: true,
     });
-    if (data) {
-        await router.push({ name: 'basket-done' });
-    }
+    await router.push({ name: 'basket-done' });
+    location.reload();
 }
 </script>
 <template>
     <div class="container h-100 d-flex flex-column justify-content-between">
         <div class="basket-items-wrapper">
             <div
-                v-for="(item, i) in basket.products"
+                v-for="(item, i) in productsInBasket"
                 :key="item._id + i"
                 class="hover basket-item"
             >
@@ -65,6 +63,7 @@ async function confirmBasket() {
                                 removeItemId === item._id
                             ) || !showWantToRemoveModal
                         "
+                        class="m-2"
                     >
                         {{ item.title }}
                     </span>
@@ -133,7 +132,7 @@ async function confirmBasket() {
                     class="d-flex justify-content-center align-items-center text-center"
                 >
                     Kas oled kindel? Sa saaksid veel kaasa votta
-                    {{ 10 - basket.products.length }} asja.
+                    {{ 9 - basket.products.length }} asja.
                 </div>
                 <div class="d-flex w-100">
                     <button

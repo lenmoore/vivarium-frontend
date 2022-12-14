@@ -35,7 +35,4 @@ export default defineConfig({
         },
         fallback: { os: path.resolve('os-browserify/browser') },
     },
-    css: {
-        devSourcemap: true,
-    },
 });
