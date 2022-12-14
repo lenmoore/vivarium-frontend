@@ -2,7 +2,7 @@
     <div class="page">
         <h1 class="h1-color">VIVAARIUM</h1>
         <BaseHeader class="app-header" />
-        <a class="font-size-xs" href="https://192.168.8.102:3000/api/games">
+        <a class="font-size-xs" href="https://10.0.0.244:3000/api/games">
             kliki mind kui login lehte pole ja advanced -> proceed
         </a>
         <div class="app-wrapper">
@@ -19,12 +19,12 @@ import BaseNavigation from '@/components/Navigation/BaseNavigation.vue';
 import BaseHeader from '@/components/Navigation/BaseHeader.vue';
 import router from '@/router';
 
-if (
-    !localStorage.getItem('accessToken')?.length &&
-    router.currentRoute.value.name !== 'login'
-) {
-    router.push({ name: 'visitor.login' });
-}
+// if (
+//     !localStorage.getItem('accessToken')?.length &&
+//     router.currentRoute.value.name !== 'login'
+// ) {
+//     router.push({ name: 'visitor.login' });
+// }
 </script>
 
 <style lang="scss">

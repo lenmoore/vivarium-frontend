@@ -23,24 +23,26 @@ defineProps(['product']);
         <span class="values">
             <span class="green">{{
                 Math.round(
-                    (product.humanity_values.green.average + Number.EPSILON) *
+                    (product.humanity_values?.green?.average + Number.EPSILON) *
                         100
                 ) / 100
             }}</span>
             <span class="red">{{
                 Math.round(
-                    (product.humanity_values.red.average + Number.EPSILON) * 100
+                    (product.humanity_values?.red?.average + Number.EPSILON) *
+                        100
                 ) / 100
             }}</span>
             <span class="blue">{{
                 Math.round(
-                    (product.humanity_values.blue.average + Number.EPSILON) *
+                    (product.humanity_values?.blue?.average + Number.EPSILON) *
                         100
                 ) / 100
             }}</span>
             <span class="orange">{{
                 Math.round(
-                    (product.humanity_values.orange.average + Number.EPSILON) *
+                    (product.humanity_values?.orange?.average +
+                        Number.EPSILON) *
                         100
                 ) / 100
             }}</span>

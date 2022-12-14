@@ -78,8 +78,10 @@ body {
                 background: $bg-color;
                 width: 100%;
                 border-radius: $border-radius;
-                box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+                box-shadow: 0 4px 30px rgba(0, 0, 0, 0.15);
                 backdrop-filter: blur(5px);
+                margin-left: 0.5rem;
+                margin-right: 0.5rem;
                 -webkit-backdrop-filter: blur(5px);
                 //border: 1px solid rgba(238, 218, 200, 0.3);
                 overflow: hidden;

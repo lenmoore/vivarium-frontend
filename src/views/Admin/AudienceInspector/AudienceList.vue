@@ -147,7 +147,8 @@ products.value.forEach((product) => {
         countedProducts.push({ ...product, count: count });
     }
 });
-let sortedCountedProducts = countedProducts.sort((a, b) => a.count < b.count);
+
+// let sortedCountedProducts = countedProducts.sort((a, b) => a.count < b.count);
 
 async function confirmColors() {
     console.log(mappedVisitors);
@@ -211,10 +212,7 @@ async function confirmColors() {
 
             <div v-else-if="viewOptions.showProductsSummary">
                 Kokku {{ allProductsEverSelected.length }} toodet
-                <div
-                    v-for="product in sortedCountedProducts"
-                    :key="product._id"
-                >
+                <div v-for="product in countedProducts" :key="product._id">
                     <div v-if="product.count > 0">
                         {{ product.title }}
                         <img :src="product.image" alt="" height="100" />

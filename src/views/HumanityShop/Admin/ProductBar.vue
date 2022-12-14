@@ -3,6 +3,7 @@ import { onMounted, reactive } from 'vue';
 import { Chart } from 'chart.js/auto';
 
 import { defineProps } from 'vue';
+
 const props = defineProps(['data']);
 
 const data = reactive(props.data);
@@ -39,7 +40,7 @@ onMounted(() => {
                         data.green.avg,
                         data.blue.avg,
                         data.silver.avg,
-                        data.fuchsia.avg,
+                        data.red.avg,
                     ],
                     backgroundColor: [
                         'rgb(151,255,99, 0.6)',
