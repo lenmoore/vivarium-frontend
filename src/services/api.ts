@@ -56,7 +56,7 @@ const instance: AxiosInstance = axios.create({
         Authorization: authHeader().toString(),
         'X-Refresh': refreshHeader().toString(),
     },
-    baseURL: tina,
+    baseURL: gons2,
 });
 
 export default instance;

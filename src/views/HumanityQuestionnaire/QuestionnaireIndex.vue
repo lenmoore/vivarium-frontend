@@ -132,11 +132,19 @@ function step(i) {
 </script>
 <template>
     <div
-        class="h-100 d-flex flex-column justify-content-between w-100 align-content-around"
+        class="h-100 d-flex flex-column overflow-scroll justify-content-between w-100 align-content-around"
     >
-        <div v-if="state.game_loading">Arvutan...</div>
-        <div v-else-if="state.game_started" class="game-steps-wrapper w-100">
+        <!--        <div v-if="state.game_loading">Arvutan...</div>-->
+        <div v-if="state.game_started" class="game-steps-wrapper w-100">
             <div v-if="!state.last_step">
+                <div class="buttons">
+                    <button class="btn" @click="step(-1)">eelmine</button>
+                    <span
+                        >{{ state.step_counter + 1 }} /
+                        {{ activeGame.game_steps.length }}</span
+                    >
+                    <button class="btn" @click="step(1)">jargmine</button>
+                </div>
                 <h4 class="text-center">
                     {{ state.current_step.question_text }}
                 </h4>
@@ -154,15 +162,6 @@ function step(i) {
                     >
                         {{ step.option_text }}
                     </div>
-                </div>
-
-                <div class="buttons">
-                    <button class="btn" @click="step(-1)">eelmine</button>
-                    <span
-                        >{{ state.step_counter + 1 }} /
-                        {{ activeGame.game_steps.length }}</span
-                    >
-                    <button class="btn" @click="step(1)">jargmine</button>
                 </div>
             </div>
             <div v-else>
@@ -202,7 +201,6 @@ function step(i) {
     align-items: center;
     width: 100%;
     justify-content: space-between;
-    margin-top: 3rem;
 }
 
 .selected {

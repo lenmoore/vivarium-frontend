@@ -27,7 +27,7 @@ const basket = {
     query: {},
 };
 const scan = { name: 'visitor.humanity-shop.scan', label: 'Pood', query: {} };
-const quiz = { name: 'visitor.quiz', label: 'vasta', query: {} };
+const quiz = { name: 'visitor.quiz', label: 'küsitlus', query: {} };
 let navLinks = ref({ linx: [home] });
 let isAuthenticated = localStorage.accessToken != null;
 

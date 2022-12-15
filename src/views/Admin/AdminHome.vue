@@ -24,8 +24,7 @@ onMounted(async () => {
 </script>
 <template>
     <div class="admin-home container">
-        <h2>Tsau, admin.</h2>
-        <div v-if="$route.name === 'admin.home'" class="d-flex flex-column">
+        <div class="d-flex w-75 align-items-center justify-content-between">
             <RouterLink :to="{ name: 'admin.audience' }">
                 Publik koik
             </RouterLink>
@@ -50,6 +49,6 @@ onMounted(async () => {
                 Publik lime
             </RouterLink>
         </div>
-        <RouterView v-else />
+        <RouterView />
     </div>
 </template>

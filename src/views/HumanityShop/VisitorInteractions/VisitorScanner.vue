@@ -41,7 +41,7 @@ async function onDecode(content) {
     );
     console.log(alreadyInBasket);
     console.log(visitor.basket?.confirmed);
-    if (alreadyInBasket || visitor.basket?.confirmed) {
+    if (alreadyInBasket) {
         console.log('dude');
         qr.value.isValid = false;
     }
@@ -128,7 +128,7 @@ function timeout(ms) {
                             Su korv on juba kinnitatud ja enam tooteid lisada ei
                             saa.
                         </div>
-                        <div v-else-if="!qr.isValid">
+                        <div v-else-if="!qr.isValid" class="bg-white">
                             See toode on juba sinu korvis.
                             <button class="btn btn-primary" @click="onInit">
                                 Olgu
@@ -142,9 +142,14 @@ function timeout(ms) {
 </template>
 
 <style lang="scss">
+.scanner-wrapper {
+    height: 50vh;
+}
+
 .validation-success {
-    height: 100%;
+    height: 100vh;
     width: 100%;
+    z-index: 100;
 
     .product-add {
         background-color: white;
@@ -152,7 +157,7 @@ function timeout(ms) {
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        height: 100%;
+        height: 60%;
 
         .product-title {
             margin-top: 3rem;
@@ -170,5 +175,9 @@ function timeout(ms) {
             }
         }
     }
+}
+
+.bg-white {
+    background-color: white;
 }
 </style>

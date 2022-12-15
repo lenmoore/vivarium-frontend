@@ -29,6 +29,7 @@
     "jose": "^4.10.0",
     "mdb-vue-ui-kit": "^3.1.1",
     "moment": "^2.29.4",
+    "onesignal-vue": "^1.0.2",
     "os-browserify": "^0.3.0",
     "pinia": "^2.0.21",
     "pinia-plugin-persistedstate": "^2.3.0",

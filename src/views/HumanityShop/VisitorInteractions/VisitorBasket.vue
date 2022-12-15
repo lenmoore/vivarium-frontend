@@ -16,12 +16,14 @@ onMounted(async () => {
     await humanityStore.fetchProducts();
 });
 let visitor = ref(visitorStore.getVisitor);
-let basket = ref(visitor.value.basket);
-let productsInBasket = ref(basket.value.products);
+let productsInBasket = ref(visitor.value.basket.products);
+let basket = visitor.value.basket;
 
 async function removeProduct(item) {
+    console.log(item);
     showWantToRemoveModal.value = false;
-    let newBasketProducts = basket.value.products.filter(
+    console.log(basket.products);
+    let newBasketProducts = basket.products.filter(
         (product) => product._id !== item._id
     );
 

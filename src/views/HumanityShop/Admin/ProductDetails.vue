@@ -107,7 +107,7 @@ async function back() {
             <div class="product-details d-flex w-100">
                 <QrcodeVue
                     :size="300"
-                    :value="product.title"
+                    :value="product._id"
                     background="#faa17d"
                     foreground="#3e48ad"
                     level="H"
