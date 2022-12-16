@@ -3,11 +3,11 @@ import { useVisitorStore } from '../../store/visitor.store';
 import BaseForm from '../../components/BaseForm/index.vue';
 import BaseInput from '../../components/BaseForm/BaseInput.vue';
 import { usePerformanceStore } from '../../store/performance.store';
-import { computed, defineEmits, onMounted, watchEffect } from 'vue';
+import { computed, defineEmits, onBeforeMount, watchEffect } from 'vue';
 import router from '../../router/index';
 
 const performanceStore = usePerformanceStore();
-onMounted(async () => {
+onBeforeMount(async () => {
     await performanceStore.getPerformances();
 });
 const activePerformance = computed(() => {

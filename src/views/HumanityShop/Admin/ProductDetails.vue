@@ -32,22 +32,22 @@ let entryCounts = {
                 .length,
         },
     },
-    // fuchsia: {
-    //     avg: product.humanity_values.fuchsia?.average,
-    //     sum: product.humanity_values.fuchsia?.entries?.reduce((a, b) => a + b),
-    //     counts: {
-    //         1: product.humanity_values.fuchsia?.entries?.filter((v) => v === 1)
-    //             .length,
-    //         2: product.humanity_values.fuchsia?.entries?.filter((v) => v === 2)
-    //             .length,
-    //         3: product.humanity_values.fuchsia?.entries?.filter((v) => v === 3)
-    //             .length,
-    //         4: product.humanity_values.fuchsia?.entries?.filter((v) => v === 4)
-    //             .length,
-    //         5: product.humanity_values.fuchsia?.entries?.filter((v) => v === 5)
-    //             .length,
-    //     },
-    // },
+    fuchsia: {
+        avg: product.humanity_values.fuchsia?.average,
+        sum: product.humanity_values.fuchsia?.entries?.reduce((a, b) => a + b),
+        counts: {
+            1: product.humanity_values.fuchsia?.entries?.filter((v) => v === 1)
+                .length,
+            2: product.humanity_values.fuchsia?.entries?.filter((v) => v === 2)
+                .length,
+            3: product.humanity_values.fuchsia?.entries?.filter((v) => v === 3)
+                .length,
+            4: product.humanity_values.fuchsia?.entries?.filter((v) => v === 4)
+                .length,
+            5: product.humanity_values.fuchsia?.entries?.filter((v) => v === 5)
+                .length,
+        },
+    },
     blue: {
         avg: product.humanity_values.orange?.average,
         sum: product.humanity_values.orange?.entries.reduce((a, b) => a + b),

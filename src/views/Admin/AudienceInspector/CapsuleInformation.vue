@@ -1,0 +1,212 @@
+<script setup>
+import router from '../../../router/index';
+import { computed, onBeforeMount, ref, watch } from 'vue';
+import { useHumanityShopStore } from '../../../store/humanity-shop/humanity-shop.store';
+import ProductItem from '../../HumanityShop/Admin/ProductItem.vue';
+import { useRoute } from 'vue-router';
+import { usePerformanceStore } from '../../../store/performance.store';
+
+const route = useRoute();
+const performanceStore = usePerformanceStore();
+const id = router.currentRoute.value.params.id;
+
+onBeforeMount(async () => {
+    await performanceStore.getGames();
+    await performanceStore.getPhases();
+    await humanityStore.fetchProducts();
+});
+
+let games = computed(() => performanceStore.games);
+
+const humanityStore = useHumanityShopStore();
+let showOnlyColor = ref('');
+
+let products = computed(() => humanityStore.products);
+
+async function sortProducts() {
+    await humanityStore.fetchProducts();
+    products = computed(() => humanityStore.products);
+    let color = {
+        'blue-sky': 'orange',
+        fuchsia: 'fuchsia',
+        silver: 'blue',
+        lime: 'green',
+    }[showOnlyColor.value];
+    let pp = products.value.sort(
+        (a, b) =>
+            b.humanity_values[color].average - a.humanity_values[color].average
+    );
+    console.log(games);
+    return pp;
+}
+
+async function sortGames() {
+    await performanceStore.getGames();
+    games = computed(() => performanceStore.games);
+    let color = {
+        'blue-sky': 'orange',
+        fuchsia: 'fuchsia',
+        silver: 'blue',
+        lime: 'green',
+    }[showOnlyColor.value];
+    console.log(games);
+    return games.value.filter((g) => g.open_for_colors.includes(color));
+}
+
+function isForSelectedColor(color) {
+    return (
+        color ===
+        {
+            'blue-sky': 'orange',
+            fuchsia: 'fuchsia',
+            silver: 'blue',
+            lime: 'green',
+        }[showOnlyColor.value]
+    );
+}
+</script>
+
+<template>
+    <div class="my-4">
+        <div>
+            <button
+                :class="{ 'font-size-xl': showOnlyColor === 'blue-sky' }"
+                class="mx-2"
+                style="background-color: paleturquoise"
+                @click="
+                    showOnlyColor = 'blue-sky';
+                    products = sortProducts();
+                    games = sortGames();
+                "
+            >
+                Kapsel türkiis
+            </button>
+
+            <button
+                :class="{ 'font-size-xl': showOnlyColor === 'fuchsia' }"
+                class="mx-2"
+                style="background-color: lightpink"
+                @click="
+                    showOnlyColor = 'fuchsia';
+                    products = sortProducts();
+                    games = sortGames();
+                "
+            >
+                Kapsel violett
+            </button>
+
+            <button
+                :class="{ 'font-size-xl': showOnlyColor === 'silver' }"
+                class="mx-2"
+                style="background-color: silver"
+                @click="
+                    showOnlyColor = 'silver';
+                    products = sortProducts();
+                    games = sortGames();
+                "
+            >
+                Kapsel hõbevalge
+            </button>
+
+            <button
+                :class="{ 'font-size-xl': showOnlyColor === 'lime' }"
+                class="mx-2"
+                style="background-color: lime"
+                @click="
+                    showOnlyColor = 'lime';
+                    products = sortProducts();
+                    games = sortGames();
+                "
+            >
+                Kapsel laim
+            </button>
+        </div>
+        <br /><br />
+        <div v-if="showOnlyColor.length">
+            <div class="py-4 col">
+                <h2>Mäng kapslis</h2>
+                <div>
+                    <div v-for="(game, i) in games" :key="game._id + i">
+                        <div
+                            v-if="
+                                game.game_type !== 'SHOP' &&
+                                isForSelectedColor(game.open_for_colors[0]) &&
+                                game.open_for_colors.length === 1
+                            "
+                        >
+                            <h3>{{ game.name }}</h3>
+
+                            <div
+                                v-for="step in game.game_steps"
+                                :key="step._id"
+                                class="py-2"
+                            >
+                                <strong>{{ step.question_text }}</strong>
+                                <div
+                                    v-for="option in step.question_options"
+                                    :key="option.option_text"
+                                >
+                                    {{ option.option_text }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="py-4 col">
+                <h2>Kapsli toodete edetabel</h2>
+                <div class="products">
+                    <div
+                        v-for="(product, i) in products"
+                        :key="i"
+                        class="product"
+                    >
+                        <div v-if="product">
+                            {{ product?.title }}
+                            <span
+                                v-if="showOnlyColor === 'lime'"
+                                class="lime"
+                                >{{
+                                    Math.round(
+                                        products[i].humanity_values?.green
+                                            ?.average * 100
+                                    ) / 100
+                                }}</span
+                            >
+                            <span
+                                v-if="showOnlyColor === 'silver'"
+                                class="lime"
+                                >{{
+                                    Math.round(
+                                        products[i].humanity_values?.blue
+                                            ?.average * 100
+                                    ) / 100
+                                }}</span
+                            >
+                            <span
+                                v-if="showOnlyColor === 'blue-sky'"
+                                class="lime"
+                                >{{
+                                    Math.round(
+                                        products[i].humanity_values?.orange
+                                            ?.average * 100
+                                    ) / 100
+                                }}</span
+                            >
+                            <span
+                                v-if="showOnlyColor === 'fuchsia'"
+                                class="lime"
+                                >{{
+                                    Math.round(
+                                        products[i].humanity_values?.fuchsia
+                                            ?.average * 100
+                                    ) / 100
+                                }}</span
+                            >
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

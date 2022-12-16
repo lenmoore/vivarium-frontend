@@ -137,6 +137,7 @@ const routes: Array<RouteRecordRaw> = [
     {
         path: '/admin',
         name: 'admin.home',
+        redirect: 'admin/capsule',
         component: () => import('../views/Admin/AdminHome.vue'),
         children: [
             {
@@ -144,6 +145,14 @@ const routes: Array<RouteRecordRaw> = [
                 name: 'admin.audience',
                 component: () =>
                     import('../views/Admin/AudienceInspector/AudienceList.vue'),
+            },
+            {
+                path: 'capsule',
+                name: 'admin.capsule',
+                component: () =>
+                    import(
+                        '../views/Admin/AudienceInspector/CapsuleInformation.vue'
+                    ),
             },
         ],
     },

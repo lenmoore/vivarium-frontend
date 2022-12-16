@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, reactive } from 'vue';
+import { onBeforeMount, reactive } from 'vue';
 import { Chart } from 'chart.js/auto';
 
 import { defineProps } from 'vue';
@@ -8,7 +8,7 @@ const props = defineProps(['data']);
 
 const data = reactive(props.data);
 console.log('18->', data.green);
-onMounted(() => {
+onBeforeMount(() => {
     const ctx = document.getElementById('general-chart');
 
     // todo make chart for distribution of grades for each color + display sum of all responses
@@ -28,19 +28,19 @@ onMounted(() => {
         },
         data: {
             labels: [
-                'lime (' + data.green.sum + ' pts)',
-                'blue (' + data.blue.sum + ' pts)',
-                'silver (' + data.silver.sum + ' pts)',
-                'fuchsia (' + data.fuchsia.sum + ' pts)',
+                'lime (' + data.green?.sum + ' pts)',
+                'blue (' + data.blue?.sum + ' pts)',
+                'silver (' + data.silver?.sum + ' pts)',
+                'fuchsia (' + data.fuchsia?.sum + ' pts)',
             ],
             datasets: [
                 {
                     label: 'averages',
                     data: [
-                        data.green.avg,
-                        data.blue.avg,
-                        data.silver.avg,
-                        data.fuchsia.avg,
+                        data.green?.avg,
+                        data.blue?.avg,
+                        data.silver?.avg,
+                        data.fuchsia?.avg,
                     ],
                     backgroundColor: [
                         'rgb(151,255,99, 0.6)',

@@ -1,12 +1,12 @@
 <script setup>
 import { useVisitorStore } from '@/store/visitor.store';
-import { onMounted, reactive, ref } from 'vue';
+import { onBeforeMount, reactive, ref } from 'vue';
 import { useHumanityShopStore } from '@/store/humanity-shop/humanity-shop.store';
 
 const visitorStore = useVisitorStore();
 
 const humanityStore = useHumanityShopStore();
-onMounted(async () => {
+onBeforeMount(async () => {
     await visitorStore.fetchVisitor(localStorage.getItem('visitorId'));
     await humanityStore.getVisitorBasket();
 });
@@ -60,18 +60,18 @@ if (visitor && basket && quizResults) {
 </script>
 
 <template>
-    <div class="container">
-        <div v-if="visitor && basket && quizResults" class="border">
-            {{ humanityResults }}
-        </div>
-        <div v-if="visitor">
+    <div v-if="visitor && quizResults" class="container">
+        <!--        <div v-if="visitor && basket && quizResults" class="border">-->
+        <!--            {{ humanityResults }}-->
+        <!--        </div>-->
+        <div>
             <h2>ID {{ visitor.wardrobe_number }} Character sheet</h2>
-            {{ visitor.confirmed_humanity_value }}
+            <h2 :class="visitor.confirmed_humanity_value">
+                {{ visitor.confirmed_humanity_value }}
+            </h2>
         </div>
 
-        <div v-else>Siin pole sulle praegu midagi. Logi parem sisse.</div>
-
-        <div v-if="visitor">
+        <div>
             <div v-if="basket">
                 <h4>Votad kapslisse kaasa</h4>
 
@@ -101,12 +101,12 @@ if (visitor && basket && quizResults) {
                     }}</small>
                 </div>
             </div>
-            <button
-                class="btn btn-outline-primary mt-4"
-                @click="deleteAllQuizResults"
-            >
-                Kustuta koik quizide vastused (ARA VAJUTA)
-            </button>
+            <!--            <button-->
+            <!--                class="btn btn-outline-primary mt-4"-->
+            <!--                @click="deleteAllQuizResults"-->
+            <!--            >-->
+            <!--                Kustuta koik quizide vastused (ARA VAJUTA)-->
+            <!--            </button>-->
         </div>
     </div>
 </template>
@@ -115,5 +115,21 @@ if (visitor && basket && quizResults) {
 td {
     width: 4rem;
     border: 1px solid black;
+}
+
+.silver {
+    background-color: silver;
+}
+
+.fuchsia {
+    background-color: lightpink;
+}
+
+.blue-sky {
+    background-color: cornflowerblue;
+}
+
+.lime {
+    background-color: lightgreen;
 }
 </style>

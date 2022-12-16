@@ -1,6 +1,6 @@
 <script setup>
 import { QrStream } from 'vue3-qr-reader';
-import { computed, onMounted, reactive, ref } from 'vue';
+import { computed, onBeforeMount, reactive, ref } from 'vue';
 import { useHumanityShopStore } from '../../../store/humanity-shop/humanity-shop.store';
 import { useVisitorStore } from '../../../store/visitor.store';
 
@@ -16,7 +16,7 @@ const qr = ref({
 });
 
 const humanityShopStore = useHumanityShopStore();
-onMounted(async () => {
+onBeforeMount(async () => {
     await humanityShopStore.fetchProducts();
     await humanityShopStore.getVisitorBasket();
 });

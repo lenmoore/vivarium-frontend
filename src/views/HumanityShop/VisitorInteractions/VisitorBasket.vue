@@ -1,6 +1,6 @@
 <script setup>
 import { useVisitorStore } from '../../../store/visitor.store';
-import { ref, onMounted, reactive } from 'vue';
+import { ref, onBeforeMount, reactive } from 'vue';
 import { useHumanityShopStore } from '../../../store/humanity-shop/humanity-shop.store';
 import router from '../../../router/index';
 
@@ -11,7 +11,7 @@ let showWantToRemoveModal = ref(false);
 let removeItemId = ref('');
 let showConfirmBasketConfirmation = ref(false);
 
-onMounted(async () => {
+onBeforeMount(async () => {
     await humanityStore.getVisitorBasket();
     await humanityStore.fetchProducts();
 });

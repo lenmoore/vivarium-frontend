@@ -1,7 +1,8 @@
 <script setup>
-import { computed, onMounted, ref } from 'vue';
+import { computed, onBeforeMount, reactive, ref, watch } from 'vue';
 import { useHumanityShopStore } from '../../store/humanity-shop/humanity-shop.store';
 import { usePerformanceStore } from '../../store/performance.store';
+import router from '../../router/index';
 
 const performanceStore = usePerformanceStore();
 const humanityStore = useHumanityShopStore();
@@ -11,7 +12,7 @@ let viewOptions = ref({
     showProductsSummary: false,
     showQuizSummary: false,
 });
-onMounted(async () => {
+onBeforeMount(async () => {
     await humanityStore.fetchBaskets();
     await performanceStore.getPerformances();
     const activePerformance = computed(() => {
@@ -21,34 +22,44 @@ onMounted(async () => {
         activePerformance.value._id
     );
 });
+let getRoute = reactive('');
+watch(router.currentRoute, () => {
+    getRoute = router.currentRoute.value.name;
+    console.log(getRoute);
+});
 </script>
 <template>
     <div class="admin-home container">
-        <div class="d-flex w-75 align-items-center justify-content-between">
-            <RouterLink :to="{ name: 'admin.audience' }">
-                Publik koik
+        <div class="w-100 d-flex align-items-center justify-content-center">
+            <RouterLink
+                :class="
+                    getRoute === 'admin.audience'
+                        ? 'btn-primary'
+                        : 'btn-outline-primary'
+                "
+                :to="{ name: 'admin.audience' }"
+                class="btn btn-outline-primary"
+            >
+                Publik kapslites
             </RouterLink>
             <RouterLink
-                :to="{ name: 'admin.audience', query: { color: 'blue-sky' } }"
+                :class="
+                    getRoute === 'admin.capsule'
+                        ? 'btn-primary'
+                        : 'btn-outline-primary'
+                "
+                :to="{ name: 'admin.capsule' }"
+                class="btn mx-4"
             >
-                Publik blue-sky
-            </RouterLink>
-            <RouterLink
-                :to="{ name: 'admin.audience', query: { color: 'fuchsia' } }"
-            >
-                Publik fuchsia
-            </RouterLink>
-            <RouterLink
-                :to="{ name: 'admin.audience', query: { color: 'silver' } }"
-            >
-                Publik silver
-            </RouterLink>
-            <RouterLink
-                :to="{ name: 'admin.audience', query: { color: 'lime' } }"
-            >
-                Publik lime
+                Kapslite info
             </RouterLink>
         </div>
-        <RouterView />
+        <RouterView :key="$route.fullPath" />
     </div>
 </template>
+
+<style lang="scss" scoped>
+.router-link-active {
+    background-color: coral !important;
+}
+</style>

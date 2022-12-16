@@ -1,6 +1,6 @@
 <script setup>
 import { useRoute } from 'vue-router';
-import { computed, onMounted, reactive, ref } from 'vue';
+import { computed, onBeforeMount, reactive, ref } from 'vue';
 import PhaseManager from './components/PhaseManager.vue';
 import { usePerformanceStore } from '../../../../../store/performance.store';
 
@@ -8,9 +8,15 @@ const route = useRoute();
 const id = route.params.id;
 
 const performanceStore = usePerformanceStore();
-onMounted(async () => {
+onBeforeMount(async () => {
     await performanceStore.getPhases();
     await performanceStore.getPerformances();
+    const activePerformance = computed(() => {
+        return performanceStore.getActivePerformance;
+    });
+    await performanceStore.getCurrentPerformanceVisitors(
+        activePerformance.value._id
+    );
 });
 
 const performances = computed(() => performanceStore.performances);
@@ -23,7 +29,7 @@ performanceStore.getPerformanceById(id);
 
 <template>
     <div>
-        <div v-if="performance">
+        <div v-if="performance._id">
             {{ performance.title }} <br />
             kuupaev: {{ performance.date }}
 
@@ -31,9 +37,6 @@ performanceStore.getPerformanceById(id);
             <PhaseManager :phases="phases" />
 
             <div class="performance-settings">
-                <button class="btn btn-primary m-1">
-                    Jaga publik gruppidesse
-                </button>
                 <div class="d-flex">
                     <button
                         v-if="performance.active"

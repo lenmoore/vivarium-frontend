@@ -1,6 +1,6 @@
 <script setup>
 import { usePerformanceStore } from '../../store/performance.store';
-import { computed, onMounted, reactive, ref, watch } from 'vue';
+import { computed, onBeforeMount, reactive, ref, watch } from 'vue';
 import { useVisitorStore } from '../../store/visitor.store';
 import router from '../../router/index';
 
@@ -16,7 +16,7 @@ const state = reactive({
     visitor_current_step_selected_option_text: '',
 });
 
-onMounted(async () => {
+onBeforeMount(async () => {
     await visitorStore.fetchVisitor(localStorage.getItem('visitorId'));
     await performanceStore.getGames();
     await performanceStore.getPhases();

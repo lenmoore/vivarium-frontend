@@ -1,13 +1,14 @@
 <script lang="ts" setup>
 import { useAuthStore } from '@/store/auth.store';
-import { computed, onMounted, reactive, ref, watch } from 'vue';
+import { computed, onBeforeMount, reactive, ref, watch } from 'vue';
 import { usePerformanceStore } from '@/store/performance.store';
 import router from '@/router';
+import { LocationQueryRaw } from 'vue-router';
 
 const performanceStore = usePerformanceStore();
 const authStore = useAuthStore();
 
-onMounted(async () => {
+onBeforeMount(async () => {
     await performanceStore.getGames();
     await performanceStore.getPhases();
     await performanceStore.getPerformances();
@@ -32,18 +33,19 @@ let navLinks = ref({ linx: [home] });
 let isAuthenticated = localStorage.accessToken != null;
 
 function renderLinks() {
-    navLinks.value.linx = [home];
     // stuff from store
     const phases = ref(computed(() => performanceStore.phases));
     const activePhase = ref(phases.value.find((p) => p.active));
     const games = ref(computed(() => performanceStore.games));
 
     if (isAuthenticated && isAdmin) {
+        console.log('dude');
         navLinks.value.linx = [
             { name: 'superadmin', label: 'superadmin', query: {} },
             { name: 'admin.home', label: 'näitleja dashboard', query: {} },
         ];
     } else if (isAuthenticated) {
+        navLinks.value.linx = [home];
         // is authenticated as visitor
         const activeGame = games.value.find(
             (game) => game?._id === activePhase?.value?.phase_game?._id
@@ -67,28 +69,47 @@ function renderLinks() {
     }
 }
 
+// todo fix this stupid hack
+async function goTo(link: {
+    name: string;
+    query: LocationQueryRaw;
+    label: string;
+}) {
+    if (
+        router.currentRoute.value.name
+            ?.toString()
+            .split('.')
+            .includes(link.name.split('.')[0])
+    ) {
+        console.log('te');
+        location.replace(router.currentRoute.value.fullPath);
+        renderLinks();
+    } else {
+        await router.push('/');
+        await router.push({ name: link.name, query: link.query });
+    }
+}
+
 function logout() {
     localStorage.clear();
     sessionStorage.clear();
     router.push('/');
 }
-
-const isIntroView = router.currentRoute.value.name === 'visitor.intro';
 </script>
 
 <template>
-    <nav v-if="!isIntroView" class="container nav-wrapper">
-        <RouterLink
+    <nav class="container nav-wrapper">
+        <span
             v-for="(link, i) in navLinks.linx"
             :key="`${navLinks.linx.length}_${i}`"
-            :to="{ name: link.name, query: link.query }"
-            class="nav-item"
         >
-            {{ link.label }}
-        </RouterLink>
-        <!--        <button v-if="isAuthenticated" class="btn" @click="logout">-->
-        <!--            logout-->
-        <!--        </button>-->
+            <button class="nav-item" @click="goTo(link)">
+                {{ link.label }}
+            </button>
+        </span>
+        <button v-if="isAuthenticated" class="btn" @click="logout">
+            logout
+        </button>
     </nav>
     <!--    <button class="btn" @click="renderLinks">XX</button>-->
 </template>

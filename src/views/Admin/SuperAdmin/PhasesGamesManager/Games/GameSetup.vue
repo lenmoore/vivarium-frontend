@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted, reactive, ref } from 'vue';
+import { computed, onBeforeMount, reactive, ref } from 'vue';
 import { usePerformanceStore } from '../../../../../store/performance.store';
 import router from '../../../../../router/index';
 import { Step } from '../../../../../types/performances.types';
@@ -8,7 +8,7 @@ import GameStep from './GameStep.vue';
 const performanceStore = usePerformanceStore();
 const id = router.currentRoute.value.params.id;
 
-onMounted(async () => {
+onBeforeMount(async () => {
     await performanceStore.getGames();
     await performanceStore.getPhases();
 });
