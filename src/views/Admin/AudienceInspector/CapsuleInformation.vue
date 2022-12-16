@@ -71,7 +71,7 @@ function isForSelectedColor(color) {
         <div>
             <button
                 :class="{ 'font-size-xl': showOnlyColor === 'blue-sky' }"
-                class="mx-2"
+                class="mx-2 p-2"
                 style="background-color: paleturquoise"
                 @click="
                     showOnlyColor = 'blue-sky';
@@ -79,12 +79,12 @@ function isForSelectedColor(color) {
                     games = sortGames();
                 "
             >
-                Kapsel türkiis
+                Türkiis
             </button>
 
             <button
                 :class="{ 'font-size-xl': showOnlyColor === 'fuchsia' }"
-                class="mx-2"
+                class="mx-2 p-2"
                 style="background-color: lightpink"
                 @click="
                     showOnlyColor = 'fuchsia';
@@ -92,12 +92,12 @@ function isForSelectedColor(color) {
                     games = sortGames();
                 "
             >
-                Kapsel violett
+                Violett
             </button>
 
             <button
                 :class="{ 'font-size-xl': showOnlyColor === 'silver' }"
-                class="mx-2"
+                class="mx-2 p-2"
                 style="background-color: silver"
                 @click="
                     showOnlyColor = 'silver';
@@ -105,12 +105,12 @@ function isForSelectedColor(color) {
                     games = sortGames();
                 "
             >
-                Kapsel hõbevalge
+                Hõbevalge
             </button>
 
             <button
                 :class="{ 'font-size-xl': showOnlyColor === 'lime' }"
-                class="mx-2"
+                class="mx-2 p-2"
                 style="background-color: lime"
                 @click="
                     showOnlyColor = 'lime';
@@ -118,7 +118,7 @@ function isForSelectedColor(color) {
                     games = sortGames();
                 "
             >
-                Kapsel laim
+                Laim
             </button>
         </div>
         <br /><br />

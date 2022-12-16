@@ -14,6 +14,7 @@ let viewOptions = ref({
     ready: false,
 });
 onBeforeMount(async () => {
+    await performanceStore.getGames();
     await humanityStore.fetchBaskets();
     await performanceStore.getPerformances();
     const activePerformance = computed(() => {
@@ -23,10 +24,11 @@ onBeforeMount(async () => {
         activePerformance.value._id
     );
 });
+
 const baskets = computed(() => humanityStore.getBaskets);
 const products = computed(() => humanityStore.getProducts);
-let showOnlyColor = ref(router.currentRoute.value.query.color);
-console.log(showOnlyColor);
+let games = computed(() => performanceStore.games);
+let showOnlyColorRoute = ref(router.currentRoute.value.query.color);
 let visitors = computed(() => performanceStore.getVisitors);
 
 function toggleViewOptions(show) {
@@ -48,25 +50,23 @@ function toggleViewOptions(show) {
     }
 }
 
-console.log(visitors);
 let allProductsEverSelected = ref([]);
 let countedProducts = ref([]);
 let mappedVisitors = ref([]);
 watch(visitors, async () => {
     let visitorsToMap = [];
 
-    if (showOnlyColor.value) {
-        console.log(showOnlyColor);
+    if (showOnlyColorRoute.value) {
         visitorsToMap = ref(
             visitors.value.filter(
                 (visitor) =>
-                    visitor.confirmed_humanity_value === showOnlyColor.value
+                    visitor.confirmed_humanity_value ===
+                    showOnlyColorRoute.value
             )
         );
     } else {
         visitorsToMap = ref(visitors.value);
     }
-    console.log(visitorsToMap);
     mappedVisitors = visitorsToMap.value?.map((visitor) => {
         let basket = visitor.basket;
 
@@ -131,6 +131,9 @@ watch(visitors, async () => {
                         .reduce((a, b) => a + b) + orangeQuiz,
             },
         ];
+        visitor.quiz_results.forEach((p) => {
+            allAnswers.value.push(p);
+        });
         if (visitor.confirmed_humanity_value !== 'none') {
             return {
                 ...visitor,
@@ -150,53 +153,33 @@ watch(visitors, async () => {
         };
     });
     await getProducts(mappedVisitors);
-    await getQuizResults(mappedVisitors);
+    await performanceStore.getGames();
+    games = computed(() => performanceStore.games);
+    let color = {
+        'blue-sky': 'orange',
+        fuchsia: 'fuchsia',
+        silver: 'blue',
+        lime: 'green',
+    }[showOnlyColorRoute.value || 'all'];
+    console.log(games);
+    games = games.value.filter(
+        (g) =>
+            g.open_for_colors.includes(color) && g.open_for_colors.length === 1
+    );
 });
-let quizResults = ref([]);
 let allAnswers = ref([]);
-
-async function getQuizResults(visitores) {
-    console.log('hello');
-    console.log(visitores.length);
-    visitores.forEach((visitor) => {
-        console.log('visitor', visitor);
-        visitor.quiz_results.forEach((p) => {
-            allAnswers.value.push(p);
-        });
-    });
-
-    visitores.forEach((product) => {
-        let count = allAnswers.value.filter(
-            (p) => p._id === product._id
-        ).length;
-        if (
-            !quizResults.value.find(
-                (cP) => cP.option_text === product.option_text
-            )
-        ) {
-            quizResults.value.push({ ...product, count: count });
-        }
-    });
-
-    viewOptions.value.ready = true;
-    console.log(quizResults);
-}
 
 async function confirmColors() {
     visitors = visitors.value.map((visitor) => ({
         ...visitor,
         confirmed_humanity_value: visitor.highest.color,
     }));
-    console.log(visitors);
     await performanceStore.updateVisitors(visitors);
     location.reload();
 }
 
 async function getProducts(visitores) {
-    console.log('hello');
-    console.log(visitores.length);
     visitores.forEach((visitor) => {
-        console.log('visitor', visitor);
         visitor.basket?.products?.forEach((p) => {
             allProductsEverSelected.value.push(p);
         });
@@ -206,56 +189,59 @@ async function getProducts(visitores) {
         let count = allProductsEverSelected.value.filter(
             (p) => p._id === product._id
         ).length;
-        if (!countedProducts.value.find((cP) => cP._id === product._id)) {
+        if (!countedProducts?.value?.find((cP) => cP._id === product._id)) {
             countedProducts.value.push({ ...product, count: count });
         }
     });
 
+    countedProducts = countedProducts.value.sort((a, b) => b.count - a.count);
     viewOptions.value.ready = true;
 }
 </script>
 
 <template>
     <div class="my-4">
-        <small>Publiku filter</small> <br />
         <RouterLink :to="{ name: 'admin.audience' }" class="mx-2"
             >Publik kõik
         </RouterLink>
-        <RouterLink
-            :class="{ 'font-size-xl': showOnlyColor === 'blue-sky' }"
-            :to="{ name: 'admin.audience', query: { color: 'blue-sky' } }"
-            class="mx-2"
-            style="background-color: paleturquoise"
-        >
-            Publik türkiis
-        </RouterLink>
+        <br />
+        <div class="d-flex justify-content-around align-items-center">
+            <RouterLink
+                :class="{ 'font-size-xl': showOnlyColorRoute === 'blue-sky' }"
+                :to="{ name: 'admin.audience', query: { color: 'blue-sky' } }"
+                class="mx-2 p-2"
+                style="background-color: paleturquoise"
+            >
+                Türkiis
+            </RouterLink>
 
-        <RouterLink
-            :class="{ 'font-size-xl': showOnlyColor === 'fuchsia' }"
-            :to="{ name: 'admin.audience', query: { color: 'fuchsia' } }"
-            class="mx-2 link"
-            style="background-color: lightpink"
-        >
-            Publik violett
-        </RouterLink>
+            <RouterLink
+                :class="{ 'font-size-xl': showOnlyColorRoute === 'fuchsia' }"
+                :to="{ name: 'admin.audience', query: { color: 'fuchsia' } }"
+                class="mx-2 p-2"
+                style="background-color: lightpink"
+            >
+                Violett
+            </RouterLink>
 
-        <RouterLink
-            :class="{ 'font-size-xl': showOnlyColor === 'silver' }"
-            :to="{ name: 'admin.audience', query: { color: 'silver' } }"
-            class="mx-2 link"
-            style="background-color: silver"
-        >
-            Publik hõbevalge
-        </RouterLink>
+            <RouterLink
+                :class="{ 'font-size-xl': showOnlyColorRoute === 'silver' }"
+                :to="{ name: 'admin.audience', query: { color: 'silver' } }"
+                class="mx-2 p-2"
+                style="background-color: silver"
+            >
+                Hõbevalge
+            </RouterLink>
 
-        <RouterLink
-            :class="{ 'font-size-xl': showOnlyColor === 'lime' }"
-            :to="{ name: 'admin.audience', query: { color: 'lime' } }"
-            class="mx-2 link"
-            style="background-color: lime"
-        >
-            Publik laim
-        </RouterLink>
+            <RouterLink
+                :class="{ 'font-size-xl': showOnlyColorRoute === 'lime' }"
+                :to="{ name: 'admin.audience', query: { color: 'lime' } }"
+                class="mx-2 p-2"
+                style="background-color: lime"
+            >
+                Laim
+            </RouterLink>
+        </div>
 
         <div v-if="visitors && baskets">
             <div class="d-flex align-items-center justify-content-around">
@@ -298,17 +284,14 @@ async function getProducts(visitores) {
                             (visitor.highest && visitor.highest.color) ||
                             visitor.confirmed_humanity_value
                         "
-                        class="visitor-wrapper mt-2"
+                        class="visitor-wrapper mt-2 text-center"
                     >
-                        <h6>Garderoobinumber: {{ visitor.wardrobe_number }}</h6>
+                        <h5>Garderoobinumber: {{ visitor.wardrobe_number }}</h5>
                         Tooteid korvis: {{ visitor.basket.products.length }},
                         {{
                             visitor.confirmed_humanity_value ||
                             (visitor.highest && visitor.highest.color)
                         }}
-                        <!--                        <br /><small style="font-size: 10px">{{-->
-                        <!--                            visitor.avg_hum_values-->
-                        <!--                        }}</small>-->
 
                         <div class="border-top">
                             Korvis:
@@ -325,9 +308,6 @@ async function getProducts(visitores) {
                         viewOptions.showProductsSummary && countedProducts
                     "
                 >
-                    <!--                    Poes oli kokku tooteid {{ products.length }}. Kokku toodi-->
-                    <!--                    {{ showOnlyColor }} kapslisse-->
-                    <!--                    {{ allProductsEverSelected.length }} toodet.-->
                     <div>
                         <div
                             v-for="product in countedProducts"
@@ -347,34 +327,44 @@ async function getProducts(visitores) {
                     </div>
                 </div>
                 <div v-else-if="viewOptions.showQuizSummary">
-                    <small class="text-white bg-black"
-                        >Helena paneb siia loendatud tulemused ka siis kui
-                        jouab. Prg nii v2he et :D
-                    </small>
-                    <div
-                        v-for="visitor in mappedVisitors"
-                        :key="'visitor' + visitor._id"
-                        class="border"
-                    >
-                        <div
-                            v-for="quizAnswer in visitor.quiz_results"
-                            :key="visitor._id + quizAnswer._id"
-                        >
-                            {{ quizAnswer.result_text }}
+                    <div v-for="(game, i) in games" :key="game._id + i">
+                        <div>
+                            <div
+                                v-for="step in game.game_steps"
+                                :key="step._id"
+                                class="py-2"
+                            >
+                                <h4>{{ step.question_text }}</h4>
+                                <div
+                                    v-for="option in step.question_options"
+                                    :key="option.option_text"
+                                >
+                                    {{ option.option_text }}
+                                    <strong
+                                        >({{
+                                            allAnswers.filter(
+                                                (ans) =>
+                                                    ans.result_text ===
+                                                    option.option_text
+                                            ).length
+                                        }})</strong
+                                    >
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <h4 style="margin-top: 20rem">
-                Ära vajuta neid nuppe, kui sul siia asja pole. Helena paneb need
-                hiljem peitu
-            </h4>
-            <div>
-                <button class="btn btn-primary" @click="confirmColors">
-                    pane värvid lukku
-                </button>
-            </div>
+            <!--            <h4 style="margin-top: 20rem">-->
+            <!--                Ära vajuta neid nuppe, kui sul siia asja pole. Helena paneb need-->
+            <!--                hiljem peitu-->
+            <!--            </h4>-->
+            <!--            <div>-->
+            <!--                <button class="btn btn-primary" @click="confirmColors">-->
+            <!--                    pane värvid lukku-->
+            <!--                </button>-->
+            <!--            </div>-->
         </div>
     </div>
 </template>
