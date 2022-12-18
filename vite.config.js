@@ -9,17 +9,17 @@ import * as fs from 'fs';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-    server: {
-        host: true,
-        port: 8080,
-        proxy: {
-            'localhost:8080': {
-                target: 'http://localhost:80',
-                changeOrigin: true,
-                secure: false,
-            },
-        },
-    },
+    // server: {
+    //     host: true,
+    //     port: 8080,
+    //     proxy: {
+    //         'localhost:8080': {
+    //             target: 'http://localhost:80',
+    //             changeOrigin: true,
+    //             secure: false,
+    //         },
+    //     },
+    // },
     plugins: [
         vue({
             template: {
