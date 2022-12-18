@@ -41,7 +41,7 @@ async function removeProduct(item) {
         <div
             class="h-100 d-flex flex-column justify-content-between basket-list"
         >
-            Korvis hetkel {{ productsInBasket.length }} toodet.
+            Korvis hetkel {{ productsInBasket.length || 0 }} toodet.
             <div class="basket-items-wrapper">
                 <div
                     v-for="(item, i) in productsInBasket"
@@ -67,7 +67,7 @@ async function removeProduct(item) {
                         v-if="
                             showWantToRemoveModal && removeItemId === item._id
                         "
-                        class="d-flex justify-content-end"
+                        class="d-flex justify-content-end m-2"
                     >
                         Kindel, et eemaldad toote?
                         <button
@@ -88,14 +88,14 @@ async function removeProduct(item) {
                     </div>
                     <div v-else>
                         <button
-                            class="btn d-flex align-items-baseline"
+                            class="btn d-flex flex-column"
                             @click="
                                 showWantToRemoveModal = true;
                                 removeItemId = item._id;
                             "
                         >
-                            <span>eemalda</span>
-                            <span class="font-size-xl"> &#9746; </span>
+                            <span class="font-size-xl">&#9746;</span>
+                            <span class="font-size-xs">eemalda</span>
                         </button>
                     </div>
                 </div>
@@ -105,7 +105,7 @@ async function removeProduct(item) {
                 <RouterLink :to="{ name: 'home' }">Vaata</RouterLink>
             </div>
         </div>
-        <div class="bottom-fixed">
+        <div class="bottom-fixed d-flex flex-column">
             <div
                 v-if="basket.products.length === 0"
                 class="align-items-center justify-content-center d-flex w-100"

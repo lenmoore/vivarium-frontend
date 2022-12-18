@@ -34,9 +34,8 @@ function goScan() {
             Esmalt aga külasta kohvikut esimesel korrusel. Teisele korrusele
             saab minna alates 18.45.
         </p>
-        <small class="bg-dark text-white"
-            >Tee poe faasi alguses refresh, see syncimine laks eile
-            katki.</small
+        <a class="btn btn-primary" href="/visitor/humanity-shop/basket"
+            >Poodi</a
         >
     </div>
 </template>

@@ -81,11 +81,27 @@ watch(state, async () => {
 });
 
 async function addEmptyStepsToVisitor() {
-    console.log('cauka');
-    console.log(visitor);
+    await performanceStore.getGames();
+    visitor = await visitorStore.fetchVisitor(
+        localStorage.getItem('visitorId')
+    );
+    let activePhase = ref(
+        phases?.value.find(
+            (phase) =>
+                phase.active &&
+                ((visitor.confirmed_humanity_value &&
+                    phase.phase_game.open_for_colors.includes(capsuleColor)) ||
+                    visitor.confirmed_humanity_value === 'none')
+        )
+    );
+    const activeGameId = ref(activePhase.value?.phase_game?._id);
+    activeGame = ref(
+        games.value.find((game) => game._id === activeGameId?.value)
+    );
+
     gameStepsWithVisitorSelectedValues = ref(activeGame.value?.game_steps);
-    console.log(gameStepsWithVisitorSelectedValues);
-    for (const step1 of gameStepsWithVisitorSelectedValues?.value) {
+
+    for (const step1 of activeGame.value?.game_steps) {
         visitor.quiz_results.push({
             step: step1,
             result_text: '-',
@@ -93,6 +109,7 @@ async function addEmptyStepsToVisitor() {
         });
     }
     await visitorStore.editVisitor(visitor);
+
     localStorage.setItem(activeGame.value._id, 'started');
 
     await performanceStore.getPhases();
@@ -108,7 +125,9 @@ function quizIsDone() {
 }
 
 async function selectValue(val) {
-    await visitorStore.fetchVisitor(localStorage.getItem('visitorId'));
+    visitor = await visitorStore.fetchVisitor(
+        localStorage.getItem('visitorId')
+    );
     let updateVisitor = ref(visitor);
     console.log(updateVisitor);
     let stepToUpdate = updateVisitor.value.quiz_results.find(
