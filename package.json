@@ -9,7 +9,7 @@
     "qa": "mode=qa vite",
     "prod": "mode=prod vite",
     "build": "vite build",
-    "start": "node server.js",
+    "start": "vite build",
     "preview": "vite preview --port 4173"
   },
   "engines": {
