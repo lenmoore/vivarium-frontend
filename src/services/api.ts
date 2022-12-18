@@ -59,7 +59,7 @@ const instance: AxiosInstance = axios.create({
         Authorization: authHeader().toString(),
         'X-Refresh': refreshHeader().toString(),
     },
-    baseURL: herokuapi,
+    baseURL: 'https://ancient-oasis-40097.herokuapp.com/' + herokuapi,
 });
 
 export default instance;
