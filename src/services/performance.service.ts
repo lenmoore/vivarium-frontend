@@ -69,6 +69,20 @@ class PerformanceService {
             });
     }
 
+    async archiveAudience(payload: any) {
+        console.log(payload);
+        return await api
+            .put(`/performances/${payload._id}/archive-visitors`, payload, {
+                params: {
+                    performanceId: payload._id,
+                },
+            })
+            .then(({ data }) => {
+                console.log(data);
+                return data;
+            });
+    }
+
     async editPhase(payload: any) {
         if (typeof payload.phase_game === 'object') {
             payload.phase_game = payload.phase_game._id;
@@ -97,16 +111,22 @@ class PerformanceService {
     }
 
     async editVisitor(payload: any) {
+        if (payload.basket) {
+            payload = {
+                ...payload,
+                basket: {
+                    ...payload?.basket,
+                    basket_id: payload?.basket && payload?.basket?.basketId,
+                },
+            };
+        }
         console.log('------------------------payload', payload);
+
         return await api
             .put(
                 `/visitors/${payload.visitorId}`,
                 {
                     ...payload,
-                    basket: {
-                        ...payload.basket,
-                        basket_id: payload.basket.basketId,
-                    },
                 },
                 {
                     params: {

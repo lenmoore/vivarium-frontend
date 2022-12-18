@@ -45,7 +45,7 @@ function renderLinks() {
             { name: 'admin.home', label: 'näitleja dashboard', query: {} },
         ];
     } else if (isAuthenticated) {
-        navLinks.value.linx = [home];
+        navLinks.value.linx = [];
         // is authenticated as visitor
         const activeGame = games.value.find(
             (game) => game?._id === activePhase?.value?.phase_game?._id
@@ -56,13 +56,6 @@ function renderLinks() {
             navLinks.value.linx.push(scan);
         } else if (activeGame && activeGame.game_type === 'QUIZ') {
             navLinks.value.linx.push(quiz);
-        } else {
-            //    meaning they're waiting on something to happen, e.g phase to change
-            navLinks.value.linx.push({
-                name: 'visitor.quiz.done',
-                label: 'edasi',
-                query: {},
-            });
         }
     } else {
         navLinks.value.linx = [];
@@ -83,7 +76,7 @@ async function goTo(link: {
     ) {
         console.log('te');
         location.replace(router.currentRoute.value.fullPath);
-        renderLinks();
+        // renderLinks();
     } else {
         await router.push('/');
         await router.push({ name: link.name, query: link.query });
@@ -94,11 +87,12 @@ function logout() {
     localStorage.clear();
     sessionStorage.clear();
     router.push('/');
+    location.reload();
 }
 </script>
 
 <template>
-    <nav class="container nav-wrapper">
+    <nav v-if="isAdmin" class="container nav-wrapper">
         <span
             v-for="(link, i) in navLinks.linx"
             :key="`${navLinks.linx.length}_${i}`"
@@ -107,9 +101,9 @@ function logout() {
                 {{ link.label }}
             </button>
         </span>
-        <button v-if="isAuthenticated" class="btn" @click="logout">
-            logout
-        </button>
+        <!--        <button v-if="isAuthenticated" class="btn" @click="logout">-->
+        <!--            logout-->
+        <!--        </button>-->
     </nav>
     <!--    <button class="btn" @click="renderLinks">XX</button>-->
 </template>

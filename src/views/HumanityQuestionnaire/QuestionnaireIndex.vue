@@ -50,18 +50,19 @@ let activeGame = ref(
     games.value.find((game) => game._id === activeGameId?.value)
 );
 
-let gameStepsWithVisitorSelectedValues = ref(activeGame.value.game_steps);
+let gameStepsWithVisitorSelectedValues = ref(activeGame.value?.game_steps);
 
 async function startGame() {
     state.game_loading = true;
     if (
-        localStorage.getItem(activeGame.value?._id) === 'done' ||
+        localStorage.getItem(activeGame?.value?._id) === 'done' ||
         activeGame?.value?.game_type === 'SHOP'
     ) {
         alert('Uus faas pole veel alanud. Proovi varsti uuesti');
         location.reload();
     } else {
-        if (localStorage.getItem(activeGame.value._id) === null) {
+        console.log(activeGame);
+        if (localStorage.getItem(activeGame?.value?._id) === null) {
             await addEmptyStepsToVisitor();
         } else {
             console.log('visitor.quiz_results', visitor.quiz_results);
@@ -80,7 +81,9 @@ watch(state, async () => {
 });
 
 async function addEmptyStepsToVisitor() {
-    for (const step1 of gameStepsWithVisitorSelectedValues.value) {
+    console.log('cauka');
+    console.log(visitor);
+    for (const step1 of gameStepsWithVisitorSelectedValues?.value) {
         visitor.quiz_results.push({
             step: step1,
             result_text: '-',
@@ -135,33 +138,43 @@ function step(i) {
         class="h-100 d-flex flex-column overflow-scroll justify-content-between w-100 align-content-around"
     >
         <!--        <div v-if="state.game_loading">Arvutan...</div>-->
-        <div v-if="state.game_started" class="game-steps-wrapper w-100">
-            <div v-if="!state.last_step">
-                <div class="buttons">
-                    <button class="btn" @click="step(-1)">eelmine</button>
+        <div v-if="state.game_started" class="game-steps-wrapper w-100 h-100">
+            <div
+                v-if="!state.last_step"
+                class="w-100 d-flex flex-column justify-content-between h-100"
+            >
+                <div>
+                    <h4 class="text-center">
+                        {{ state.current_step.question_text }}
+                    </h4>
+                    <div class="options-wrapper w-100">
+                        <div
+                            v-for="(step, i) in state.current_step
+                                .question_options"
+                            :key="i"
+                            :class="{
+                                selected:
+                                    state.visitor_current_step_selected_option_text ===
+                                    step.option_text,
+                            }"
+                            class="option w-100"
+                            @click="selectValue(step)"
+                        >
+                            {{ step.option_text }}
+                        </div>
+                    </div>
+                </div>
+                <div class="buttons w-100">
+                    <button class="btn btn-outline-primary" @click="step(-1)">
+                        eelmine
+                    </button>
                     <span
                         >{{ state.step_counter + 1 }} /
                         {{ activeGame.game_steps.length }}</span
                     >
-                    <button class="btn" @click="step(1)">jargmine</button>
-                </div>
-                <h4 class="text-center">
-                    {{ state.current_step.question_text }}
-                </h4>
-                <div class="options-wrapper w-100">
-                    <div
-                        v-for="(step, i) in state.current_step.question_options"
-                        :key="i"
-                        :class="{
-                            selected:
-                                state.visitor_current_step_selected_option_text ===
-                                step.option_text,
-                        }"
-                        class="option w-100"
-                        @click="selectValue(step)"
-                    >
-                        {{ step.option_text }}
-                    </div>
+                    <button class="btn btn-primary" @click="step(1)">
+                        jargmine
+                    </button>
                 </div>
             </div>
             <div v-else>
@@ -201,6 +214,10 @@ function step(i) {
     align-items: center;
     width: 100%;
     justify-content: space-between;
+
+    * {
+        width: 30%;
+    }
 }
 
 .selected {

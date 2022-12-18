@@ -5,8 +5,7 @@ let isInSuperadminIndex = router.currentRoute.value.name === 'superadmin';
 </script>
 <template>
     <div class="container">
-        <h2>Tsau, superadmin.</h2>
-        <div v-if="isInSuperadminIndex" class="d-flex w-25">
+        <div class="d-flex w-25">
             <RouterLink
                 :to="{ name: 'superadmin.settings' }"
                 class="btn btn-outline-primary m-1"

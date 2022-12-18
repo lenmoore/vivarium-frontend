@@ -3,7 +3,9 @@ import { QrStream } from 'vue3-qr-reader';
 import { computed, onBeforeMount, reactive, ref } from 'vue';
 import { useHumanityShopStore } from '../../../store/humanity-shop/humanity-shop.store';
 import { useVisitorStore } from '../../../store/visitor.store';
+import router from '../../../router/index';
 
+const humanityStore = useHumanityShopStore();
 const visitorStore = useVisitorStore();
 const visitor = reactive(visitorStore.getVisitor);
 const qr = ref({
@@ -63,8 +65,10 @@ async function addProductToBasket() {
     basket.products.push(qr.value.foundProduct._id);
     await humanityShopStore.updateBasket(basket);
     qr.value.foundProduct = null;
+    await humanityStore.getVisitorBasket();
 
-    // turnCameraOn();
+    await router.push({ name: 'visitor.humanity-shop.basket' });
+    location.reload();
 }
 
 function onInit() {
@@ -76,18 +80,8 @@ function resetValidationState() {
     qr.value.isValid = true;
 }
 
-function turnCameraOn() {
-    qr.value.camera = 'auto';
-}
-
 function turnCameraOff() {
     qr.value.camera = 'off';
-}
-
-function timeout(ms) {
-    return new Promise((resolve) => {
-        window.setTimeout(resolve, ms);
-    });
 }
 </script>
 <template>
@@ -138,6 +132,8 @@ function timeout(ms) {
                 </div>
             </QrStream>
         </div>
+
+        <a href="/visitor/humanity-shop/basket">Tagasi korvi</a>
     </div>
 </template>
 

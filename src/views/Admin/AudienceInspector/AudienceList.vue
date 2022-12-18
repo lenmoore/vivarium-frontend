@@ -67,16 +67,16 @@ watch(visitors, async () => {
     } else {
         visitorsToMap = ref(visitors.value);
     }
-    mappedVisitors = visitorsToMap.value?.map((visitor) => {
+    mappedVisitors = visitorsToMap.value.map((visitor) => {
         let basket = visitor.basket;
 
         let redQuiz = visitor.quiz_results
             ? visitor?.quiz_results
                   ?.map((qR) => {
-                      if (qR?.result_humanity_values?.fuchsia) {
-                          return qR.result_humanity_values?.fuchsia;
-                      }
-                      return qR.result_humanity_values?.red;
+                      return (
+                          qR.result_humanity_values?.fuchsia ||
+                          qR.result_humanity_values?.red
+                      );
                   })
                   ?.reduce((a, b) => a + b)
             : [];
@@ -170,9 +170,9 @@ watch(visitors, async () => {
 let allAnswers = ref([]);
 
 async function confirmColors() {
-    visitors = visitors.value.map((visitor) => ({
+    visitors = visitors?.value.map((visitor) => ({
         ...visitor,
-        confirmed_humanity_value: visitor.highest.color,
+        confirmed_humanity_value: visitor?.color,
     }));
     await performanceStore.updateVisitors(visitors);
     location.reload();
@@ -190,11 +190,11 @@ async function getProducts(visitores) {
             (p) => p._id === product._id
         ).length;
         if (!countedProducts?.value?.find((cP) => cP._id === product._id)) {
-            countedProducts.value.push({ ...product, count: count });
+            countedProducts?.value?.push({ ...product, count: count });
         }
     });
 
-    countedProducts = countedProducts.value.sort((a, b) => b.count - a.count);
+    countedProducts = countedProducts?.value?.sort((a, b) => b.count - a.count);
     viewOptions.value.ready = true;
 }
 </script>
@@ -356,15 +356,15 @@ async function getProducts(visitores) {
                 </div>
             </div>
 
-            <!--            <h4 style="margin-top: 20rem">-->
-            <!--                Ära vajuta neid nuppe, kui sul siia asja pole. Helena paneb need-->
-            <!--                hiljem peitu-->
-            <!--            </h4>-->
-            <!--            <div>-->
-            <!--                <button class="btn btn-primary" @click="confirmColors">-->
-            <!--                    pane värvid lukku-->
-            <!--                </button>-->
-            <!--            </div>-->
+            <h4 style="margin-top: 20rem">
+                Ära vajuta neid nuppe, kui sul siia asja pole. Helena paneb need
+                hiljem peitu
+            </h4>
+            <div>
+                <button class="btn btn-primary" @click="confirmColors">
+                    pane värvid lukku
+                </button>
+            </div>
         </div>
     </div>
 </template>

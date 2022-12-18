@@ -25,18 +25,27 @@ const phases = computed(() => performanceStore.phases);
 const performance = performances.value.find((p) => p._id === id);
 
 performanceStore.getPerformanceById(id);
+
+async function archiveAudienceMembers() {
+    return await performanceStore.archiveWholeAudience(performance);
+}
 </script>
 
 <template>
     <div>
         <div v-if="performance._id">
-            {{ performance.title }} <br />
-            kuupaev: {{ performance.date }}
+            <h1>
+                {{ performance.title }}
+            </h1>
+            {{ performance.date.split('T')[0] }}
 
-            <h2>Phases</h2>
-            <PhaseManager :phases="phases" />
+            <div class="pt-4">
+                <h2>Faasid</h2>
+                <PhaseManager :phases="phases" />
+            </div>
 
             <div class="performance-settings">
+                <h3>Seaded</h3>
                 <div class="d-flex">
                     <button
                         v-if="performance.active"
@@ -55,6 +64,12 @@ performanceStore.getPerformanceById(id);
                         "
                     >
                         Alusta etendust
+                    </button>
+                    <button
+                        class="btn btn-primary"
+                        @click="archiveAudienceMembers"
+                    >
+                        Arhiveeri kogu publik
                     </button>
                 </div>
             </div>

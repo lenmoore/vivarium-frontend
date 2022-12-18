@@ -63,7 +63,7 @@ async function onSubmitPhase() {
                     <strong>{{ phase.name }}</strong>
                     <small>
                         | aktiivne: {{ phase.active }} | mäng ={{
-                            phase.phase_game.name
+                            phase.phase_game?.name
                         }}</small
                     >
                 </div>

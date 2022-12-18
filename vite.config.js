@@ -2,6 +2,7 @@ import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import path from 'path';
 import basicSsl from '@vitejs/plugin-basic-ssl';
+import * as fs from 'fs';
 
 // todo do the environments --
 // dev mode should not use docker because the HMR api is shit with docker

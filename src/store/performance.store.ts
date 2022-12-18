@@ -81,6 +81,11 @@ export const usePerformanceStore = defineStore({
             p.active = false;
             return await PerformanceService.editPerformance(p);
         },
+        async archiveWholeAudience(
+            p: TheatrePerformance
+        ): Promise<TheatrePerformance> {
+            return await PerformanceService.archiveAudience(p);
+        },
         async addPhase(newPhase: Phase) {
             const phase: Phase = await PerformanceService.addPhase(newPhase);
             console.log(phase);

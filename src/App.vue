@@ -1,14 +1,18 @@
 <template>
     <div class="page">
-        <a href="/"><h1 class="h1-color">VIVAARIUM</h1></a>
-        <BaseHeader class="app-header" />
-        <a class="font-size-xs" href="https://192.168.8.102:3000/api/games">
-            kliki mind kui login lehte pole ja advanced -> proceed
-        </a>
+        <a :href="getActiveHomeLink()" class="text-decoration-none"
+            ><h1 class="h1-color text-decoration-none">VIVAARIUM</h1></a
+        >
+        <h1 class="d-flex justify-content-center">
+            ID_{{ visitor.wardrobe_number }}
+        </h1>
+        <!--        <a class="font-size-xs" href="https://10.0.0.244:3000/api/games">-->
+        <!--            kliki mind kui login lehte pole ja advanced -> proceed-->
+        <!--        </a>-->
         <div class="app-wrapper">
-            <a v-if="showLoginBtn" href="/visitor-login"
-                ><h1>publik login</h1></a
-            >
+            <!--            <a v-if="showLoginBtn" href="/visitor-login"-->
+            <!--                ><h1>publik login</h1></a-->
+            <!--            >-->
             <div class="app-router-view">
                 <RouterView :key="$route.fullPath" />
             </div>
@@ -19,15 +23,53 @@
 
 <script lang="ts" setup>
 import BaseNavigation from '@/components/Navigation/BaseNavigation.vue';
-import BaseHeader from '@/components/Navigation/BaseHeader.vue';
-import { watch } from 'vue';
+import { computed, onBeforeMount, ref, watch } from 'vue';
 import router from '@/router';
+import { useVisitorStore } from '@/store/visitor.store';
+import { usePerformanceStore } from '@/store/performance.store';
 
+const performanceStore = usePerformanceStore();
+const visitorStore = useVisitorStore();
+const visitor = visitorStore.getVisitor;
 let showLoginBtn = localStorage.getItem('accessToken') == null;
-console.log(showLoginBtn);
+let isAdmin = localStorage.admin;
+
+const phases = ref(computed(() => performanceStore.phases));
+let activePhase = ref(phases.value.find((p) => p.active));
+let games = ref(computed(() => performanceStore.games));
+let activeGame = games.value.find(
+    (game) => game?._id === activePhase?.value?.phase_game?._id
+);
 watch(router.currentRoute, () => {
     showLoginBtn = localStorage.getItem('accessToken') == null;
+    isAdmin = localStorage.admin;
 });
+onBeforeMount(async () => {
+    await performanceStore.getGames();
+    await performanceStore.getPhases();
+    await performanceStore.getPerformances();
+    activeGame = games.value.find(
+        (game) => game?._id === activePhase?.value?.phase_game?._id
+    );
+});
+
+function getActiveHomeLink() {
+    const phases = ref(computed(() => performanceStore.phases));
+    let activePhase = ref(phases.value.find((p) => p.active));
+    let games = ref(computed(() => performanceStore.games));
+    let activeGame = games.value.find(
+        (game) => game?._id === activePhase?.value?.phase_game?._id
+    );
+    if (isAdmin) {
+        return '/';
+    }
+
+    if (activeGame && activeGame.game_type === 'SHOP') {
+        console.log('ou');
+        return '/visitor/humanity-shop/basket';
+    }
+    return '/visitor/quiz';
+}
 </script>
 
 <style lang="scss">
@@ -36,7 +78,7 @@ body,
 #app,
 .app-wrapper,
 .app-router-view {
-    height: 94%;
+    height: 97%;
 }
 
 .app-wrapper {

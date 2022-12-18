@@ -6,6 +6,66 @@ const routes: Array<RouteRecordRaw> = [
         path: '/',
         name: 'home',
         component: HomeView,
+        children: [
+            {
+                path: '/visitor',
+                name: 'visitor',
+                component: () =>
+                    import(
+                        '../views/HumanityShop/VisitorInteractions/VisitorIndex.vue'
+                    ),
+                children: [
+                    {
+                        path: 'intro',
+                        name: 'visitor.intro',
+                        component: () =>
+                            import('../views/VisitorAuth/VisitorIntro.vue'),
+                    },
+                    {
+                        path: '/visitor/quiz',
+                        name: 'visitor.quiz',
+                        component: () =>
+                            import(
+                                '../views/HumanityQuestionnaire/QuestionnaireIndex.vue'
+                            ),
+                    },
+                    {
+                        path: 'humanity-shop',
+                        name: 'visitor.humanity-shop',
+                        component: () =>
+                            import(
+                                '../views/HumanityShop/VisitorInteractions/HumanityShopHome.vue'
+                            ),
+                        children: [
+                            {
+                                path: 'basket',
+                                name: 'visitor.humanity-shop.basket',
+                                component: () =>
+                                    import(
+                                        '../views/HumanityShop/VisitorInteractions/VisitorBasket.vue'
+                                    ),
+                            },
+                            {
+                                path: 'scan',
+                                name: 'visitor.humanity-shop.scan',
+                                component: () =>
+                                    import(
+                                        '../views/HumanityShop/VisitorInteractions/VisitorScanner.vue'
+                                    ),
+                            },
+                            {
+                                path: 'done',
+                                name: 'basket-done',
+                                component: () =>
+                                    import(
+                                        '../views/HumanityShop/VisitorInteractions/BasketIsDone.vue'
+                                    ),
+                            },
+                        ],
+                    },
+                ],
+            },
+        ],
     },
     {
         path: '/about',
@@ -173,56 +233,6 @@ const routes: Array<RouteRecordRaw> = [
         name: 'visitor.quiz.done',
         component: () =>
             import('../views/HumanityQuestionnaire/PhaseTwoIsDone.vue'),
-    },
-    {
-        path: '/visitor',
-        name: 'visitor',
-        component: () =>
-            import(
-                '../views/HumanityShop/VisitorInteractions/VisitorIndex.vue'
-            ),
-        children: [
-            {
-                path: 'intro',
-                name: 'visitor.intro',
-                component: () =>
-                    import('../views/VisitorAuth/VisitorIntro.vue'),
-            },
-            {
-                path: 'humanity-shop',
-                name: 'visitor.humanity-shop',
-                component: () =>
-                    import(
-                        '../views/HumanityShop/VisitorInteractions/HumanityShopHome.vue'
-                    ),
-                children: [
-                    {
-                        path: 'basket',
-                        name: 'visitor.humanity-shop.basket',
-                        component: () =>
-                            import(
-                                '../views/HumanityShop/VisitorInteractions/VisitorBasket.vue'
-                            ),
-                    },
-                    {
-                        path: 'scan',
-                        name: 'visitor.humanity-shop.scan',
-                        component: () =>
-                            import(
-                                '../views/HumanityShop/VisitorInteractions/VisitorScanner.vue'
-                            ),
-                    },
-                    {
-                        path: 'done',
-                        name: 'basket-done',
-                        component: () =>
-                            import(
-                                '../views/HumanityShop/VisitorInteractions/BasketIsDone.vue'
-                            ),
-                    },
-                ],
-            },
-        ],
     },
 ];
 
