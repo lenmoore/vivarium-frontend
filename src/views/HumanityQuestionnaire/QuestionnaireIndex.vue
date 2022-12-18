@@ -25,7 +25,7 @@ onBeforeMount(async () => {
 const phases = computed(() => performanceStore.phases);
 const games = computed(() => performanceStore.games);
 console.log(phases);
-let visitor = reactive(visitorStore.getVisitor);
+let visitor = visitorStore.fetchVisitor(localStorage.getItem('visitorId'));
 let colors = {
     'blue-sky': 'orange',
     fuchsia: 'fuchsia',
@@ -108,6 +108,7 @@ async function addEmptyStepsToVisitor() {
             result_humanity_values: {},
         });
     }
+    console.log('is this where it gets lost?', visitor);
     await visitorStore.editVisitor(visitor);
 
     localStorage.setItem(activeGame.value._id, 'started');

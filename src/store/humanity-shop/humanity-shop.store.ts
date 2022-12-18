@@ -49,7 +49,8 @@ export const useHumanityShopStore = defineStore({
             });
         },
         async updateBasket(basket: Basket) {
-            return await BasketService.updateBasket(basket);
+            const b = await BasketService.updateBasket(basket);
+            return b;
         },
         async updateProduct(product: any) {
             console.log(product);
