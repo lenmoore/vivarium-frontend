@@ -8,7 +8,7 @@
     "dev": "mode=dev vite --host --port 8080",
     "qa": "mode=qa vite",
     "prod": "mode=prod vite",
-    "build": "vue-tsc --noEmit && vite build",
+    "build": "vite build",
     "start": "vite build",
     "preview": "vite preview --port 4173"
   },
