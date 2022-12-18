@@ -83,6 +83,8 @@ watch(state, async () => {
 async function addEmptyStepsToVisitor() {
     console.log('cauka');
     console.log(visitor);
+    gameStepsWithVisitorSelectedValues = ref(activeGame.value?.game_steps);
+    console.log(gameStepsWithVisitorSelectedValues);
     for (const step1 of gameStepsWithVisitorSelectedValues?.value) {
         visitor.quiz_results.push({
             step: step1,

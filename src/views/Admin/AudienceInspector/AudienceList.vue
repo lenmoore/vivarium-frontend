@@ -10,7 +10,8 @@ const humanityStore = useHumanityShopStore();
 let viewOptions = ref({
     showSummaryList: true,
     showProductsSummary: false,
-    showQuizSummary: false,
+    showQuizSummaryInCapsule: false,
+    showQuizSummaryPreCapsule: false,
     ready: false,
 });
 onBeforeMount(async () => {
@@ -28,20 +29,25 @@ onBeforeMount(async () => {
 const baskets = computed(() => humanityStore.getBaskets);
 const products = computed(() => humanityStore.getProducts);
 let games = computed(() => performanceStore.games);
+let gamesPreCapsule = computed(() => performanceStore.games);
 let showOnlyColorRoute = ref(router.currentRoute.value.query.color);
 let visitors = computed(() => performanceStore.getVisitors);
 
 function toggleViewOptions(show) {
     viewOptions.value.showSummaryList = false;
     viewOptions.value.showProductsSummary = false;
-    viewOptions.value.showQuizSummary = false;
+    viewOptions.value.showQuizSummaryPreCapsule = false;
+    viewOptions.value.showQuizSummaryInCapsule = false;
 
     switch (show) {
         case 'products':
             viewOptions.value.showProductsSummary = true;
             break;
-        case 'quiz':
-            viewOptions.value.showQuizSummary = true;
+        case 'quiz-in-capsule':
+            viewOptions.value.showQuizSummaryInCapsule = true;
+            break;
+        case 'quiz-pre-capsule':
+            viewOptions.value.showQuizSummaryPreCapsule = true;
             break;
         case 'audience':
         default:
@@ -52,10 +58,14 @@ function toggleViewOptions(show) {
 
 let allProductsEverSelected = ref([]);
 let countedProducts = ref([]);
-let mappedVisitors = ref([]);
+let mappedVisitors = reactive([]);
+let allAnswers = ref([]);
 watch(visitors, async () => {
     let visitorsToMap = [];
-
+    allProductsEverSelected = ref([]);
+    countedProducts = ref([]);
+    mappedVisitors = reactive([]);
+    allAnswers = ref([]);
     if (showOnlyColorRoute.value) {
         visitorsToMap = ref(
             visitors.value.filter(
@@ -105,33 +115,34 @@ watch(visitors, async () => {
             {
                 color: 'fuchsia',
                 val:
-                    basket.products
-                        .map((p) => p.humanity_values?.fuchsia?.average)
-                        .reduce((a, b) => a + b) + redQuiz,
+                    basket?.products
+                        ?.map((p) => p.humanity_values?.fuchsia?.average)
+                        ?.reduce((a, b) => a + b) + redQuiz,
             },
             {
                 color: 'lime',
                 val:
-                    basket.products
-                        .map((p) => p.humanity_values.green.average)
-                        .reduce((a, b) => a + b) + greenQuiz,
+                    basket?.products
+                        ?.map((p) => p.humanity_values.green.average)
+                        ?.reduce((a, b) => a + b) + greenQuiz,
             },
             {
                 color: 'silver',
                 val:
-                    basket.products
-                        .map((p) => p.humanity_values.blue.average)
-                        .reduce((a, b) => a + b) + blueQuiz,
+                    basket?.products
+                        ?.map((p) => p.humanity_values.blue.average)
+                        ?.reduce((a, b) => a + b) + blueQuiz,
             },
             {
                 color: 'blue-sky',
                 val:
-                    basket.products
-                        .map((p) => p.humanity_values.orange.average)
-                        .reduce((a, b) => a + b) + orangeQuiz,
+                    basket?.products
+                        ?.map((p) => p.humanity_values.orange.average)
+                        ?.reduce((a, b) => a + b) + orangeQuiz,
             },
         ];
         visitor.quiz_results.forEach((p) => {
+            console.log(p);
             allAnswers.value.push(p);
         });
         if (visitor.confirmed_humanity_value !== 'none') {
@@ -145,6 +156,7 @@ watch(visitors, async () => {
             (value) =>
                 value.val === Math.max(...avg_hum_values.map((o) => o.val))
         );
+        console.log('Highest: ', highest?.color);
         return {
             ...visitor,
             basket,
@@ -152,29 +164,45 @@ watch(visitors, async () => {
             highest,
         };
     });
+
     await getProducts(mappedVisitors);
     await performanceStore.getGames();
     games = computed(() => performanceStore.games);
+    gamesPreCapsule = games.value.filter(
+        (g) => g.open_for_colors.length === 4 && g.game_type !== 'SHOP'
+    );
+    console.log('`G G G G G GAMES', gamesPreCapsule);
+
     let color = {
         'blue-sky': 'orange',
         fuchsia: 'fuchsia',
         silver: 'blue',
         lime: 'green',
     }[showOnlyColorRoute.value || 'all'];
-    console.log(games);
     games = games.value.filter(
         (g) =>
             g.open_for_colors.includes(color) && g.open_for_colors.length === 1
     );
 });
-let allAnswers = ref([]);
 
 async function confirmColors() {
-    visitors = visitors?.value.map((visitor) => ({
-        ...visitor,
-        confirmed_humanity_value: visitor?.color,
-    }));
-    await performanceStore.updateVisitors(visitors);
+    console.log(mappedVisitors);
+    console.log(mappedVisitors.length);
+    let viiiiis = [];
+    mappedVisitors.forEach((visitor) => {
+        console.log(visitor);
+        if (
+            visitor.confirmed_humanity_value === 'none' ||
+            !visitor.confirmed_humanity_value
+        ) {
+            viiiiis.push({
+                ...visitor,
+                confirmed_humanity_value: visitor.highest.color,
+            });
+        }
+    });
+    console.log(viiiiis);
+    await performanceStore.updateVisitors(viiiiis);
     location.reload();
 }
 
@@ -194,7 +222,10 @@ async function getProducts(visitores) {
         }
     });
 
-    countedProducts = countedProducts?.value?.sort((a, b) => b.count - a.count);
+    console.log(countedProducts);
+    countedProducts.value = countedProducts?.value?.sort(
+        (a, b) => b.count - a.count
+    );
     viewOptions.value.ready = true;
 }
 </script>
@@ -266,12 +297,23 @@ async function getProducts(visitores) {
                 </button>
                 <button
                     :class="{
-                        'bg-success text-white': viewOptions.showQuizSummary,
+                        'bg-success text-white':
+                            viewOptions.showQuizSummaryPreCapsule,
                     }"
                     class="btn btn-outline-primary"
-                    @click="toggleViewOptions('quiz')"
+                    @click="toggleViewOptions('quiz-pre-capsule')"
                 >
-                    K6ik quizi vastused
+                    Quizi vastused enne kapslit
+                </button>
+                <button
+                    :class="{
+                        'bg-success text-white':
+                            viewOptions.showQuizSummaryInCapsule,
+                    }"
+                    class="btn btn-outline-primary"
+                    @click="toggleViewOptions('quiz-in-capsule')"
+                >
+                    Quizid kapslis
                 </button>
             </div>
 
@@ -326,8 +368,41 @@ async function getProducts(visitores) {
                         </div>
                     </div>
                 </div>
-                <div v-else-if="viewOptions.showQuizSummary">
+                <div v-else-if="viewOptions.showQuizSummaryInCapsule">
                     <div v-for="(game, i) in games" :key="game._id + i">
+                        <div>
+                            <h1>{{ i }} {{ game.name }}</h1>
+                            <div
+                                v-for="step in game.game_steps"
+                                :key="step._id"
+                                class="py-2"
+                            >
+                                <h4>{{ step.question_text }}</h4>
+                                <div
+                                    v-for="option in step.question_options"
+                                    :key="option.option_text"
+                                >
+                                    {{ option.option_text }}
+                                    <strong
+                                        >({{
+                                            allAnswers.filter(
+                                                (ans) =>
+                                                    ans.result_text ===
+                                                        option.option_text &&
+                                                    ans.step === step._id
+                                            ).length
+                                        }})</strong
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div v-else-if="viewOptions.showQuizSummaryPreCapsule">
+                    <div
+                        v-for="(game, i) in gamesPreCapsule"
+                        :key="game._id + i"
+                    >
                         <div>
                             <div
                                 v-for="step in game.game_steps"
@@ -345,7 +420,8 @@ async function getProducts(visitores) {
                                             allAnswers.filter(
                                                 (ans) =>
                                                     ans.result_text ===
-                                                    option.option_text
+                                                        option.option_text &&
+                                                    ans.step === step._id
                                             ).length
                                         }})</strong
                                     >
