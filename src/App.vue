@@ -60,7 +60,7 @@ function getActiveHomeLink() {
     let activeGame = games.value.find(
         (game) => game?._id === activePhase?.value?.phase_game?._id
     );
-    if (isAdmin) {
+    if (isAdmin || showLoginBtn) {
         return '/';
     }
 
