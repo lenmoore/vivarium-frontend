@@ -1,1 +1,0 @@
-import{_ as o,r as t,o as n,a as s,m as c,i as a}from"./index.73886189.js";const r={},_=a("h2",{class:"d-flex justify-content-center"},"Faas I",-1);function i(l,m){const e=t("RouterView");return n(),s("div",null,[_,c(e)])}const f=o(r,[["render",i]]);export{f as default};

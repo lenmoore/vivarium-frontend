@@ -1,0 +1,1 @@
+import{_ as r,r as c,o as e,a as t,c as a}from"./index.d52b5046.js";const s={};function _(o,l){const n=c("RouterView");return e(),t("div",null,[(e(),a(n,{key:o.$route.name}))])}const f=r(s,[["render",_]]);export{f as default};

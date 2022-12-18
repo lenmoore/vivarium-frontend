@@ -1,0 +1,1 @@
+import{o as t,a as s,p as o,i as r,F as n,l as u}from"./index.d52b5046.js";const c={__name:"BasketIsDone",setup(i){function a(){u.push({name:"visitor.quiz"})}return(l,e)=>(t(),s(n,null,[o(" Oled valmis. Mine jargmisesse ruumi. Vota istet ja oota sobrad ara. Kui oled seal, vajuta nuppu. "),r("button",{onClick:e[0]||(e[0]=p=>a())},"nupp")],64))}};export{c as default};
