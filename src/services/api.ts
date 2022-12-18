@@ -51,6 +51,7 @@ const tina = 'https://10.0.0.244:3000/api';
 const nothing = 'https://192.168.237.106:3000/api';
 
 const gons2 = 'https://192.168.8.102:3000/api';
+const herokuapi = 'https://api-vivaarium.herokuapp.com/api';
 
 const instance: AxiosInstance = axios.create({
     headers: {
@@ -58,7 +59,7 @@ const instance: AxiosInstance = axios.create({
         Authorization: authHeader().toString(),
         'X-Refresh': refreshHeader().toString(),
     },
-    baseURL: tina,
+    baseURL: herokuapi,
 });
 
 export default instance;

@@ -8,13 +8,12 @@
     "dev": "mode=dev vite --host --port 8080",
     "qa": "mode=qa vite",
     "prod": "mode=prod vite",
-    "build": "vite build",
+    "build": "vue-tsc --noEmit && vite build",
     "start": "vite build",
     "preview": "vite preview --port 4173"
   },
   "engines": {
-    "npm": ">=8.0.0 <9.0.0",
-    "node": ">=16.0.0 <17.0.0"
+    "node": "18.2.0"
   },
   "main": "src/main.ts",
   "dependencies": {
