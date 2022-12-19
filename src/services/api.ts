@@ -54,12 +54,13 @@ const gons2 = 'https://192.168.8.102:3000/api';
 const herokuapi = 'https://api-vivaarium.herokuapp.com/api';
 const sitt = 'http://localhost:3000/api';
 const corsAnywhere = 'https://ancient-oasis-40097.herokuapp.com/';
+const vatheroku = 'https://vat-vivaarium.herokuapp.com';
 const instance: AxiosInstance = axios.create({
     headers: {
         'Content-Type': 'application/json',
         Authorization: authHeader().toString(),
         'X-Refresh': refreshHeader().toString(),
-        'X-Forwarded-For': corsAnywhere + ',' + herokuapi,
+        'X-Forwarded-For': vatheroku + ',' + corsAnywhere + ',' + herokuapi,
     },
     baseURL: corsAnywhere + herokuapi,
 });
