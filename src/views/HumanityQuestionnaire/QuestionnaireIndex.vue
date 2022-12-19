@@ -139,6 +139,7 @@ async function selectValue(val) {
     stepToUpdate.result_humanity_values = val.humanity_values;
     state.visitor_current_step_selected_option_text = val.option_text;
     visitor = await visitorStore.editVisitor(updateVisitor.value);
+    step(state.counter);
 }
 
 function step(i) {
@@ -153,6 +154,26 @@ function step(i) {
         visitor.quiz_results.find((qr) => qr.step === state.current_step._id)
             .result_text
     );
+}
+
+function shuffle(array) {
+    let currentIndex = array.length,
+        randomIndex;
+
+    // While there remain elements to shuffle.
+    while (currentIndex !== 0) {
+        // Pick a remaining element.
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex--;
+
+        // And swap it with the current element.
+        [array[currentIndex], array[randomIndex]] = [
+            array[randomIndex],
+            array[currentIndex],
+        ];
+    }
+
+    return array;
 }
 </script>
 <template>
@@ -171,8 +192,9 @@ function step(i) {
                     </h4>
                     <div class="options-wrapper w-100">
                         <div
-                            v-for="(step, i) in state.current_step
-                                .question_options"
+                            v-for="(step, i) in shuffle(
+                                state.current_step.question_options
+                            )"
                             :key="i"
                             :class="{
                                 selected:

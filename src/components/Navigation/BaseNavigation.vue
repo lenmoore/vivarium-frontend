@@ -101,10 +101,8 @@ function logout() {
                 {{ link.label }}
             </button>
         </span>
-        <!--        <button v-if="isAuthenticated" class="btn" @click="logout">-->
-        <!--            logout-->
-        <!--        </button>-->
     </nav>
+    <button v-if="isAuthenticated" class="btn" @click="logout">logout</button>
     <!--    <button class="btn" @click="renderLinks">XX</button>-->
 </template>
 
