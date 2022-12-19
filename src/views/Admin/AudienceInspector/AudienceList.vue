@@ -432,15 +432,15 @@ async function getProducts(visitores) {
                 </div>
             </div>
 
-            <h4 style="margin-top: 20rem">
-                Ära vajuta neid nuppe, kui sul siia asja pole. Helena paneb need
-                hiljem peitu
-            </h4>
-            <div>
-                <button class="btn btn-primary" @click="confirmColors">
-                    pane värvid lukku
-                </button>
-            </div>
+            <!--            <h4 style="margin-top: 20rem">-->
+            <!--                Ära vajuta neid nuppe, kui sul siia asja pole. Helena paneb need-->
+            <!--                hiljem peitu-->
+            <!--            </h4>-->
+            <!--            <div>-->
+            <!--                <button class="btn btn-primary" @click="confirmColors">-->
+            <!--                    pane värvid lukku-->
+            <!--                </button>-->
+            <!--            </div>-->
         </div>
     </div>
 </template>
