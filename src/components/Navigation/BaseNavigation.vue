@@ -102,7 +102,13 @@ function logout() {
             </button>
         </span>
     </nav>
-    <button v-if="isAuthenticated" class="btn" @click="logout">logout</button>
+    <button
+        v-if="isAuthenticated && $route.path === '/visitor/logout'"
+        class="btn"
+        @click="logout"
+    >
+        logout
+    </button>
     <!--    <button class="btn" @click="renderLinks">XX</button>-->
 </template>
 
