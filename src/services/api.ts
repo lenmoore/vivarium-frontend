@@ -60,7 +60,7 @@ const instance: AxiosInstance = axios.create({
         'Content-Type': 'application/json',
         Authorization: authHeader().toString(),
         'X-Refresh': refreshHeader().toString(),
-        'X-Forwarded-For': vatheroku + ',' + corsAnywhere + ',' + herokuapi,
+        'X-Forwarded-For': corsAnywhere + herokuapi,
     },
     baseURL: corsAnywhere + herokuapi,
 });
