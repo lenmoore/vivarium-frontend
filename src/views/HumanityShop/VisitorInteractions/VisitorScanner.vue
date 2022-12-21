@@ -67,7 +67,7 @@ async function addProductToBasket() {
     qr.value.foundProduct = null;
     await humanityStore.getVisitorBasket();
 
-    await router.push({ name: 'visitor.humanity-shop.basket' });
+    // await router.push({ name: 'visitor.humanity-shop.basket' });
     location.reload();
 }
 
@@ -117,6 +117,7 @@ function turnCameraOff() {
                         <div v-else-if="qr.basketFull">
                             Su korv on tais. Mine korvi lehele ning saad korvist
                             tooteid eemaldada, kui soovid.
+                            <a href="/visitor/humanity-shop/basket">Korvi</a>
                         </div>
                         <div v-else-if="basket.confirmed">
                             Su korv on juba kinnitatud ja enam tooteid lisada ei

@@ -31,6 +31,7 @@ async function startNextGame() {
         showWarning.value = true;
     } else {
         await router.push({ name: 'visitor.quiz' });
+        location.reload();
     }
 }
 </script>
@@ -43,6 +44,8 @@ async function startNextGame() {
             jrgmine faas pole veel alanud. Proovi varsti uuesti.
         </div>
 
-        <button class="btn btn-primary" @click="startNextGame">Nupp :D</button>
+        <button class="btn btn-primary" @click="startNextGame">
+            Alusta järgmist mängu
+        </button>
     </div>
 </template>

@@ -121,7 +121,7 @@ async function removeProduct(item) {
             </div>
             <div
                 v-else
-                class="align-items-center justify-content-center d-flex w-100"
+                class="align-items-center justify-content-center d-flex w-100 mb-4 pt-4"
             >
                 <a class="btn btn-primary" href="/visitor/humanity-shop/scan">
                     Vajuta, et tootekood skaneerida

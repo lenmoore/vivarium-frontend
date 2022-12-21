@@ -102,6 +102,12 @@ function logout() {
             </button>
         </span>
     </nav>
+    <nav v-else>
+        <span>
+            <a class="nav-item" href="/visitor/quiz"> Küsimused </a>
+            <a class="nav-item" href="/visitor/humanity-shop/basket"> Pood </a>
+        </span>
+    </nav>
     <button
         v-if="isAuthenticated && $route.path === '/visitor/logout'"
         class="btn"

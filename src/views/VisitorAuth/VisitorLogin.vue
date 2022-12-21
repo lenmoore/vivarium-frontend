@@ -5,6 +5,7 @@ import BaseInput from '../../components/BaseForm/BaseInput.vue';
 import { usePerformanceStore } from '../../store/performance.store';
 import { computed, defineEmits, onBeforeMount, watchEffect } from 'vue';
 import router from '../../router/index';
+import moment from 'moment';
 
 const performanceStore = usePerformanceStore();
 onBeforeMount(async () => {
@@ -16,7 +17,7 @@ const activePerformance = computed(() => {
 const visitorStore = useVisitorStore();
 
 const visitor = {
-    email: '',
+    email: moment(),
     wardrobe_number: 0,
     wants_newsletter: false,
     wants_summary: false,
@@ -53,13 +54,13 @@ async function onLogin() {
             :type="'number'"
             name="wardrobe_number"
         />
-        <BaseInput
-            :id="'email'"
-            v-model="visitor.email"
-            :label="'Email, kui soovid VAT teatri uudiskirja'"
-            :placeholder="'Email'"
-            :type="'text'"
-            name="email"
-        />
+        <!--        <BaseInput-->
+        <!--            :id="'email'"-->
+        <!--            v-model="visitor.email"-->
+        <!--            :label="'Email, kui soovid VAT teatri uudiskirja'"-->
+        <!--            :placeholder="'Email'"-->
+        <!--            :type="'text'"-->
+        <!--            name="email"-->
+        <!--        />-->
     </BaseForm>
 </template>

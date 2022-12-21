@@ -15,15 +15,17 @@ const state = reactive({
     last_step: false,
     visitor_current_step_selected_option_text: '',
 });
-
+let stateVIsitor = visitorStore.getVisitor;
 onBeforeMount(async () => {
     await visitorStore.fetchVisitor(localStorage.getItem('visitorId'));
+    stateVIsitor = visitorStore.getVisitor;
+    localStorage.setItem('visitorId', stateVIsitor.visitorId);
     await performanceStore.getGames();
     await performanceStore.getPhases();
 });
 
-const phases = computed(() => performanceStore.phases);
-const games = computed(() => performanceStore.games);
+let phases = computed(() => performanceStore.phases);
+let games = computed(() => performanceStore.games);
 console.log(phases);
 let visitor = visitorStore.fetchVisitor(localStorage.getItem('visitorId'));
 let colors = {
@@ -44,7 +46,7 @@ let activePhase = ref(
                 visitor.confirmed_humanity_value === 'none')
     )
 );
-const activeGameId = ref(activePhase.value?.phase_game?._id);
+let activeGameId = ref(activePhase.value?.phase_game?._id);
 
 let activeGame = ref(
     games.value.find((game) => game._id === activeGameId?.value)
@@ -62,14 +64,12 @@ async function startGame() {
         location.reload();
     } else {
         console.log(activeGame);
-        if (localStorage.getItem(activeGame?.value?._id) === null) {
-            await addEmptyStepsToVisitor();
-        } else {
-            console.log('visitor.quiz_results', visitor.quiz_results);
-        }
-        state.game_started = true;
-
-        state.current_step = gameStepsWithVisitorSelectedValues.value[0];
+        // if (localStorage.getItem(activeGame?.value?._id) === null) {
+        await addEmptyStepsToVisitor();
+        // } else {
+        //     console.log('visitor.quiz_results', visitor.quiz_results);
+        // }
+        state.current_step = gameStepsWithVisitorSelectedValues?.value[0];
     }
     step(1);
 }
@@ -81,12 +81,13 @@ watch(state, async () => {
 });
 
 async function addEmptyStepsToVisitor() {
-    await performanceStore.getGames();
+    games.value = await performanceStore.getGames();
+    phases.value = await performanceStore.getPhases();
     visitor = await visitorStore.fetchVisitor(
         localStorage.getItem('visitorId')
     );
     let activePhase = ref(
-        phases?.value.find(
+        phases.value?.find(
             (phase) =>
                 phase.active &&
                 ((visitor.confirmed_humanity_value &&
@@ -94,28 +95,35 @@ async function addEmptyStepsToVisitor() {
                     visitor.confirmed_humanity_value === 'none')
         )
     );
+    console.log(activePhase);
     const activeGameId = ref(activePhase.value?.phase_game?._id);
+    console.log(activeGameId);
     activeGame = ref(
-        games.value.find((game) => game._id === activeGameId?.value)
+        games?.value?.find((game) => game._id === activeGameId?.value)
+    );
+    console.log(activeGame);
+    gameStepsWithVisitorSelectedValues = reactive(
+        activeGame?.value?.game_steps
     );
 
-    gameStepsWithVisitorSelectedValues = ref(activeGame.value?.game_steps);
-
-    for (const step1 of activeGame.value?.game_steps) {
-        visitor.quiz_results.push({
-            step: step1,
-            result_text: '-',
-            result_humanity_values: {},
-        });
+    console.log(visitor);
+    if (activeGame.value) {
+        for (let step1 of activeGame?.value?.game_steps) {
+            visitor.quiz_results.push({
+                step: step1,
+                result_text: '-',
+                result_humanity_values: {},
+            });
+        }
+        localStorage.setItem(activeGame.value._id, 'started');
     }
-    console.log('is this where it gets lost?', visitor);
     await visitorStore.editVisitor(visitor);
 
-    localStorage.setItem(activeGame.value._id, 'started');
+    state.game_started = true;
 
-    await performanceStore.getPhases();
-    activePhase = reactive(performanceStore.getActivePhase);
-    await performanceStore.getGames();
+    // await performanceStore.getPhases();
+    // activePhase = reactive(performanceStore.getActivePhase);
+    // await performanceStore.getGames();
     // location.reload();
     state.game_loading = false;
 }
@@ -139,7 +147,7 @@ async function selectValue(val) {
     stepToUpdate.result_humanity_values = val.humanity_values;
     state.visitor_current_step_selected_option_text = val.option_text;
     visitor = await visitorStore.editVisitor(updateVisitor.value);
-    step(state.counter);
+    // step(1);
 }
 
 function step(i) {
@@ -156,30 +164,51 @@ function step(i) {
     );
 }
 
-function shuffle(array) {
-    let currentIndex = array.length,
-        randomIndex;
-
-    // While there remain elements to shuffle.
-    while (currentIndex !== 0) {
-        // Pick a remaining element.
-        randomIndex = Math.floor(Math.random() * currentIndex);
-        currentIndex--;
-
-        // And swap it with the current element.
-        [array[currentIndex], array[randomIndex]] = [
-            array[randomIndex],
-            array[currentIndex],
-        ];
-    }
-
-    return array;
-}
+// function shuffle(array) {
+//     let currentIndex = array.length,
+//         randomIndex;
+//
+//     // While there remain elements to shuffle.
+//     while (currentIndex !== 0) {
+//         // Pick a remaining element.
+//         randomIndex = Math.floor(Math.random() * currentIndex);
+//         currentIndex--;
+//
+//         // And swap it with the current element.
+//         [array[currentIndex], array[randomIndex]] = [
+//             array[randomIndex],
+//             array[currentIndex],
+//         ];
+//     }
+//
+//     return array;
+// }
 </script>
 <template>
     <div
         class="h-100 d-flex flex-column overflow-scroll justify-content-between w-100 align-content-around"
     >
+        {{ activeGame }}
+        <div
+            class="d-flex align-items-center w-100 h-100 justify-content-center"
+        >
+            (Vajuta nuppu ja oota. See võib mõne aja laadida.)
+            <button class="w-75 btn btn-primary" @click="startGame">
+                Alusta
+            </button>
+        </div>
+        <div class="buttons w-100">
+            <button class="btn btn-outline-primary" @click="step(-1)">
+                eelmine
+            </button>
+            <!--            <span-->
+            <!--                >{{ state.step_counter + 1 }} /-->
+            <!--                {{-->
+            <!--                    activeGame?.game_steps ? activeGame?.game_steps?.length : 0-->
+            <!--                }}</span-->
+            <!--            >-->
+            <button class="btn btn-primary" @click="step(1)">jargmine</button>
+        </div>
         <!--        <div v-if="state.game_loading">Arvutan...</div>-->
         <div v-if="state.game_started" class="game-steps-wrapper w-100 h-100">
             <div
@@ -192,9 +221,8 @@ function shuffle(array) {
                     </h4>
                     <div class="options-wrapper w-100">
                         <div
-                            v-for="(step, i) in shuffle(
-                                state.current_step.question_options
-                            )"
+                            v-for="(step, i) in state.current_step
+                                .question_options"
                             :key="i"
                             :class="{
                                 selected:
@@ -208,32 +236,12 @@ function shuffle(array) {
                         </div>
                     </div>
                 </div>
-                <div class="buttons w-100">
-                    <button class="btn btn-outline-primary" @click="step(-1)">
-                        eelmine
-                    </button>
-                    <span
-                        >{{ state.step_counter + 1 }} /
-                        {{ activeGame.game_steps.length }}</span
-                    >
-                    <button class="btn btn-primary" @click="step(1)">
-                        jargmine
-                    </button>
-                </div>
             </div>
             <div v-else>
                 <button class="btn btn-primary" @click="quizIsDone">
                     Valmis
                 </button>
             </div>
-        </div>
-        <div
-            v-else
-            class="d-flex align-items-center w-100 h-100 justify-content-center"
-        >
-            <button class="w-75 btn btn-primary" @click="startGame">
-                Alusta
-            </button>
         </div>
     </div>
 </template>

@@ -1,11 +1,11 @@
 <template>
     <div class="page">
         <a :href="getActiveHomeLink()" class="text-decoration-none"
-            ><h1 class="h1-color text-decoration-none">VIVAARIUM</h1></a
+            ><h1 class="h1-color text-decoration-none">VIVAARIUM</h1>
+            <h1 class="d-flex justify-content-center">
+                ID_{{ visitor.wardrobe_number }}
+            </h1></a
         >
-        <h1 class="d-flex justify-content-center">
-            ID_{{ visitor.wardrobe_number }}
-        </h1>
         <!--        <a class="font-size-xs" href="https://10.0.0.244:3000/api/games">-->
         <!--            kliki mind kui login lehte pole ja advanced -> proceed-->
         <!--        </a>-->
@@ -67,8 +67,10 @@ function getActiveHomeLink() {
     if (activeGame && activeGame.game_type === 'SHOP') {
         console.log('ou');
         return '/visitor/humanity-shop/basket';
+    } else if (activeGame && activeGame.game_type === 'QUIZ') {
+        return '/visitor/quiz';
     }
-    return '/visitor/quiz';
+    return '/';
 }
 </script>
 

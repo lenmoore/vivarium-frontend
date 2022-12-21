@@ -80,7 +80,7 @@ watch(visitors, async () => {
     mappedVisitors = visitorsToMap.value.map((visitor) => {
         let basket = visitor.basket;
 
-        let redQuiz = visitor.quiz_results
+        let redQuiz = visitor?.quiz_results
             ? visitor?.quiz_results
                   ?.map((qR) => {
                       return (
@@ -90,21 +90,21 @@ watch(visitors, async () => {
                   })
                   ?.reduce((a, b) => a + b)
             : [];
-        let greenQuiz = visitor.quiz_results
+        let greenQuiz = visitor?.quiz_results
             ? visitor?.quiz_results
                   ?.map((qR) => {
                       return qR?.result_humanity_values?.green;
                   })
                   ?.reduce((a, b) => a + b)
             : [];
-        let blueQuiz = visitor.quiz_results
+        let blueQuiz = visitor?.quiz_results
             ? visitor?.quiz_results
                   ?.map((qR) => {
                       return qR?.result_humanity_values?.blue;
                   })
                   ?.reduce((a, b) => a + b)
             : [];
-        let orangeQuiz = visitor.quiz_results
+        let orangeQuiz = visitor?.quiz_results
             ? visitor?.quiz_results
                   ?.map((qR) => {
                       return qR?.result_humanity_values?.orange;
@@ -432,15 +432,15 @@ async function getProducts(visitores) {
                 </div>
             </div>
 
-            <!--            <h4 style="margin-top: 20rem">-->
-            <!--                Ära vajuta neid nuppe, kui sul siia asja pole. Helena paneb need-->
-            <!--                hiljem peitu-->
-            <!--            </h4>-->
-            <!--            <div>-->
-            <!--                <button class="btn btn-primary" @click="confirmColors">-->
-            <!--                    pane värvid lukku-->
-            <!--                </button>-->
-            <!--            </div>-->
+            <h4 style="margin-top: 20rem">
+                Ära vajuta neid nuppe, kui sul siia asja pole. Helena paneb need
+                hiljem peitu
+            </h4>
+            <div>
+                <button class="btn btn-primary" @click="confirmColors">
+                    pane värvid lukku
+                </button>
+            </div>
         </div>
     </div>
 </template>
