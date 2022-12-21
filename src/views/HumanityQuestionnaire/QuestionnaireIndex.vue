@@ -14,20 +14,24 @@ const state = reactive({
     step_counter: -1,
     last_step: false,
     visitor_current_step_selected_option_text: '',
+    active_game: null,
 });
-let stateVIsitor = visitorStore.getVisitor;
+let stateVIsitor = localStorage.getItem('visitor');
+let visitor = stateVIsitor;
 onBeforeMount(async () => {
+    await performanceStore.getGames();
+    await performanceStore.getPhases();
+    await performanceStore.getPerformances();
     await visitorStore.fetchVisitor(localStorage.getItem('visitorId'));
     stateVIsitor = visitorStore.getVisitor;
     localStorage.setItem('visitorId', stateVIsitor.visitorId);
-    await performanceStore.getGames();
-    await performanceStore.getPhases();
 });
-
-let phases = computed(() => performanceStore.phases);
-let games = computed(() => performanceStore.games);
-console.log(phases);
-let visitor = visitorStore.fetchVisitor(localStorage.getItem('visitorId'));
+const phases = ref(computed(() => performanceStore.phases));
+let activePhase = ref(phases.value.find((p) => p.active));
+let games = ref(computed(() => performanceStore.games));
+state.activeGame = games.value.find(
+    (game) => game?._id === activePhase?.value?.phase_game?._id
+);
 let colors = {
     'blue-sky': 'orange',
     fuchsia: 'fuchsia',
@@ -37,39 +41,35 @@ let colors = {
 // todo this is a little hack for determining the correct color capsule game when in the capsule, the check should be stricter and come from the store.
 let capsuleColor = colors[visitor.confirmed_humanity_value];
 
-let activePhase = ref(
-    phases?.value.find(
-        (phase) =>
-            phase.active &&
-            ((visitor.confirmed_humanity_value &&
-                phase.phase_game.open_for_colors.includes(capsuleColor)) ||
-                visitor.confirmed_humanity_value === 'none')
-    )
-);
-let activeGameId = ref(activePhase.value?.phase_game?._id);
+// if (
+//     phase.active &&
+//     (visitor.confirmed_humanity_value === 'none' ||
+//         phase.phase_game.open_for_colors.includes(capsuleColor))
+// ) {
+//     activePhase = phase;
+//     activeGameId = phase.phase_game._id;
+// }
 
-let activeGame = ref(
-    games.value.find((game) => game._id === activeGameId?.value)
-);
-
-let gameStepsWithVisitorSelectedValues = ref(activeGame.value?.game_steps);
+let gameStepsWithVisitorSelectedValues = ref(state.activeGame?.game_steps);
 
 async function startGame() {
+    state.step_counter = 0;
     state.game_loading = true;
     if (
-        localStorage.getItem(activeGame?.value?._id) === 'done' ||
-        activeGame?.value?.game_type === 'SHOP'
+        localStorage.getItem(state.activeGame?._id) === 'done' ||
+        state.activeGame?.game_type === 'SHOP'
     ) {
         alert('Uus faas pole veel alanud. Proovi varsti uuesti');
         location.reload();
     } else {
-        console.log(activeGame);
-        // if (localStorage.getItem(activeGame?.value?._id) === null) {
-        await addEmptyStepsToVisitor();
-        // } else {
-        //     console.log('visitor.quiz_results', visitor.quiz_results);
-        // }
-        state.current_step = gameStepsWithVisitorSelectedValues?.value[0];
+        console.log(state.activeGame);
+        if (localStorage.getItem(state.activeGame?._id) === null) {
+            await addEmptyStepsToVisitor();
+        } else {
+            console.log('visitor.quiz_results', visitor.quiz_results);
+        }
+        state.current_step =
+            gameStepsWithVisitorSelectedValues?.value[state.step_counter];
     }
     step(1);
 }
@@ -98,39 +98,39 @@ async function addEmptyStepsToVisitor() {
     console.log(activePhase);
     const activeGameId = ref(activePhase.value?.phase_game?._id);
     console.log(activeGameId);
-    activeGame = ref(
+    state.activeGame = ref(
         games?.value?.find((game) => game._id === activeGameId?.value)
     );
-    console.log(activeGame);
-    gameStepsWithVisitorSelectedValues = reactive(
-        activeGame?.value?.game_steps
-    );
+    console.log(state.activeGame.value);
+    gameStepsWithVisitorSelectedValues = reactive(state.activeGame?.game_steps);
 
     console.log(visitor);
-    if (activeGame.value) {
-        for (let step1 of activeGame?.value?.game_steps) {
+    if (state.activeGame.value) {
+        for (let step1 of state.activeGame?.game_steps) {
             visitor.quiz_results.push({
                 step: step1,
                 result_text: '-',
                 result_humanity_values: {},
             });
         }
-        localStorage.setItem(activeGame.value._id, 'started');
+        localStorage.setItem(state.activeGame._id, 'started');
     }
     await visitorStore.editVisitor(visitor);
 
     state.game_started = true;
+    // state.current_step = gameStepsWithVisitorSelectedValues.value[0];
 
     // await performanceStore.getPhases();
     // activePhase = reactive(performanceStore.getActivePhase);
     // await performanceStore.getGames();
-    // location.reload();
     state.game_loading = false;
+    step(1);
 }
 
 function quizIsDone() {
-    localStorage.setItem(activeGame.value._id, 'done');
-    router.push({ name: 'visitor.quiz.done' });
+    console.log(state.activeGame);
+    localStorage.setItem(state.activeGame?._id, 'done');
+    location.reload();
 }
 
 async function selectValue(val) {
@@ -139,7 +139,7 @@ async function selectValue(val) {
     );
     let updateVisitor = ref(visitor);
     console.log(updateVisitor);
-    let stepToUpdate = updateVisitor.value.quiz_results.find(
+    let stepToUpdate = Object.values(updateVisitor.value.quiz_results).find(
         (qR) => qR.step === state.current_step._id
     );
     console.log(stepToUpdate);
@@ -151,10 +151,19 @@ async function selectValue(val) {
 }
 
 function step(i) {
+    console.log(state);
+    console.log(gameStepsWithVisitorSelectedValues);
+    state.game_loading = false;
+    state.game_started = true;
     state.step_counter += i;
-    if (state.step_counter < gameStepsWithVisitorSelectedValues.value.length) {
-        state.current_step =
-            gameStepsWithVisitorSelectedValues.value[state.step_counter];
+    if (
+        state.step_counter <
+        Object.values(gameStepsWithVisitorSelectedValues).length
+    ) {
+        console.log('length');
+        state.current_step = Object.values(gameStepsWithVisitorSelectedValues)[
+            state.step_counter
+        ];
     } else {
         state.last_step = true;
     }
@@ -188,8 +197,11 @@ function step(i) {
     <div
         class="h-100 d-flex flex-column overflow-scroll justify-content-between w-100 align-content-around"
     >
-        {{ activeGame }}
+        <div v-if="state.game_loading">
+            <img alt="loader" src="/public/Spinner-1s-200px.gif" />
+        </div>
         <div
+            v-if="!state.game_started"
             class="d-flex align-items-center w-100 h-100 justify-content-center"
         >
             (Vajuta nuppu ja oota. See võib mõne aja laadida.)
@@ -217,7 +229,10 @@ function step(i) {
             >
                 <div>
                     <h4 class="text-center">
-                        {{ state.current_step.question_text }}
+                        {{
+                            state.current_step &&
+                            state.current_step.question_text
+                        }}
                     </h4>
                     <div class="options-wrapper w-100">
                         <div
