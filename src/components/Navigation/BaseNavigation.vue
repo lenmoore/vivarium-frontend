@@ -42,8 +42,14 @@ function renderLinks() {
     if (isAuthenticated.value && isAdmin) {
         console.log('dude');
         navLinks.value.linx = [
-            { name: 'superadmin', label: 'superadmin', query: {} },
-            { name: 'admin.home', label: 'näitlejate dashboardid', query: {} },
+            { name: 'admin.home', label: 'kapslid', query: {} },
+            { name: 'superadmin.games', label: 'mangud', query: {} },
+            { name: 'superadmin.phases', label: 'faasid', query: {} },
+            {
+                name: 'superadmin.performances',
+                label: 'etendused',
+                query: {},
+            },
         ];
     } else if (isAuthenticated.value) {
         navLinks.value.linx = [];
@@ -61,6 +67,12 @@ function renderLinks() {
     } else {
         navLinks.value.linx = [];
     }
+}
+
+let adminMenuOpen = ref(false);
+
+function toggleAdminMenu() {
+    adminMenuOpen.value = !adminMenuOpen.value;
 }
 
 // todo fix this stupid hack
@@ -93,7 +105,11 @@ function logout() {
 </script>
 
 <template>
-    <nav v-if="isAdmin" class="container nav-wrapper">
+    <div v-if="isAdmin && !adminMenuOpen">
+        <button class="btn" @click="toggleAdminMenu">menu</button>
+    </div>
+    <nav v-if="isAdmin && adminMenuOpen" class="container nav-wrapper">
+        <button class="btn" @click="toggleAdminMenu">sulge</button>
         <span
             v-for="(link, i) in navLinks.linx"
             :key="`${navLinks.linx.length}_${i}`"
@@ -103,7 +119,7 @@ function logout() {
             </button>
         </span>
     </nav>
-    <nav v-else-if="isAuthenticated">
+    <nav v-else-if="isAuthenticated && !isAdmin">
         <span>
             <a class="nav-item" href="/visitor/quiz"> Küsimused </a>
             <a class="nav-item" href="/visitor/humanity-shop/basket"> Pood </a>
@@ -122,11 +138,23 @@ function logout() {
 <style lang="scss">
 @import 'src/assets/common';
 
+.nav-wrapper {
+    overflow: scroll;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: $bg-color;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    padding: 0.5rem;
+    height: 100%;
+    bottom: 0;
+}
+
 .nav-item {
     text-decoration: none;
     background-color: white;
     color: black;
-    width: 100%;
     margin: 0.5rem;
     text-align: center;
 

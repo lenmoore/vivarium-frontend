@@ -19,7 +19,7 @@ onBeforeMount(async () => {
         return performanceStore.getActivePerformance;
     });
     await performanceStore.getCurrentPerformanceVisitors(
-        activePerformance.value._id
+        activePerformance?.value?._id
     );
 });
 let getRoute = reactive('');
