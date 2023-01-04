@@ -55,6 +55,14 @@ async function onSubmitGame() {
                         "
                     >
                         {{ game.name }}
+                        <span
+                            v-for="color in game.open_for_colors"
+                            :key="color + '_' + game.name"
+                            :class="color"
+                            class="color-badge"
+                        >
+                            __
+                        </span>
                     </div>
 
                     <h4 class="mt-4">Lisa uus:</h4>

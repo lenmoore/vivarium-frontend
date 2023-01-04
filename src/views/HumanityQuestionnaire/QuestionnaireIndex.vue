@@ -17,44 +17,53 @@ const state = reactive({
     active_game: null,
 });
 let stateVIsitor = localStorage.getItem('visitor');
-let visitor = stateVIsitor;
+let gameStepsWithVisitorSelectedValues = [];
 onBeforeMount(async () => {
     await performanceStore.getGames();
     await performanceStore.getPhases();
     await performanceStore.getPerformances();
-    await visitorStore.fetchVisitor(localStorage.getItem('visitorId'));
-    stateVIsitor = visitorStore.getVisitor;
+    stateVIsitor = await visitorStore.fetchVisitor(
+        localStorage.getItem('visitorId')
+    );
+    console.log(stateVIsitor.quiz_results);
     localStorage.setItem('visitorId', stateVIsitor.visitorId);
+
+    const phases = ref(computed(() => performanceStore.phases));
+    let activePhase = ref(phases.value.find((p) => p.active));
+    let games = ref(computed(() => performanceStore.games));
+    state.activeGame = games.value.find(
+        (game) => game?._id === activePhase?.value?.phase_game?._id
+    );
+    console.log('active Game ->>>>> ', state.activeGame);
+    gameStepsWithVisitorSelectedValues = ref(stateVIsitor.quiz_results);
+    gameStepsWithVisitorSelectedValues =
+        gameStepsWithVisitorSelectedValues.value.filter(
+            (qr) => qr.game === state.activeGame._id
+        );
+    console.log(gameStepsWithVisitorSelectedValues);
 });
-const phases = ref(computed(() => performanceStore.phases));
-let activePhase = ref(phases.value.find((p) => p.active));
-let games = ref(computed(() => performanceStore.games));
-state.activeGame = games.value.find(
-    (game) => game?._id === activePhase?.value?.phase_game?._id
-);
+let visitor = stateVIsitor;
+
 let colors = {
     turq: 'orange',
     fuchsia: 'fuchsia',
     silver: 'blue',
     lime: 'green',
 };
-// todo this is a little hack for determining the correct color capsule game when in the capsule, the check should be stricter and come from the store.
 let capsuleColor = colors[visitor.confirmed_humanity_value];
 
-// if (
-//     phase.active &&
-//     (visitor.confirmed_humanity_value === 'none' ||
-//         phase.phase_game.open_for_colors.includes(capsuleColor))
-// ) {
-//     activePhase = phase;
-//     activeGameId = phase.phase_game._id;
-// }
-
-let gameStepsWithVisitorSelectedValues = ref(state.activeGame?.game_steps);
+// todo this is a little hack for determining the correct color capsule game when in the capsule, the check should be stricter and come from the store.
 
 async function startGame() {
+    console.log('active game id', state?.activeGame?._id);
     state.step_counter = 0;
     state.game_loading = true;
+
+    console.log(
+        'gameStepsWithVisitorSelectedValues',
+        gameStepsWithVisitorSelectedValues
+    );
+
     if (
         localStorage.getItem(state.activeGame?._id) === 'done' ||
         state.activeGame?.game_type === 'SHOP'
@@ -62,70 +71,26 @@ async function startGame() {
         alert('Uus faas pole veel alanud. Proovi varsti uuesti');
         location.reload();
     } else {
-        console.log(state.activeGame);
+        console.log('Active game: ', state.activeGame);
         if (localStorage.getItem(state.activeGame?._id) === null) {
-            await addEmptyStepsToVisitor();
+            console.log('Game not started I think...?');
         } else {
             console.log('visitor.quiz_results', visitor.quiz_results);
         }
+        console.log(visitor.quiz_results);
         state.current_step =
-            gameStepsWithVisitorSelectedValues?.value[state.step_counter];
+            gameStepsWithVisitorSelectedValues[state.step_counter];
     }
+    localStorage.setItem(state.activeGame?._id, 'started');
+
     step(1);
 }
 
-watch(state, async () => {
-    visitor = await visitorStore.fetchVisitor(
-        localStorage.getItem('visitorId')
-    );
-});
-
-async function addEmptyStepsToVisitor() {
-    games.value = await performanceStore.getGames();
-    phases.value = await performanceStore.getPhases();
-    visitor = await visitorStore.fetchVisitor(
-        localStorage.getItem('visitorId')
-    );
-    let activePhase = ref(
-        phases.value?.find(
-            (phase) =>
-                phase.active &&
-                ((visitor.confirmed_humanity_value &&
-                    phase.phase_game.open_for_colors.includes(capsuleColor)) ||
-                    visitor.confirmed_humanity_value === 'none')
-        )
-    );
-    console.log(activePhase);
-    const activeGameId = ref(activePhase.value?.phase_game?._id);
-    console.log(activeGameId);
-    state.activeGame = ref(
-        games?.value?.find((game) => game._id === activeGameId?.value)
-    );
-    console.log(state.activeGame.value);
-    gameStepsWithVisitorSelectedValues = reactive(state.activeGame?.game_steps);
-
-    console.log(visitor);
-    if (state.activeGame.value) {
-        for (let step1 of state.activeGame?.game_steps) {
-            visitor.quiz_results.push({
-                step: step1,
-                result_text: '-',
-                result_humanity_values: {},
-            });
-        }
-        localStorage.setItem(state.activeGame._id, 'started');
-    }
-    await visitorStore.editVisitor(visitor);
-
-    state.game_started = true;
-    // state.current_step = gameStepsWithVisitorSelectedValues.value[0];
-
-    // await performanceStore.getPhases();
-    // activePhase = reactive(performanceStore.getActivePhase);
-    // await performanceStore.getGames();
-    state.game_loading = false;
-    step(1);
-}
+// watch(state, async () => {
+//     visitor = await visitorStore.fetchVisitor(
+//         localStorage.getItem('visitorId')
+//     );
+// });
 
 function quizIsDone() {
     console.log(state.activeGame);
@@ -134,64 +99,45 @@ function quizIsDone() {
 }
 
 async function selectValue(val) {
-    visitor = await visitorStore.fetchVisitor(
-        localStorage.getItem('visitorId')
-    );
-    let updateVisitor = ref(visitor);
+    console.log('seda tahan_>', val);
+    console.log('seda tahan_>', val.option_text);
+    state.visitor_current_step_selected_option_text = val.option_text;
+
+    let updateVisitor = ref(stateVIsitor);
     console.log(updateVisitor);
-    let stepToUpdate = Object.values(updateVisitor.value.quiz_results).find(
-        (qR) => qR.step === state.current_step._id
+    console.log(state.current_step);
+    let stepToUpdate = updateVisitor.value.quiz_results.find(
+        (qR) => qR.step._id === state.current_step._id
     );
     console.log(stepToUpdate);
     stepToUpdate.result_text = val.option_text;
     stepToUpdate.result_humanity_values = val.humanity_values;
-    state.visitor_current_step_selected_option_text = val.option_text;
-    visitor = await visitorStore.editVisitor(updateVisitor.value);
+    stateVIsitor = await visitorStore.editVisitor(updateVisitor.value);
     // step(1);
 }
 
 function step(i) {
-    console.log(state);
-    console.log(gameStepsWithVisitorSelectedValues);
     state.game_loading = false;
     state.game_started = true;
     state.step_counter += i;
-    if (
-        state.step_counter <
-        Object.values(gameStepsWithVisitorSelectedValues).length
-    ) {
-        console.log('length');
-        state.current_step = Object.values(gameStepsWithVisitorSelectedValues)[
-            state.step_counter
-        ];
-    } else {
-        state.last_step = true;
-    }
+    // if (state.step_counter < gameStepsWithVisitorSelectedValues.length) {
+    console.log(gameStepsWithVisitorSelectedValues[0]);
+    state.current_step =
+        gameStepsWithVisitorSelectedValues[state.step_counter].step;
+    // } else {
+    // state.last_step = true;
+    // console.log('bro midagi katki');
+    // }
     state.visitor_current_step_selected_option_text = ref(
-        visitor.quiz_results.find((qr) => qr.step === state.current_step._id)
-            .result_text
+        gameStepsWithVisitorSelectedValues.find(
+            (qr) => qr.step._id === state.current_step._id
+        )?.result_text
+    );
+    console.log(
+        'state.visitor_current_step_selected_option_text _________ ',
+        state.visitor_current_step_selected_option_text
     );
 }
-
-// function shuffle(array) {
-//     let currentIndex = array.length,
-//         randomIndex;
-//
-//     // While there remain elements to shuffle.
-//     while (currentIndex !== 0) {
-//         // Pick a remaining element.
-//         randomIndex = Math.floor(Math.random() * currentIndex);
-//         currentIndex--;
-//
-//         // And swap it with the current element.
-//         [array[currentIndex], array[randomIndex]] = [
-//             array[randomIndex],
-//             array[currentIndex],
-//         ];
-//     }
-//
-//     return array;
-// }
 </script>
 <template>
     <div
@@ -202,25 +148,13 @@ function step(i) {
         </div>
         <div
             v-if="!state.game_started"
-            class="d-flex align-items-center w-100 h-100 justify-content-center"
+            class="d-flex align-items-center w-100 h-100 justify-content-center flex-column"
         >
-            (Vajuta nuppu ja oota. See võib mõne aja laadida.)
             <button class="w-75 btn btn-primary" @click="startGame">
                 Alusta
             </button>
         </div>
-        <div class="buttons w-100">
-            <button class="btn btn-outline-primary" @click="step(-1)">
-                eelmine
-            </button>
-            <!--            <span-->
-            <!--                >{{ state.step_counter + 1 }} /-->
-            <!--                {{-->
-            <!--                    activeGame?.game_steps ? activeGame?.game_steps?.length : 0-->
-            <!--                }}</span-->
-            <!--            >-->
-            <button class="btn btn-primary" @click="step(1)">jargmine</button>
-        </div>
+
         <!--        <div v-if="state.game_loading">Arvutan...</div>-->
         <div v-if="state.game_started" class="game-steps-wrapper w-100 h-100">
             <div
@@ -250,6 +184,23 @@ function step(i) {
                             {{ step.option_text }}
                         </div>
                     </div>
+                </div>
+                current step - {{ state.current_step }} <br /><br />
+                eem -
+                {{ gameStepsWithVisitorSelectedValues[state.step_counter] }}
+                <div class="buttons">
+                    <button class="btn btn-outline-primary" @click="step(-1)">
+                        eelmine
+                    </button>
+                    <!--            <span-->
+                    <!--                >{{ state.step_counter + 1 }} /-->
+                    <!--                {{-->
+                    <!--                    activeGame?.game_steps ? activeGame?.game_steps?.length : 0-->
+                    <!--                }}</span-->
+                    <!--            >-->
+                    <button class="btn btn-primary" @click="step(1)">
+                        jargmine
+                    </button>
                 </div>
             </div>
             <div v-else>

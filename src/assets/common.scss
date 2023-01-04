@@ -205,3 +205,30 @@ h5 {
     padding: 0;
     margin: 0;
 }
+
+.color-badge {
+
+    &.fuchsia {
+        background-color: $fuchsia;
+        color: $fuchsia;
+    }
+
+    &.green, &.lime {
+        background-color: $neon-green;
+        color: $neon-green;
+    }
+
+    &.orange, &.turq {
+        background-color: $icon-blue;
+        color: $icon-blue;
+    }
+
+    &.blue, &.silver {
+        background-color: $silver;
+        color: $silver;
+    }
+
+    font-size: 0.75rem;
+    margin: 0.1rem;
+    padding: 0.2rem;
+}

@@ -28,6 +28,7 @@ export const useVisitorStore = defineStore({
             });
         },
         async editVisitor(visitor: Visitor): Promise<Visitor> {
+            console.log('Payload->', visitor);
             const result = await PerformanceService.editVisitor(visitor);
             console.log('editvisitor result', result);
             this.visitor = new Visitor(result);

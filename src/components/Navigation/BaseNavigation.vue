@@ -14,7 +14,8 @@ onBeforeMount(async () => {
     await performanceStore.getPerformances();
     renderLinks();
 });
-const isAdmin = localStorage.admin;
+const isAdmin = ref(localStorage.getItem('admin') === 'true');
+const isActor = ref(localStorage.getItem('actor') === 'true');
 
 watch(router.currentRoute, () => {
     console.log('route change');
@@ -38,8 +39,16 @@ function renderLinks() {
     const phases = ref(computed(() => performanceStore.phases));
     const activePhase = ref(phases.value.find((p) => p.active));
     const games = ref(computed(() => performanceStore.games));
-
-    if (isAuthenticated.value && isAdmin) {
+    console.log('admin', isAdmin.value);
+    console.log('actor', isActor.value);
+    console.log('auth', isAuthenticated.value);
+    const activeGame = ref(
+        games.value.find(
+            (game) => game?._id === activePhase?.value?.phase_game?._id
+        )
+    );
+    console.log(activeGame.value?.game_type);
+    if (isAuthenticated.value && isAdmin.value) {
         console.log('dude');
         navLinks.value.linx = [
             { name: 'admin.home', label: 'kapslid', query: {} },
@@ -51,17 +60,20 @@ function renderLinks() {
                 query: {},
             },
         ];
-    } else if (isAuthenticated.value) {
+    } else if (isAuthenticated.value && isActor.value) {
+        console.log('emm hallo');
+        navLinks.value.linx = [
+            { name: 'admin.home', label: 'kapslid', query: {} },
+            { name: 'superadmin.phases', label: 'faasid', query: {} },
+        ];
+    } else if (isAuthenticated.value && !isActor.value && !isAdmin.value) {
         navLinks.value.linx = [];
         // is authenticated as visitor
-        const activeGame = games.value.find(
-            (game) => game?._id === activePhase?.value?.phase_game?._id
-        );
 
-        if (activeGame && activeGame.game_type === 'SHOP') {
+        if (activeGame.value && activeGame.value.game_type === 'SHOP') {
             navLinks.value.linx.push(basket);
             navLinks.value.linx.push(scan);
-        } else if (activeGame && activeGame.game_type === 'QUIZ') {
+        } else if (activeGame.value && activeGame.value.game_type === 'QUIZ') {
             navLinks.value.linx.push(quiz);
         }
     } else {
@@ -108,6 +120,7 @@ function logout() {
     <div v-if="isAdmin && !adminMenuOpen">
         <button class="btn" @click="toggleAdminMenu">menu</button>
     </div>
+    <!--    <button class="btn" @click="logout">logout</button>-->
     <nav v-if="isAdmin && adminMenuOpen" class="container nav-wrapper">
         <button class="btn" @click="toggleAdminMenu">sulge</button>
         <span
@@ -118,11 +131,27 @@ function logout() {
                 {{ link.label }}
             </button>
         </span>
+        <button class="btn" @click="logout">logout</button>
     </nav>
-    <nav v-else-if="isAuthenticated && !isAdmin">
-        <span>
-            <a class="nav-item" href="/visitor/quiz"> Küsimused </a>
-            <a class="nav-item" href="/visitor/humanity-shop/basket"> Pood </a>
+    <nav v-else-if="isAuthenticated && isActor">
+        <span
+            v-for="(link, i) in navLinks.linx"
+            :key="`${navLinks.linx.length}_${i}`"
+        >
+            <button class="nav-item" @click="goTo(link)">
+                {{ link.label }}
+            </button>
+        </span>
+        <button class="btn" @click="logout">logout</button>
+    </nav>
+    <nav v-else-if="isAuthenticated.value && !isActor.value && !isAdmin.value">
+        <span
+            v-for="(link, i) in navLinks.linx"
+            :key="`${navLinks.linx.length}_${i}`"
+        >
+            <button class="nav-item" @click="goTo(link)">
+                {{ link.label }}
+            </button>
         </span>
     </nav>
     <button
