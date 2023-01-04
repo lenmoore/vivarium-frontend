@@ -120,7 +120,7 @@ function logout() {
     <div v-if="isAdmin && !adminMenuOpen">
         <button class="btn" @click="toggleAdminMenu">menu</button>
     </div>
-    <!--    <button class="btn" @click="logout">logout</button>-->
+    <button class="btn" @click="logout">logout</button>
     <nav v-if="isAdmin && adminMenuOpen" class="container nav-wrapper">
         <button class="btn" @click="toggleAdminMenu">sulge</button>
         <span

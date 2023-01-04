@@ -16,9 +16,9 @@ let viewOptions = ref({
     ready: false,
 });
 onBeforeMount(async () => {
-    await performanceStore.getGames();
-    await humanityStore.fetchBaskets();
-    await performanceStore.getPerformances();
+    // await performanceStore.getGames();
+    // await humanityStore.fetchBaskets();
+    // await performanceStore.getPerformances();
     const activePerformance = computed(() => {
         return performanceStore.getActivePerformance;
     });
@@ -171,7 +171,7 @@ watch(visitors, async () => {
     });
 
     await getProducts(mappedVisitors);
-    await performanceStore.getGames();
+    // await performanceStore.getGames();
     games = computed(() => performanceStore.games);
     gamesPreCapsule = games.value.filter(
         (g) => g.open_for_colors.length === 4 && g.game_type !== 'SHOP'

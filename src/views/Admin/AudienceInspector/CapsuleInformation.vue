@@ -11,8 +11,8 @@ const performanceStore = usePerformanceStore();
 const id = router.currentRoute.value.params.id;
 
 onBeforeMount(async () => {
-    await performanceStore.getGames();
-    await performanceStore.getPhases();
+    // await performanceStore.getGames();
+    // await performanceStore.getPhases();
     await humanityStore.fetchProducts();
 });
 
@@ -41,7 +41,7 @@ async function sortProducts() {
 }
 
 async function sortGames() {
-    await performanceStore.getGames();
+    // await performanceStore.getGames();
     games = computed(() => performanceStore.games);
     let color = {
         turq: 'orange',

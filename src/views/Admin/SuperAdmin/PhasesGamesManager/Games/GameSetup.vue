@@ -9,8 +9,8 @@ const performanceStore = usePerformanceStore();
 const id = router.currentRoute.value.params.id;
 
 onBeforeMount(async () => {
-    await performanceStore.getGames();
-    await performanceStore.getPhases();
+    // await performanceStore.getGames();
+    // await performanceStore.getPhases();
 });
 
 const activePhase = computed(() => performanceStore.getActivePhase);

@@ -20,9 +20,9 @@ let stateVIsitor = localStorage.getItem('visitor');
 let gameStepsWithVisitorSelectedValues = [];
 let updateVisitor = {};
 onBeforeMount(async () => {
-    await performanceStore.getGames();
-    await performanceStore.getPhases();
-    await performanceStore.getPerformances();
+    // await performanceStore.getGames();
+    // await performanceStore.getPhases();
+    // await performanceStore.getPerformances();
     stateVIsitor = await visitorStore.fetchVisitor(
         localStorage.getItem('visitorId')
     );

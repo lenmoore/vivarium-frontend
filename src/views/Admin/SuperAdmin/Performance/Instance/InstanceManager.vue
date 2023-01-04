@@ -9,8 +9,8 @@ const id = route.params.id;
 
 const performanceStore = usePerformanceStore();
 onBeforeMount(async () => {
-    await performanceStore.getPhases();
-    await performanceStore.getPerformances();
+    // await performanceStore.getPhases();
+    // await performanceStore.getPerformances();
     const activePerformance = computed(() => {
         return performanceStore.getActivePerformance;
     });
