@@ -41,7 +41,27 @@ async function removeProduct(item) {
         <div
             class="h-100 d-flex flex-column justify-content-between basket-list"
         >
-            Korvis hetkel {{ productsInBasket.length || 0 }} toodet.
+            <div
+                v-if="basket.products.length === 9"
+                class="text-bg-success p-2"
+            >
+                Korvi mahub 9 toodet. Kui tahad veel midagi lisada, pead
+                millestki loobuma.
+            </div>
+            <div
+                v-else
+                class="d-flex align-items-center justify-content-between"
+            >
+                <div>
+                    Korvis hetkel {{ productsInBasket.length || 0 }} toodet.
+                </div>
+                <a
+                    class="btn btn-primary p-4"
+                    href="/visitor/humanity-shop/scan"
+                >
+                    Vajuta, et tootekood skaneerida
+                </a>
+            </div>
             <div class="basket-items-wrapper">
                 <div
                     v-for="(item, i) in productsInBasket"
@@ -112,21 +132,7 @@ async function removeProduct(item) {
             >
                 Su korvis pole veel tooteid.
             </div>
-            <div
-                v-if="basket.products.length === 9"
-                class="text-bg-success p-2"
-            >
-                Korvi mahub 9 toodet. Kui tahad veel midagi lisada, pead
-                millestki loobuma.
-            </div>
-            <div
-                v-else
-                class="align-items-center justify-content-center d-flex w-100 mb-4 pt-4"
-            >
-                <a class="btn btn-primary" href="/visitor/humanity-shop/scan">
-                    Vajuta, et tootekood skaneerida
-                </a>
-            </div>
+            <div v-else-if="basket.products.length === 9"></div>
         </div>
     </div>
 </template>
@@ -134,6 +140,7 @@ async function removeProduct(item) {
 <style lang="scss">
 .basket-items-wrapper {
     width: 100%;
+    margin-top: 1rem;
 
     .basket-item {
         margin-bottom: 1rem;

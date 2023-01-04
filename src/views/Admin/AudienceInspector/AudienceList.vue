@@ -82,72 +82,64 @@ watch(visitors, async () => {
         let basket = visitor.basket;
 
         let redQuiz = visitor?.quiz_results
-            ? visitor?.quiz_results
-                  ?.map((qR) => {
-                      return (
-                          qR.result_humanity_values?.fuchsia ||
-                          qR.result_humanity_values?.red
-                      );
-                  })
-                  ?.reduce((a, b) => a + b)
+            ? visitor?.quiz_results?.map((qR) => {
+                  return qR.result_humanity_values?.fuchsia;
+              })
             : [];
         let greenQuiz = visitor?.quiz_results
-            ? visitor?.quiz_results
-                  ?.map((qR) => {
-                      return qR?.result_humanity_values?.green;
-                  })
-                  ?.reduce((a, b) => a + b)
+            ? visitor?.quiz_results?.map((qR) => {
+                  return qR?.result_humanity_values?.lime;
+              })
             : [];
         let blueQuiz = visitor?.quiz_results
-            ? visitor?.quiz_results
-                  ?.map((qR) => {
-                      return qR?.result_humanity_values?.blue;
-                  })
-                  ?.reduce((a, b) => a + b)
+            ? visitor?.quiz_results?.map((qR) => {
+                  return qR?.result_humanity_values?.silver;
+              })
             : [];
         let orangeQuiz = visitor?.quiz_results
-            ? visitor?.quiz_results
-                  ?.map((qR) => {
-                      return qR?.result_humanity_values?.orange;
-                  })
-                  ?.reduce((a, b) => a + b)
+            ? visitor?.quiz_results?.map((qR) => {
+                  return qR?.result_humanity_values?.turq;
+              })
             : [];
+
+        let redProducts = basket?.products?.map(
+            (p) => p.humanity_values?.fuchsia?.average
+        );
+        let silverProducts = basket?.products?.map(
+            (p) => p.humanity_values?.blue?.average
+        );
+        let limeProducts = basket?.products?.map(
+            (p) => p.humanity_values?.green?.average
+        );
+        let turqProducts = basket?.products?.map(
+            (p) => p.humanity_values?.orange?.average
+        );
+        console.log(redQuiz);
+        console.log(redProducts);
+        let fuchsia = [...redQuiz, ...redProducts];
+        let lime = [...greenQuiz, ...limeProducts];
+        let silver = [...blueQuiz, ...silverProducts];
+        let turq = [...orangeQuiz, ...turqProducts];
+
         let avg_hum_values = [
             {
-                color: 'fuchsia',
-                val: basket.products.length
-                    ? basket?.products
-                          ?.map((p) => p.humanity_values?.fuchsia?.average)
-                          ?.reduce((a, b) => a + b) + redQuiz
-                    : 0,
+                color: 'lime',
+                val: Math.floor(lime.reduce((a, b) => a + b)),
             },
             {
-                color: 'lime',
-                val: basket.products.length
-                    ? basket?.products
-                          ?.map((p) => p.humanity_values.green.average)
-                          ?.reduce((a, b) => a + b) + greenQuiz
-                    : 0,
+                color: 'fuchsia',
+                val: Math.floor(fuchsia.reduce((a, b) => a + b)),
             },
             {
                 color: 'silver',
-                val: basket.products.length
-                    ? basket?.products
-                          ?.map((p) => p.humanity_values.blue.average)
-                          ?.reduce((a, b) => a + b) + blueQuiz
-                    : 0,
+                val: Math.floor(silver.reduce((a, b) => a + b)),
             },
             {
                 color: 'turq',
-                val: basket.products.length
-                    ? basket?.products
-                          ?.map((p) => p.humanity_values.orange.average)
-                          ?.reduce((a, b) => a + b) + orangeQuiz
-                    : 0,
+                val: Math.floor(turq.reduce((a, b) => a + b)),
             },
         ];
         visitor.quiz_results.forEach((p) => {
-            console.log(p);
             allAnswers.value.push(p);
         });
         if (visitor.confirmed_humanity_value !== 'none') {
@@ -161,7 +153,6 @@ watch(visitors, async () => {
             (value) =>
                 value.val === Math.max(...avg_hum_values.map((o) => o.val))
         );
-        console.log('Highest: ', highest?.color);
         return {
             ...visitor,
             basket,
@@ -171,12 +162,11 @@ watch(visitors, async () => {
     });
 
     await getProducts(mappedVisitors);
-    // await performanceStore.getGames();
+    // await performanceStore.getGames();]
     games = computed(() => performanceStore.games);
     gamesPreCapsule = games.value.filter(
         (g) => g.open_for_colors.length === 4 && g.game_type !== 'SHOP'
     );
-    console.log('`G G G G G GAMES', gamesPreCapsule);
 
     let color = {
         turq: 'orange',
@@ -195,7 +185,6 @@ async function confirmColors() {
     console.log(mappedVisitors.length);
     let viiiiis = [];
     mappedVisitors.forEach((visitor) => {
-        console.log(visitor);
         if (
             visitor.confirmed_humanity_value === 'none' ||
             !visitor.confirmed_humanity_value
@@ -206,7 +195,6 @@ async function confirmColors() {
             });
         }
     });
-    console.log(viiiiis);
     await performanceStore.updateVisitors(viiiiis);
     location.reload();
 }
@@ -334,6 +322,16 @@ async function getProducts(visitores) {
                         class="visitor-wrapper mt-2 text-center"
                     >
                         <h5>Garderoobinumber: {{ visitor.wardrobe_number }}</h5>
+                        <small
+                            >|
+                            <span
+                                v-for="val in visitor.avg_hum_values"
+                                :key="visitor.wardrobe_number + val.val"
+                            >
+                                {{ val.color }}: {{ val.val }} |
+                            </span></small
+                        >
+                        <br />
                         Tooteid korvis: {{ visitor.basket.products.length }},
                         {{
                             visitor.confirmed_humanity_value ||
@@ -346,6 +344,14 @@ async function getProducts(visitores) {
                                 v-for="product in visitor.basket.products"
                                 :key="product.title"
                                 >{{ product.title }},
+                            </small>
+                        </div>
+                        <div class="border-top">
+                            Vastused:
+                            <small
+                                v-for="result in visitor.quiz_results"
+                                :key="result.result_text"
+                                >{{ result.result_text }},
                             </small>
                         </div>
                     </div>

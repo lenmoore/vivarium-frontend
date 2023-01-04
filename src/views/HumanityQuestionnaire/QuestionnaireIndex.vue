@@ -20,7 +20,7 @@ let stateVIsitor = localStorage.getItem('visitor');
 let gameStepsWithVisitorSelectedValues = [];
 let updateVisitor = {};
 onBeforeMount(async () => {
-    // await performanceStore.getGames();
+    await performanceStore.getGames();
     // await performanceStore.getPhases();
     // await performanceStore.getPerformances();
     stateVIsitor = await visitorStore.fetchVisitor(
@@ -86,7 +86,8 @@ async function startGame() {
     }
     localStorage.setItem(state.activeGame?._id, 'started');
 
-    step(1);
+    state.game_loading = false;
+    step(0);
 }
 
 // watch(state, async () => {
@@ -102,6 +103,7 @@ function quizIsDone() {
 }
 
 async function selectValue(val) {
+    state.game_loading = true;
     console.log('seda tahan_>', val);
     console.log('seda tahan_>', val.option_text);
     state.visitor_current_step_selected_option_text = val.option_text;
@@ -115,6 +117,7 @@ async function selectValue(val) {
     console.log(stepToUpdate);
     stepToUpdate.result_text = val.option_text;
     stepToUpdate.result_humanity_values = val.humanity_values;
+    state.game_loading = false;
     stateVIsitor = await visitorStore.editVisitor(updateVisitor.value);
     // step(1);
 }
@@ -143,12 +146,13 @@ function step(i) {
 }
 </script>
 <template>
+    <div v-if="state.game_loading">
+        <img alt="loader" src="/public/Spinner-1s-200px.gif" />
+    </div>
     <div
+        v-else
         class="h-100 d-flex flex-column overflow-scroll justify-content-between w-100 align-content-around"
     >
-        <div v-if="state.game_loading">
-            <img alt="loader" src="/public/Spinner-1s-200px.gif" />
-        </div>
         <div
             v-if="!state.game_started"
             class="d-flex align-items-center w-100 h-100 justify-content-center flex-column"

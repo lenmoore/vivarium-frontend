@@ -55,6 +55,11 @@ function renderLinks() {
             { name: 'superadmin.games', label: 'mangud', query: {} },
             { name: 'superadmin.phases', label: 'faasid', query: {} },
             {
+                name: 'superadmin.games.humanity-shop.products',
+                label: 'tooted',
+                query: {},
+            },
+            {
                 name: 'superadmin.performances',
                 label: 'etendused',
                 query: {},
@@ -93,19 +98,20 @@ async function goTo(link: {
     query: LocationQueryRaw;
     label: string;
 }) {
-    if (
-        router.currentRoute.value.name
-            ?.toString()
-            .split('.')
-            .includes(link.name.split('.')[0])
-    ) {
-        console.log('te');
-        location.replace(router.currentRoute.value.fullPath);
-        // renderLinks();
-    } else {
-        await router.push('/');
-        await router.push({ name: link.name, query: link.query });
-    }
+    await router.push({ name: link.name, query: link.query });
+    adminMenuOpen.value = false;
+    // if (
+    //     router.currentRoute.value.name
+    //         ?.toString()
+    //         .split('.')
+    //         .includes(link.name.split('.')[0])
+    // ) {
+    //     console.log('te');
+    //     location.replace(router.currentRoute.value.fullPath);
+    //     // renderLinks();
+    // } else {
+    //     await router.push('/');
+    // }
 }
 
 function logout() {

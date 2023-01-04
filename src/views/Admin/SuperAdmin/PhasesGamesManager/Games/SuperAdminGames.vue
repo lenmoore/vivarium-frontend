@@ -13,7 +13,7 @@ const games = computed(() => performanceStore.games);
 const newGame = {
     name: '',
     pre_capsule: true,
-    open_for_colors: 'fuchsia,green,orange,blue',
+    open_for_colors: 'fuchsia,lime,silver,turq',
     type: 'QUIZ',
 };
 
@@ -75,9 +75,6 @@ async function onSubmitGame() {
                             type="text"
                         />
 
-                        <small class="mt-4">
-                            (lime=green,fuchsia=fuchsia,blue=orange,silver=blue!!)"
-                        </small>
                         <BaseInput
                             id="for_colors"
                             v-model="newGame.open_for_colors"

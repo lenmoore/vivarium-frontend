@@ -25,6 +25,7 @@ onBeforeMount(async () => {
 const products = computed(() => humanityShopStore.getProducts);
 
 async function onDecode(content) {
+    qr.value.isValid = true;
     console.log('dude hello?');
     console.log(content);
     qr.value.result = content;
@@ -41,8 +42,7 @@ async function onDecode(content) {
     let alreadyInBasket = visitor.basket?.products?.some(
         (prod) => prod === qr.value.foundProduct._id
     );
-    console.log(alreadyInBasket);
-    console.log(visitor.basket?.confirmed);
+
     if (alreadyInBasket) {
         console.log('dude');
         qr.value.isValid = false;
@@ -60,15 +60,17 @@ async function onDecode(content) {
 
 async function addProductToBasket() {
     console.log('gonna try and add this to the basket', qr.value.foundProduct);
-    let basket = reactive(visitor).basket;
+    if (qr.value.isValid) {
+        let basket = reactive(visitor).basket;
 
-    basket.products.push(qr.value.foundProduct._id);
-    await humanityShopStore.updateBasket(basket);
-    qr.value.foundProduct = null;
-    await humanityStore.getVisitorBasket();
+        basket.products.push(qr.value.foundProduct._id);
+        await humanityShopStore.updateBasket(basket);
+        qr.value.foundProduct = null;
+        await humanityStore.getVisitorBasket();
+    }
 
     // await router.push({ name: 'visitor.humanity-shop.basket' });
-    location.reload();
+    // location.reload();
 }
 
 function onInit() {
@@ -86,7 +88,14 @@ function turnCameraOff() {
 </script>
 <template>
     <div>
-        <h2>Skänni midagi!</h2>
+        <div class="d-flex justify-content-center mb-4">
+            <h2>Skänni midagi!</h2>
+            <a
+                class="btn btn-outline-primary"
+                href="/visitor/humanity-shop/basket"
+                >Vajuta, et minna korvi</a
+            >
+        </div>
         <div class="scanner-wrapper">
             <QrStream @decode="onDecode" @init="onInit">
                 <div v-if="qr.foundProduct" class="validation-success">
@@ -99,7 +108,6 @@ function turnCameraOff() {
                             alt=""
                             class="product-image"
                         />
-
                         <div v-if="qr.isValid" class="btns">
                             <button
                                 class="btn btn-outline-primary"
@@ -119,10 +127,6 @@ function turnCameraOff() {
                             tooteid eemaldada, kui soovid.
                             <a href="/visitor/humanity-shop/basket">Korvi</a>
                         </div>
-                        <div v-else-if="basket.confirmed">
-                            Su korv on juba kinnitatud ja enam tooteid lisada ei
-                            saa.
-                        </div>
                         <div v-else-if="!qr.isValid" class="bg-white">
                             See toode on juba sinu korvis.
                             <button class="btn btn-primary" @click="onInit">
@@ -133,8 +137,6 @@ function turnCameraOff() {
                 </div>
             </QrStream>
         </div>
-
-        <a href="/visitor/humanity-shop/basket">Tagasi korvi</a>
     </div>
 </template>
 

@@ -82,11 +82,11 @@ async function editOrAddStep(val) {
         </small>
 
         <div v-if="game.game_type === 'QUIZ'">
-            lisa uus:
+            <br />
+            Lisa uus:
             <GameStep id="new-step" :step="newStep" @submit="addStep" />
 
-            kysimused, 2ra muuta proovi, see interface on tsipa katki - teen
-            millalgi korda:
+            Olemas {{ game.game_steps.length }}: <br />
             <div
                 v-for="(step, i) in game.game_steps"
                 :id="`step_${i}`"
