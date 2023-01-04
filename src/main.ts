@@ -12,6 +12,7 @@ import '../src/assets/common.scss';
 
 const app = createApp(App);
 const pinia = createPinia();
+app.use(router);
 
 pinia.use(piniaPluginPersistedstate);
 setActivePinia(pinia);
@@ -23,8 +24,6 @@ const store = useMainStore(pinia);
 // @ts-ignore
 app.use(store);
 app.use(BootstrapVue3);
-
-app.use(router);
 
 app.mount('#app');
 

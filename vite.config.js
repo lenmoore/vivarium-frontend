@@ -6,7 +6,7 @@ import * as fs from 'fs';
 
 // todo do the environments --
 // dev mode should not use docker because the HMR api is shit with docker
-
+// comment this server part for deploy!
 // https://vitejs.dev/config/
 export default defineConfig({
     // server: {

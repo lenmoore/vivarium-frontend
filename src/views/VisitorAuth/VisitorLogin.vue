@@ -1,8 +1,8 @@
 <script setup>
-import { useVisitorStore } from '../../store/visitor.store';
+import { useVisitorStore } from '@/store/visitor.store';
 import BaseForm from '../../components/BaseForm/index.vue';
 import BaseInput from '../../components/BaseForm/BaseInput.vue';
-import { usePerformanceStore } from '../../store/performance.store';
+import { usePerformanceStore } from '@/store/performance.store';
 import { computed, defineEmits, onBeforeMount, watchEffect } from 'vue';
 import router from '../../router/index';
 import moment from 'moment';
@@ -63,4 +63,5 @@ async function onLogin() {
         <!--            name="email"-->
         <!--        />-->
     </BaseForm>
+    <div v-else>! Hetkel ei toimu ühtegi etendust.</div>
 </template>

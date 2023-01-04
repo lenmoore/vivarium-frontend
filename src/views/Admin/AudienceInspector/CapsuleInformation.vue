@@ -27,7 +27,7 @@ async function sortProducts() {
     await humanityStore.fetchProducts();
     products = computed(() => humanityStore.products);
     let color = {
-        'blue-sky': 'orange',
+        turq: 'orange',
         fuchsia: 'fuchsia',
         silver: 'blue',
         lime: 'green',
@@ -44,7 +44,7 @@ async function sortGames() {
     await performanceStore.getGames();
     games = computed(() => performanceStore.games);
     let color = {
-        'blue-sky': 'orange',
+        turq: 'orange',
         fuchsia: 'fuchsia',
         silver: 'blue',
         lime: 'green',
@@ -57,7 +57,7 @@ function isForSelectedColor(color) {
     return (
         color ===
         {
-            'blue-sky': 'orange',
+            turq: 'orange',
             fuchsia: 'fuchsia',
             silver: 'blue',
             lime: 'green',
@@ -70,11 +70,11 @@ function isForSelectedColor(color) {
     <div class="my-4">
         <div>
             <button
-                :class="{ 'font-size-xl': showOnlyColor === 'blue-sky' }"
+                :class="{ 'font-size-xl': showOnlyColor === 'turq' }"
                 class="mx-2 p-2"
                 style="background-color: paleturquoise"
                 @click="
-                    showOnlyColor = 'blue-sky';
+                    showOnlyColor = 'turq';
                     products = sortProducts();
                     games = sortGames();
                 "
@@ -184,7 +184,7 @@ function isForSelectedColor(color) {
                                 }}</span
                             >
                             <span
-                                v-if="showOnlyColor === 'blue-sky'"
+                                v-if="showOnlyColor === 'turq'"
                                 class="lime"
                                 >{{
                                     Math.round(

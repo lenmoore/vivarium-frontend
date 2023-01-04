@@ -134,7 +134,7 @@ watch(visitors, async () => {
                         ?.reduce((a, b) => a + b) + blueQuiz,
             },
             {
-                color: 'blue-sky',
+                color: 'turq',
                 val:
                     basket?.products
                         ?.map((p) => p.humanity_values.orange.average)
@@ -174,7 +174,7 @@ watch(visitors, async () => {
     console.log('`G G G G G GAMES', gamesPreCapsule);
 
     let color = {
-        'blue-sky': 'orange',
+        turq: 'orange',
         fuchsia: 'fuchsia',
         silver: 'blue',
         lime: 'green',
@@ -238,8 +238,8 @@ async function getProducts(visitores) {
         <br />
         <div class="d-flex justify-content-around align-items-center">
             <RouterLink
-                :class="{ 'font-size-xl': showOnlyColorRoute === 'blue-sky' }"
-                :to="{ name: 'admin.audience', query: { color: 'blue-sky' } }"
+                :class="{ 'font-size-xl': showOnlyColorRoute === 'turq' }"
+                :to="{ name: 'admin.audience', query: { color: 'turq' } }"
                 class="mx-2 p-2"
                 style="background-color: paleturquoise"
             >
@@ -448,7 +448,7 @@ async function getProducts(visitores) {
 <style lang="scss" scoped>
 .fuchsia,
 .silver,
-.blue-sky,
+.turq,
 .lime {
     &.router-link-exact-active {
         font-size: 2rem;

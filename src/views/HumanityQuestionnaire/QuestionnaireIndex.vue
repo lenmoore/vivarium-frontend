@@ -33,7 +33,7 @@ state.activeGame = games.value.find(
     (game) => game?._id === activePhase?.value?.phase_game?._id
 );
 let colors = {
-    'blue-sky': 'orange',
+    turq: 'orange',
     fuchsia: 'fuchsia',
     silver: 'blue',
     lime: 'green',

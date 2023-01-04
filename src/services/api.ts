@@ -48,13 +48,15 @@ const gonsiori = 'https://192.168.8.102:3000/api';
 const vatteater = 'https://192.168.1.166:3000/api';
 const localHttps = 'https://localhost:3000/api';
 const tina = 'https://10.0.0.244:3000/api';
-const nothing = 'https://192.168.237.106:3000/api';
+const tina2 = 'http://127.0.0.1:3000/api';
+const nothing = 'https://192.168.95.106:3000/api';
 
 const gons2 = 'https://192.168.8.102:3000/api';
 const herokuapi = 'https://api-vivaarium.herokuapp.com/api';
 const sitt = 'http://localhost:3000/api';
 const corsAnywhere = 'https://ancient-oasis-40097.herokuapp.com/';
 const vatheroku = 'https://vat-vivaarium.herokuapp.com';
+const DEPLOY = corsAnywhere + herokuapi;
 
 const instance: AxiosInstance = axios.create({
     headers: {
@@ -63,7 +65,7 @@ const instance: AxiosInstance = axios.create({
         'X-Refresh': refreshHeader().toString(),
         'X-Forwarded-For': corsAnywhere + herokuapi,
     },
-    baseURL: corsAnywhere + herokuapi,
+    baseURL: DEPLOY,
 });
 
 export default instance;

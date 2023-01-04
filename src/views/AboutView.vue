@@ -127,7 +127,7 @@ td {
     background-color: lightpink;
 }
 
-.blue-sky {
+.turq {
     background-color: cornflowerblue;
 }
 
