@@ -9,6 +9,8 @@ export const useAuthStore = defineStore({
             refreshToken: '',
             name: '',
             admin: false,
+            actor: false,
+            actor_color: '',
         },
     }),
     getters: {

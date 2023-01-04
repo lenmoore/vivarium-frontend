@@ -2,6 +2,7 @@ import TokenService from '../services/token.service';
 import api from '../services/api';
 import router from '../router';
 import { decodeJwt } from 'jose';
+
 class AuthService {
     async login(email: string, password: string) {
         return await api
@@ -21,6 +22,8 @@ class AuthService {
                     console.log(decoded);
                     user.admin = decoded.admin;
                     localStorage.setItem('admin', user.admin);
+                    localStorage.setItem('actor', user.actor);
+                    localStorage.setItem('actor_color', user.actor_color);
                     TokenService.setUser(user);
 
                     router.push('/admin');

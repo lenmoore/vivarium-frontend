@@ -43,7 +43,7 @@ function renderLinks() {
         console.log('dude');
         navLinks.value.linx = [
             { name: 'superadmin', label: 'superadmin', query: {} },
-            { name: 'admin.home', label: 'näitleja dashboard', query: {} },
+            { name: 'admin.home', label: 'näitlejate dashboardid', query: {} },
         ];
     } else if (isAuthenticated.value) {
         navLinks.value.linx = [];

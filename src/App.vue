@@ -2,7 +2,10 @@
     <div class="page">
         <a :href="getActiveHomeLink()" class="text-decoration-none"
             ><h1 class="h1-color text-decoration-none">VIVAARIUM</h1>
-            <h1 class="d-flex justify-content-center">
+            <h1
+                v-if="visitor.wardrobe_number"
+                class="d-flex justify-content-center"
+            >
                 ID_{{ visitor.wardrobe_number }}
             </h1></a
         >
