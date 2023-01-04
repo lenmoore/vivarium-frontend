@@ -115,31 +115,35 @@ watch(visitors, async () => {
         let avg_hum_values = [
             {
                 color: 'fuchsia',
-                val:
-                    basket?.products
-                        ?.map((p) => p.humanity_values?.fuchsia?.average)
-                        ?.reduce((a, b) => a + b) + redQuiz,
+                val: basket.products.length
+                    ? basket?.products
+                          ?.map((p) => p.humanity_values?.fuchsia?.average)
+                          ?.reduce((a, b) => a + b) + redQuiz
+                    : 0,
             },
             {
                 color: 'lime',
-                val:
-                    basket?.products
-                        ?.map((p) => p.humanity_values.green.average)
-                        ?.reduce((a, b) => a + b) + greenQuiz,
+                val: basket.products.length
+                    ? basket?.products
+                          ?.map((p) => p.humanity_values.green.average)
+                          ?.reduce((a, b) => a + b) + greenQuiz
+                    : 0,
             },
             {
                 color: 'silver',
-                val:
-                    basket?.products
-                        ?.map((p) => p.humanity_values.blue.average)
-                        ?.reduce((a, b) => a + b) + blueQuiz,
+                val: basket.products.length
+                    ? basket?.products
+                          ?.map((p) => p.humanity_values.blue.average)
+                          ?.reduce((a, b) => a + b) + blueQuiz
+                    : 0,
             },
             {
                 color: 'turq',
-                val:
-                    basket?.products
-                        ?.map((p) => p.humanity_values.orange.average)
-                        ?.reduce((a, b) => a + b) + orangeQuiz,
+                val: basket.products.length
+                    ? basket?.products
+                          ?.map((p) => p.humanity_values.orange.average)
+                          ?.reduce((a, b) => a + b) + orangeQuiz
+                    : 0,
             },
         ];
         visitor.quiz_results.forEach((p) => {
