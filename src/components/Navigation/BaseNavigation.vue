@@ -117,8 +117,7 @@ async function goTo(link: {
 function logout() {
     localStorage.clear();
     sessionStorage.clear();
-    router.push('/');
-    location.reload();
+    location.replace('/');
 }
 </script>
 

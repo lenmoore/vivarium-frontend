@@ -105,7 +105,7 @@ async function back() {
         <div class="d-flex">
             <!--            <button class="btn" @click="openEdit">edit</button>-->
             <div class="product-details d-flex w-100">
-                <QrcodeVue :size="300" :value="product._id" level="H" />
+                <QrcodeVue :size="500" :value="product._id" level="H" />
                 <div class="d-flex flex-column align-items-center">
                     <img
                         :src="product.image"

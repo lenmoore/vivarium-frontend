@@ -1,6 +1,6 @@
 <script setup>
 import router from '../../../router/index';
-import { computed, onBeforeMount, ref, watch } from 'vue';
+import { computed, onBeforeMount, reactive, ref, watch } from 'vue';
 import { useHumanityShopStore } from '../../../store/humanity-shop/humanity-shop.store';
 import ProductItem from '../../HumanityShop/Admin/ProductItem.vue';
 import { useRoute } from 'vue-router';
@@ -10,33 +10,33 @@ const route = useRoute();
 const performanceStore = usePerformanceStore();
 const id = router.currentRoute.value.params.id;
 
-onBeforeMount(async () => {
-    // await performanceStore.getGames();
-    // await performanceStore.getPhases();
-    await humanityStore.fetchProducts();
-});
-
+const isAdmin = ref(localStorage.getItem('admin') === 'true');
+const isActor = ref(localStorage.getItem('actor') === 'true');
 let games = computed(() => performanceStore.games);
 
 const humanityStore = useHumanityShopStore();
-let showOnlyColor = ref('');
+let showOnlyColor = ref(localStorage.getItem('actor_color'));
 
 let products = computed(() => humanityStore.products);
-
-async function sortProducts() {
+onBeforeMount(async () => {
     await humanityStore.fetchProducts();
+});
+
+// todo problems here
+function sortProducts() {
     products = computed(() => humanityStore.products);
     let color = {
         turq: 'orange',
         fuchsia: 'fuchsia',
         silver: 'blue',
         lime: 'green',
-    }[showOnlyColor.value];
+    }[showOnlyColor];
     let pp = products.value.sort(
         (a, b) =>
-            b.humanity_values[color].average - a.humanity_values[color].average
+            b.humanity_values[color]?.average -
+            a.humanity_values[color]?.average
     );
-    console.log(games);
+    console.log(pp);
     return pp;
 }
 
@@ -68,7 +68,7 @@ function isForSelectedColor(color) {
 
 <template>
     <div class="my-4">
-        <div>
+        <div v-if="isAdmin">
             <button
                 :class="{ 'font-size-xl': showOnlyColor === 'turq' }"
                 class="mx-2 p-2"
@@ -155,6 +155,7 @@ function isForSelectedColor(color) {
             </div>
             <div class="py-4 col">
                 <h2>Kapsli toodete edetabel</h2>
+                <button @click="products = sortProducts()">sorteeri</button>
                 <div class="products">
                     <div
                         v-for="(product, i) in products"

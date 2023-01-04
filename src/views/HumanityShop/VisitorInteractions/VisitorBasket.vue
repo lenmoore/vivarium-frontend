@@ -46,7 +46,7 @@ async function removeProduct(item) {
                 class="text-bg-success p-2"
             >
                 Korvi mahub 9 toodet. Kui tahad veel midagi lisada, pead
-                millestki loobuma.
+                millestki loobuma. Tee oma otsuseid hoolikalt.
             </div>
             <div
                 v-else

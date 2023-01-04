@@ -7,7 +7,10 @@ import router from '../../../router/index';
 const performanceStore = usePerformanceStore();
 const humanityStore = useHumanityShopStore();
 
-const isAdmin = localStorage.admin;
+const isAdmin = ref(localStorage.getItem('admin') === 'true');
+const isActor = ref(localStorage.getItem('actor') === 'true');
+let showOnlyColor = ref(localStorage.getItem('actor_color'));
+
 let viewOptions = ref({
     showSummaryList: true,
     showProductsSummary: false,
@@ -67,12 +70,13 @@ watch(visitors, async () => {
     countedProducts = ref([]);
     mappedVisitors = reactive([]);
     allAnswers = ref([]);
-    if (showOnlyColorRoute.value) {
+    if (showOnlyColor || showOnlyColorRoute.value) {
         visitorsToMap = ref(
             visitors.value.filter(
                 (visitor) =>
                     visitor.confirmed_humanity_value ===
-                    showOnlyColorRoute.value
+                        showOnlyColorRoute.value ||
+                    visitor.confirmed_humanity_value === showOnlyColor.value
             )
         );
     } else {
@@ -165,7 +169,7 @@ watch(visitors, async () => {
     // await performanceStore.getGames();]
     games = computed(() => performanceStore.games);
     gamesPreCapsule = games.value.filter(
-        (g) => g.open_for_colors.length === 4 && g.game_type !== 'SHOP'
+        (g) => g.open_for_colors.length > 1 && g.game_type !== 'SHOP'
     );
 
     let color = {
@@ -225,11 +229,13 @@ async function getProducts(visitores) {
 
 <template>
     <div class="my-4">
-        <RouterLink :to="{ name: 'admin.audience' }" class="mx-2"
-            >Publik kõik
-        </RouterLink>
-        <br />
-        <div class="d-flex justify-content-around align-items-center">
+        <div
+            v-if="isAdmin"
+            class="d-flex justify-content-around align-items-center"
+        >
+            <RouterLink :to="{ name: 'admin.audience' }" class="mx-2"
+                >Publik kõik
+            </RouterLink>
             <RouterLink
                 :class="{ 'font-size-xl': showOnlyColorRoute === 'turq' }"
                 :to="{ name: 'admin.audience', query: { color: 'turq' } }"

@@ -32,7 +32,8 @@ const performanceStore = usePerformanceStore();
 const visitorStore = useVisitorStore();
 const visitor = visitorStore.getVisitor;
 let showLoginBtn = localStorage.getItem('accessToken') == null;
-let isAdmin = localStorage.admin;
+const isAdmin = ref(localStorage.getItem('admin') === 'true');
+const isActor = ref(localStorage.getItem('actor') === 'true');
 
 const phases = ref(computed(() => performanceStore.phases));
 let activePhase = ref(phases.value.find((p) => p.active));
@@ -42,7 +43,6 @@ let activeGame = games.value.find(
 );
 watch(router.currentRoute, () => {
     showLoginBtn = localStorage.getItem('accessToken') == null;
-    isAdmin = localStorage.admin;
 });
 onBeforeMount(async () => {
     // await performanceStore.getGames();
@@ -60,8 +60,10 @@ function getActiveHomeLink() {
     let activeGame = games.value.find(
         (game) => game?._id === activePhase?.value?.phase_game?._id
     );
-    if (isAdmin || showLoginBtn) {
+    if (isAdmin.value) {
         return '/';
+    } else if (isActor.value) {
+        return '/admin/capsule';
     }
 
     if (activeGame && activeGame.game_type === 'SHOP') {
