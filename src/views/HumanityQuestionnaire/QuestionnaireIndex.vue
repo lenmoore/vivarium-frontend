@@ -18,6 +18,7 @@ const state = reactive({
 });
 let stateVIsitor = localStorage.getItem('visitor');
 let gameStepsWithVisitorSelectedValues = [];
+let updateVisitor = {};
 onBeforeMount(async () => {
     await performanceStore.getGames();
     await performanceStore.getPhases();
@@ -41,6 +42,8 @@ onBeforeMount(async () => {
             (qr) => qr.game === state.activeGame._id
         );
     console.log(gameStepsWithVisitorSelectedValues);
+
+    updateVisitor = ref(stateVIsitor);
 });
 let visitor = stateVIsitor;
 
@@ -103,12 +106,12 @@ async function selectValue(val) {
     console.log('seda tahan_>', val.option_text);
     state.visitor_current_step_selected_option_text = val.option_text;
 
-    let updateVisitor = ref(stateVIsitor);
     console.log(updateVisitor);
     console.log(state.current_step);
     let stepToUpdate = updateVisitor.value.quiz_results.find(
         (qR) => qR.step._id === state.current_step._id
     );
+
     console.log(stepToUpdate);
     stepToUpdate.result_text = val.option_text;
     stepToUpdate.result_humanity_values = val.humanity_values;
@@ -185,9 +188,7 @@ function step(i) {
                         </div>
                     </div>
                 </div>
-                current step - {{ state.current_step }} <br /><br />
-                eem -
-                {{ gameStepsWithVisitorSelectedValues[state.step_counter] }}
+
                 <div class="buttons">
                     <button class="btn btn-outline-primary" @click="step(-1)">
                         eelmine
@@ -217,6 +218,11 @@ function step(i) {
     border: 1px solid black;
     margin-bottom: 1rem;
     padding: 0.5rem;
+
+    &:active {
+        transform: translateY(4px);
+        transition: 0.3s right;
+    }
 }
 
 .game-steps-wrapper {
@@ -240,5 +246,6 @@ function step(i) {
 
 .selected {
     background-color: #ff9d16;
+    transition: 0.3s right;
 }
 </style>

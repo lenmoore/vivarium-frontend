@@ -135,6 +135,7 @@ class PerformanceService {
                 }
             )
             .then(({ data }) => {
+                console.log(data);
                 return data;
             });
     }

@@ -120,6 +120,11 @@ button {
     margin: 0.25rem;
 }
 
+
+.button:active, .btn:active, a:active {
+    transform: translateY(2px);
+}
+
 .small-number {
     width: 2.5rem;
     border-radius: $border-radius;
