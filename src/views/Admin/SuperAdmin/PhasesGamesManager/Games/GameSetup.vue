@@ -27,11 +27,10 @@ async function addStep(val) {
         parsedInts.push({
             ...opt,
             humanity_values: {
-                red: parseInt(opt.humanity_values.fuchsia || 0),
-                fuchsia: parseInt(opt.humanity_values.fuchsia || 0),
-                green: parseInt(opt.humanity_values.green || 0),
-                blue: parseInt(opt.humanity_values.blue || 0),
-                orange: parseInt(opt.humanity_values.orange || 0),
+                fuchsia: parseInt(opt.humanity_values?.fuchsia || 0),
+                lime: parseInt(opt.humanity_values?.lime || 0),
+                silver: parseInt(opt.humanity_values?.silver || 0),
+                turq: parseInt(opt.humanity_values?.turq || 0),
             },
         });
     });
@@ -40,9 +39,37 @@ async function addStep(val) {
     window.location.reload();
 }
 
-async function editStep(val) {
-    game.value.game_steps.push(val);
-    await performanceStore.editGame(game.value);
+async function editOrAddStep(val) {
+    let gameToSend = game.value;
+    if (val._id) {
+        let parsedInts = [];
+        val.question_options.forEach((opt) => {
+            parsedInts.push({
+                ...opt,
+                humanity_values: {
+                    fuchsia: parseInt(opt.humanity_values?.fuchsia || 0),
+                    lime: parseInt(opt.humanity_values?.lime || 0),
+                    silver: parseInt(opt.humanity_values?.silver || 0),
+                    turq: parseInt(opt.humanity_values?.turq || 0),
+                },
+            });
+        });
+        console.log(gameToSend.game_steps);
+        let stepToUpdate = gameToSend.game_steps.find(
+            (gs) => gs._id === val._id
+        );
+        stepToUpdate.question_options = {
+            ...val,
+            question_options: parsedInts,
+        };
+        console.log(stepToUpdate);
+        console.log(val);
+        console.log(gameToSend);
+
+        await performanceStore.editGame(gameToSend);
+    } else {
+        await addStep(val);
+    }
 }
 </script>
 <template>
@@ -65,7 +92,7 @@ async function editStep(val) {
                 :id="`step_${i}`"
                 :key="`step_${i}`"
             >
-                <GameStep :step="step" @submit="editStep" />
+                <GameStep :step="step" @submit="editOrAddStep" />
             </div>
         </div>
         <div v-else>

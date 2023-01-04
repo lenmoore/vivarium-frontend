@@ -17,10 +17,10 @@ function addNewOptionToStep() {
     step.value.question_options.push({
         option_text: '',
         humanity_values: {
-            green: 0,
+            lime: 0,
             fuchsia: 0,
-            blue: 0,
-            orange: 0,
+            silver: 0,
+            turq: 0,
         },
     });
 }
@@ -65,7 +65,7 @@ function deleteGameStep() {
                 <span class="values d-flex w-25 justify-content-between">
                     <BaseInput
                         :id="`option_green_${i}`"
-                        v-model="option.humanity_values.green"
+                        v-model="option.humanity_values.lime"
                         :name="`option_green_${i}`"
                         input-class="small-number green"
                         label="laim"
@@ -73,7 +73,7 @@ function deleteGameStep() {
                     />
                     <BaseInput
                         :id="`option_blue_${i}`"
-                        v-model="option.humanity_values.blue"
+                        v-model="option.humanity_values.silver"
                         :name="`option_blue_${i}`"
                         input-class="small-number blue"
                         label="silver"
@@ -89,10 +89,10 @@ function deleteGameStep() {
                     />
                     <BaseInput
                         :id="`option_orange_${i}`"
-                        v-model="option.humanity_values.orange"
+                        v-model="option.humanity_values.turq"
                         :name="`option_orange_${i}`"
                         input-class="small-number orange"
-                        label="blue"
+                        label="turq"
                         type="number"
                     />
                 </span>
