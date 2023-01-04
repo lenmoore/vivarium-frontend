@@ -63,5 +63,5 @@ async function onLogin() {
         <!--            name="email"-->
         <!--        />-->
     </BaseForm>
-    <div v-else>! Hetkel ei toimu ühtegi etendust.</div>
+    <div v-else class="container">! Etendus algab 18:45.</div>
 </template>

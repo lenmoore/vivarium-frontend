@@ -30,7 +30,8 @@ const basket = {
 const scan = { name: 'visitor.humanity-shop.scan', label: 'Pood', query: {} };
 const quiz = { name: 'visitor.quiz', label: 'küsitlus', query: {} };
 let navLinks = ref({ linx: [home] });
-let isAuthenticated = localStorage.accessToken != null;
+
+const isAuthenticated = ref(localStorage.getItem('accessToken') != null);
 
 function renderLinks() {
     // stuff from store
@@ -38,13 +39,13 @@ function renderLinks() {
     const activePhase = ref(phases.value.find((p) => p.active));
     const games = ref(computed(() => performanceStore.games));
 
-    if (isAuthenticated && isAdmin) {
+    if (isAuthenticated.value && isAdmin) {
         console.log('dude');
         navLinks.value.linx = [
             { name: 'superadmin', label: 'superadmin', query: {} },
             { name: 'admin.home', label: 'näitleja dashboard', query: {} },
         ];
-    } else if (isAuthenticated) {
+    } else if (isAuthenticated.value) {
         navLinks.value.linx = [];
         // is authenticated as visitor
         const activeGame = games.value.find(
@@ -102,7 +103,7 @@ function logout() {
             </button>
         </span>
     </nav>
-    <nav v-else>
+    <nav v-else-if="isAuthenticated">
         <span>
             <a class="nav-item" href="/visitor/quiz"> Küsimused </a>
             <a class="nav-item" href="/visitor/humanity-shop/basket"> Pood </a>
