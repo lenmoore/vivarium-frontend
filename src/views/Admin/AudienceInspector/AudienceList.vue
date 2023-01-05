@@ -126,19 +126,19 @@ watch(visitors, async () => {
         let avg_hum_values = [
             {
                 color: 'lime',
-                val: Math.floor(lime.reduce((a, b) => a + b)),
+                val: Math.floor(lime?.reduce((a, b) => a + b)),
             },
             {
                 color: 'fuchsia',
-                val: Math.floor(fuchsia.reduce((a, b) => a + b)),
+                val: Math.floor(fuchsia?.reduce((a, b) => a + b)),
             },
             {
                 color: 'silver',
-                val: Math.floor(silver.reduce((a, b) => a + b)),
+                val: Math.floor(silver?.reduce((a, b) => a + b)),
             },
             {
                 color: 'turq',
-                val: Math.floor(turq.reduce((a, b) => a + b)),
+                val: Math.floor(turq?.reduce((a, b) => a + b)),
             },
         ];
         visitor.quiz_results.forEach((p) => {
@@ -213,9 +213,9 @@ async function getProducts(visitores) {
 
     products.value.forEach((product) => {
         let count = allProductsEverSelected.value.filter(
-            (p) => p._id === product._id
+            (p) => p?._id === product?._id
         ).length;
-        if (!countedProducts?.value?.find((cP) => cP._id === product._id)) {
+        if (!countedProducts?.value?.find((cP) => cP?._id === product?._id)) {
             countedProducts?.value?.push({ ...product, count: count });
         }
     });
