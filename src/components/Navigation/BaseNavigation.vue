@@ -17,6 +17,7 @@ onBeforeMount(async () => {
 const isAdmin = ref(localStorage.getItem('admin') === 'true');
 const isActor = ref(localStorage.getItem('actor') === 'true');
 
+let confirmedHumanityValue = localStorage.getItem('confirmed_humanity_value');
 watch(router.currentRoute, () => {
     console.log('route change');
     renderLinks();
@@ -51,7 +52,7 @@ function renderLinks() {
     if (isAuthenticated.value && isAdmin.value) {
         console.log('dude');
         navLinks.value.linx = [
-            { name: 'admin.home', label: 'kapslid', query: {} },
+            { name: 'admin.capsule', label: 'kapslid', query: {} },
             { name: 'superadmin.games', label: 'mangud', query: {} },
             { name: 'superadmin.phases', label: 'faasid', query: {} },
             {
@@ -69,7 +70,7 @@ function renderLinks() {
         console.log('emm hallo');
         navLinks.value.linx = [
             { name: 'admin.home', label: 'kapslid', query: {} },
-            { name: 'superadmin.phases', label: 'faasid', query: {} },
+            // { name: 'superadmin.phases', label: 'faasid', query: {} },
         ];
     } else if (isAuthenticated.value && !isActor.value && !isAdmin.value) {
         navLinks.value.linx = [];
@@ -125,7 +126,29 @@ function logout() {
     <div v-if="isAdmin && !adminMenuOpen">
         <button class="btn" @click="toggleAdminMenu">menu</button>
     </div>
-    <button class="btn" @click="logout">logout</button>
+    <!--    <button class="btn" @click="logout">logout</button>-->
+    <div
+        v-if="confirmedHumanityValue !== 'none'"
+        :class="
+            {
+                turq: 'bg-orange',
+                fuchsia: 'bg-fuchsia',
+                silver: 'bg-blue',
+                lime: 'bg-green',
+                none: '',
+            }[confirmedHumanityValue]
+        "
+        class="p-1 w-100 text-center"
+    >
+        {{
+            {
+                turq: 'Türkiis',
+                fuchsia: 'Violett',
+                silver: 'Hõbevalge',
+                lime: 'Laim',
+            }[confirmedHumanityValue]
+        }}
+    </div>
     <nav v-if="isAdmin && adminMenuOpen" class="container nav-wrapper">
         <button class="btn" @click="toggleAdminMenu">sulge</button>
         <span
@@ -147,7 +170,7 @@ function logout() {
                 {{ link.label }}
             </button>
         </span>
-        <button class="btn" @click="logout">logout</button>
+        <!--        <button class="btn" @click="logout">logout</button>-->
     </nav>
     <nav v-else-if="isAuthenticated.value && !isActor.value && !isAdmin.value">
         <span

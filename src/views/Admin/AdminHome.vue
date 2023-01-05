@@ -7,11 +7,6 @@ import router from '../../router/index';
 const performanceStore = usePerformanceStore();
 const humanityStore = useHumanityShopStore();
 
-let viewOptions = ref({
-    showSummaryList: true,
-    showProductsSummary: false,
-    showQuizSummary: false,
-});
 onBeforeMount(async () => {
     await humanityStore.fetchBaskets();
     await performanceStore.getPerformances();
@@ -30,30 +25,30 @@ watch(router.currentRoute, () => {
 </script>
 <template>
     <div class="admin-home container">
-        <div class="w-100 d-flex align-items-center justify-content-center">
-            <RouterLink
-                :class="
-                    getRoute === 'admin.audience'
-                        ? 'btn-primary'
-                        : 'btn-outline-primary'
-                "
-                :to="{ name: 'admin.audience' }"
-                class="btn btn-outline-primary"
-            >
-                Publik kapslites
-            </RouterLink>
-            <RouterLink
-                :class="
-                    getRoute === 'admin.capsule'
-                        ? 'btn-primary'
-                        : 'btn-outline-primary'
-                "
-                :to="{ name: 'admin.capsule' }"
-                class="btn mx-4"
-            >
-                Kapslite info
-            </RouterLink>
-        </div>
+        <!--        <div class="w-100 d-flex align-items-center justify-content-center">-->
+        <!--            <RouterLink-->
+        <!--                :class="-->
+        <!--                    getRoute === 'admin.audience'-->
+        <!--                        ? 'btn-primary'-->
+        <!--                        : 'btn-outline-primary'-->
+        <!--                "-->
+        <!--                :to="{ name: 'admin.audience' }"-->
+        <!--                class="btn btn-outline-primary"-->
+        <!--            >-->
+        <!--                Publik kapslites-->
+        <!--            </RouterLink>-->
+        <!--            <RouterLink-->
+        <!--                :class="-->
+        <!--                    getRoute === 'admin.capsule'-->
+        <!--                        ? 'btn-primary'-->
+        <!--                        : 'btn-outline-primary'-->
+        <!--                "-->
+        <!--                :to="{ name: 'admin.capsule' }"-->
+        <!--                class="btn mx-4"-->
+        <!--            >-->
+        <!--                Kapslite info-->
+        <!--            </RouterLink>-->
+        <!--        </div>-->
         <RouterView :key="$route.fullPath" />
     </div>
 </template>

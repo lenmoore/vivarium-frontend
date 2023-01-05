@@ -15,30 +15,34 @@ const isActor = ref(localStorage.getItem('actor') === 'true');
 let games = computed(() => performanceStore.games);
 
 const humanityStore = useHumanityShopStore();
-let showOnlyColor = ref(localStorage.getItem('actor_color'));
+let showOnlyColor = '';
+console.log(showOnlyColor);
+await humanityStore.fetchProducts();
 
-let products = computed(() => humanityStore.products);
+let sortedProducts = reactive([]);
+let isLoading = ref(false);
 onBeforeMount(async () => {
-    await humanityStore.fetchProducts();
-});
-
-// todo problems here
-function sortProducts() {
-    products = computed(() => humanityStore.products);
+    isLoading = true;
+    let products = computed(() => humanityStore.products).value;
+    showOnlyColor = ref(localStorage.getItem('actor_color'));
     let color = {
         turq: 'orange',
         fuchsia: 'fuchsia',
         silver: 'blue',
         lime: 'green',
-    }[showOnlyColor];
-    let pp = products.value.sort(
+    }[showOnlyColor.value];
+    console.log(color);
+    sortedProducts = products.sort(
         (a, b) =>
             b.humanity_values[color]?.average -
             a.humanity_values[color]?.average
     );
-    console.log(pp);
-    return pp;
-}
+
+    console.log('omfg');
+
+    console.log(sortedProducts);
+    isLoading = false;
+});
 
 async function sortGames() {
     // await performanceStore.getGames();
@@ -75,7 +79,6 @@ function isForSelectedColor(color) {
                 style="background-color: paleturquoise"
                 @click="
                     showOnlyColor = 'turq';
-                    products = sortProducts();
                     games = sortGames();
                 "
             >
@@ -88,7 +91,6 @@ function isForSelectedColor(color) {
                 style="background-color: lightpink"
                 @click="
                     showOnlyColor = 'fuchsia';
-                    products = sortProducts();
                     games = sortGames();
                 "
             >
@@ -101,7 +103,6 @@ function isForSelectedColor(color) {
                 style="background-color: silver"
                 @click="
                     showOnlyColor = 'silver';
-                    products = sortProducts();
                     games = sortGames();
                 "
             >
@@ -114,7 +115,6 @@ function isForSelectedColor(color) {
                 style="background-color: lime"
                 @click="
                     showOnlyColor = 'lime';
-                    products = sortProducts();
                     games = sortGames();
                 "
             >
@@ -122,7 +122,7 @@ function isForSelectedColor(color) {
             </button>
         </div>
         <br /><br />
-        <div v-if="showOnlyColor.length">
+        <div>
             <div class="py-4 col">
                 <h2>Mäng kapslis</h2>
                 <div>
@@ -130,8 +130,7 @@ function isForSelectedColor(color) {
                         <div
                             v-if="
                                 game.game_type !== 'SHOP' &&
-                                isForSelectedColor(game.open_for_colors[0]) &&
-                                game.open_for_colors.length === 1
+                                isForSelectedColor(game.open_for_colors[0])
                             "
                         >
                             <h3>{{ game.name }}</h3>
@@ -155,55 +154,15 @@ function isForSelectedColor(color) {
             </div>
             <div class="py-4 col">
                 <h2>Kapsli toodete edetabel</h2>
-                <button @click="products = sortProducts()">sorteeri</button>
-                <div class="products">
+                <div v-if="isLoading">...</div>
+                <div v-else class="products">
                     <div
-                        v-for="(product, i) in products"
-                        :key="i"
+                        v-for="(product, i) in sortedProducts"
+                        :key="product._id + i"
                         class="product"
                     >
-                        <div v-if="product">
-                            {{ product?.title }}
-                            <span
-                                v-if="showOnlyColor === 'lime'"
-                                class="lime"
-                                >{{
-                                    Math.round(
-                                        products[i].humanity_values?.green
-                                            ?.average * 100
-                                    ) / 100
-                                }}</span
-                            >
-                            <span
-                                v-if="showOnlyColor === 'silver'"
-                                class="lime"
-                                >{{
-                                    Math.round(
-                                        products[i].humanity_values?.blue
-                                            ?.average * 100
-                                    ) / 100
-                                }}</span
-                            >
-                            <span
-                                v-if="showOnlyColor === 'turq'"
-                                class="lime"
-                                >{{
-                                    Math.round(
-                                        products[i].humanity_values?.orange
-                                            ?.average * 100
-                                    ) / 100
-                                }}</span
-                            >
-                            <span
-                                v-if="showOnlyColor === 'fuchsia'"
-                                class="lime"
-                                >{{
-                                    Math.round(
-                                        products[i].humanity_values?.fuchsia
-                                            ?.average * 100
-                                    ) / 100
-                                }}</span
-                            >
+                        <div>
+                            {{ product.title }}
                         </div>
                     </div>
                 </div>

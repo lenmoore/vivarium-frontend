@@ -17,7 +17,7 @@ const activePerformance = computed(() => {
 const visitorStore = useVisitorStore();
 
 const visitor = {
-    email: moment(),
+    email: '',
     wardrobe_number: 0,
     wants_newsletter: false,
     wants_summary: false,
@@ -28,7 +28,7 @@ async function onLogin() {
     visitor.username = visitor.wardrobe_number + '_' + Date.now();
     visitor.wardrobe_number = parseInt(visitor.wardrobe_number);
     if (visitor.email.length === 0) {
-        visitor.email = 'n@o.pe';
+        visitor.email = moment();
     }
     console.log(activePerformance.value);
     visitor.performance = activePerformance.value._id;
@@ -54,14 +54,14 @@ async function onLogin() {
             :type="'number'"
             name="wardrobe_number"
         />
-        <!--        <BaseInput-->
-        <!--            :id="'email'"-->
-        <!--            v-model="visitor.email"-->
-        <!--            :label="'Email, kui soovid VAT teatri uudiskirja'"-->
-        <!--            :placeholder="'Email'"-->
-        <!--            :type="'text'"-->
-        <!--            name="email"-->
-        <!--        />-->
+        <BaseInput
+            :id="'email'"
+            v-model="visitor.email"
+            :label="'Email, kui soovid VAT teatri uudiskirja'"
+            :placeholder="'Email'"
+            :type="'email'"
+            name="email"
+        />
     </BaseForm>
     <div v-else class="container">! Etendus algab 18:45.</div>
 </template>

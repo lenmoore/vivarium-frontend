@@ -45,6 +45,10 @@ export const useVisitorStore = defineStore({
             return await PerformanceService.getVisitor(id).then((data) => {
                 this.visitor = new Visitor(data);
                 localStorage.visitor = this.visitor;
+                localStorage.setItem(
+                    'confirmed_humanity_value',
+                    data.confirmed_humanity_value
+                );
                 console.log(data);
                 return data;
             });

@@ -19,9 +19,6 @@ let viewOptions = ref({
     ready: false,
 });
 onBeforeMount(async () => {
-    // await performanceStore.getGames();
-    // await humanityStore.fetchBaskets();
-    // await performanceStore.getPerformances();
     const activePerformance = computed(() => {
         return performanceStore.getActivePerformance;
     });
@@ -34,6 +31,7 @@ const baskets = computed(() => humanityStore.getBaskets);
 const products = computed(() => humanityStore.getProducts);
 let games = computed(() => performanceStore.games);
 let gamesPreCapsule = computed(() => performanceStore.games);
+let gamesInCapsule = computed(() => performanceStore.games);
 let showOnlyColorRoute = ref(router.currentRoute.value.query.color);
 let visitors = computed(() => performanceStore.getVisitors);
 
@@ -70,7 +68,7 @@ watch(visitors, async () => {
     countedProducts = ref([]);
     mappedVisitors = reactive([]);
     allAnswers = ref([]);
-    if (showOnlyColor || showOnlyColorRoute.value) {
+    if (showOnlyColor.value.length || showOnlyColorRoute.value) {
         visitorsToMap = ref(
             visitors.value.filter(
                 (visitor) =>
@@ -169,7 +167,10 @@ watch(visitors, async () => {
     // await performanceStore.getGames();]
     games = computed(() => performanceStore.games);
     gamesPreCapsule = games.value.filter(
-        (g) => g.open_for_colors.length > 1 && g.game_type !== 'SHOP'
+        (g) => g.pre_capsule && g.game_type !== 'SHOP'
+    );
+    gamesInCapsule = games.value.filter(
+        (g) => !g.pre_capsule && g.game_type !== 'SHOP'
     );
 
     let color = {
@@ -292,7 +293,7 @@ async function getProducts(visitores) {
                     class="btn btn-outline-primary"
                     @click="toggleViewOptions('products')"
                 >
-                    K6ik tooted
+                    Tooted kapslis kaasas
                 </button>
                 <button
                     :class="{
@@ -386,8 +387,18 @@ async function getProducts(visitores) {
                     </div>
                 </div>
                 <div v-else-if="viewOptions.showQuizSummaryInCapsule">
-                    <div v-for="(game, i) in games" :key="game._id + i">
-                        <div>
+                    <div
+                        v-for="(game, i) in gamesInCapsule"
+                        :key="game._id + i"
+                    >
+                        <div
+                            v-if="
+                                game.open_for_colors.includes(showOnlyColor) ||
+                                game.open_for_colors.includes(
+                                    showOnlyColorRoute
+                                )
+                            "
+                        >
                             <h1>{{ i }} {{ game.name }}</h1>
                             <div
                                 v-for="step in game.game_steps"
@@ -419,6 +430,7 @@ async function getProducts(visitores) {
                     <div
                         v-for="(game, i) in gamesPreCapsule"
                         :key="game._id + i"
+                        class="border my-2 p-4"
                     >
                         <div>
                             <div

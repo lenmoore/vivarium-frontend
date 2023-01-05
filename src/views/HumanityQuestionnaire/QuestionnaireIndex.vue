@@ -20,30 +20,44 @@ let stateVIsitor = localStorage.getItem('visitor');
 let gameStepsWithVisitorSelectedValues = [];
 let updateVisitor = {};
 onBeforeMount(async () => {
-    await performanceStore.getGames();
-    // await performanceStore.getPhases();
+    // await performanceStore.getGames();
+    state.game_loading = true;
+    await performanceStore.getPhases();
     // await performanceStore.getPerformances();
     stateVIsitor = await visitorStore.fetchVisitor(
         localStorage.getItem('visitorId')
     );
-    console.log(stateVIsitor.quiz_results);
-    localStorage.setItem('visitorId', stateVIsitor.visitorId);
 
-    const phases = ref(computed(() => performanceStore.phases));
-    let activePhase = ref(phases.value.find((p) => p.active));
-    let games = ref(computed(() => performanceStore.games));
-    state.activeGame = games.value.find(
-        (game) => game?._id === activePhase?.value?.phase_game?._id
+    const phases = reactive(performanceStore.phases);
+    console.log(phases);
+    let activePhase = reactive(
+        phases.find(
+            (p) =>
+                p.active &&
+                (stateVIsitor.confirmed_humanity_value === 'none' ||
+                    p.phase_game?.open_for_colors?.includes(
+                        stateVIsitor?.confirmed_humanity_value
+                    ))
+        )
     );
-    console.log('active Game ->>>>> ', state.activeGame);
+    console.log(activePhase);
+    let games = reactive(performanceStore.games);
+    console.log(games);
+    state.active_game = games.find(
+        (game) => game?._id === activePhase?.phase_game?._id
+    );
+    console.log(stateVIsitor.confirmed_humanity_value);
+    console.log('active Game ->>>>> ', state.active_game);
     gameStepsWithVisitorSelectedValues = ref(stateVIsitor.quiz_results);
     gameStepsWithVisitorSelectedValues =
         gameStepsWithVisitorSelectedValues.value.filter(
-            (qr) => qr.game === state.activeGame._id
+            (qr) => qr.game === state.active_game._id
         );
+
     console.log(gameStepsWithVisitorSelectedValues);
 
     updateVisitor = ref(stateVIsitor);
+    state.game_loading = false;
 });
 let visitor = stateVIsitor;
 
@@ -58,7 +72,7 @@ let capsuleColor = colors[visitor.confirmed_humanity_value];
 // todo this is a little hack for determining the correct color capsule game when in the capsule, the check should be stricter and come from the store.
 
 async function startGame() {
-    console.log('active game id', state?.activeGame?._id);
+    console.log('active game id', state?.active_game?._id);
     state.step_counter = 0;
     state.game_loading = true;
 
@@ -68,14 +82,13 @@ async function startGame() {
     );
 
     if (
-        localStorage.getItem(state.activeGame?._id) === 'done' ||
-        state.activeGame?.game_type === 'SHOP'
+        localStorage.getItem(state.active_game?._id) === 'done' ||
+        state.active_game?.game_type === 'SHOP'
     ) {
         alert('Uus faas pole veel alanud. Proovi varsti uuesti');
-        location.reload();
     } else {
-        console.log('Active game: ', state.activeGame);
-        if (localStorage.getItem(state.activeGame?._id) === null) {
+        console.log('Active game: ', state.active_game);
+        if (localStorage.getItem(state.active_game?._id) === null) {
             console.log('Game not started I think...?');
         } else {
             console.log('visitor.quiz_results', visitor.quiz_results);
@@ -84,7 +97,7 @@ async function startGame() {
         state.current_step =
             gameStepsWithVisitorSelectedValues[state.step_counter];
     }
-    localStorage.setItem(state.activeGame?._id, 'started');
+    localStorage.setItem(state.active_game?._id, 'started');
 
     state.game_loading = false;
     step(0);
@@ -96,9 +109,9 @@ async function startGame() {
 //     );
 // });
 
-function quizIsDone() {
-    console.log(state.activeGame);
-    localStorage.setItem(state.activeGame?._id, 'done');
+async function quizIsDone() {
+    console.log(state.active_game);
+    localStorage.setItem(state.active_game?._id, 'done');
     location.reload();
 }
 
@@ -126,14 +139,16 @@ function step(i) {
     state.game_loading = false;
     state.game_started = true;
     state.step_counter += i;
-    // if (state.step_counter < gameStepsWithVisitorSelectedValues.length) {
-    console.log(gameStepsWithVisitorSelectedValues[0]);
-    state.current_step =
-        gameStepsWithVisitorSelectedValues[state.step_counter].step;
-    // } else {
-    // state.last_step = true;
-    // console.log('bro midagi katki');
-    // }
+    if (state.step_counter < gameStepsWithVisitorSelectedValues.length) {
+        state.current_step =
+            gameStepsWithVisitorSelectedValues[state.step_counter].step;
+        state.current_step.question_options =
+            state.current_step.question_options.sort((a, b) =>
+                a.option_text.localeCompare(b.option_text)
+            );
+    } else {
+        state.last_step = true;
+    }
     state.visitor_current_step_selected_option_text = ref(
         gameStepsWithVisitorSelectedValues.find(
             (qr) => qr.step._id === state.current_step._id
@@ -161,7 +176,6 @@ function step(i) {
                 Alusta
             </button>
         </div>
-
         <!--        <div v-if="state.game_loading">Arvutan...</div>-->
         <div v-if="state.game_started" class="game-steps-wrapper w-100 h-100">
             <div
@@ -172,7 +186,9 @@ function step(i) {
                     <h4 class="text-center">
                         {{
                             state.current_step &&
-                            state.current_step.question_text
+                            state.current_step.question_text.length > 1
+                                ? state.current_step.question_text
+                                : 'Millega nõustud kõige rohkem?'
                         }}
                     </h4>
                     <div class="options-wrapper w-100">
@@ -200,7 +216,7 @@ function step(i) {
                     <!--            <span-->
                     <!--                >{{ state.step_counter + 1 }} /-->
                     <!--                {{-->
-                    <!--                    activeGame?.game_steps ? activeGame?.game_steps?.length : 0-->
+                    <!--                    active_game?.game_steps ? active_game?.game_steps?.length : 0-->
                     <!--                }}</span-->
                     <!--            >-->
                     <button class="btn btn-primary" @click="step(1)">
@@ -208,11 +224,7 @@ function step(i) {
                     </button>
                 </div>
             </div>
-            <div v-else>
-                <button class="btn btn-primary" @click="quizIsDone">
-                    Valmis
-                </button>
-            </div>
+            <div v-else>Valmis. Oota edasisi juhiseid.</div>
         </div>
     </div>
 </template>

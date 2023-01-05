@@ -2,7 +2,7 @@
     <div class="page">
         <a :href="getActiveHomeLink()" class="text-decoration-none"
             ><h1 class="h1-color text-decoration-none">
-                VIVAARIUM | ID_{{ visitor.wardrobe_number }}
+                VIVAARIUM | ID_{{ visitor.wardrobe_number || '?' }}
             </h1>
         </a>
 
@@ -63,7 +63,7 @@ function getActiveHomeLink() {
     if (isAdmin.value) {
         return '/';
     } else if (isActor.value) {
-        return '/admin/capsule';
+        return '/admin/audience';
     }
 
     if (activeGame && activeGame.game_type === 'SHOP') {

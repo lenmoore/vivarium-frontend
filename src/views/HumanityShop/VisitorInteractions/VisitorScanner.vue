@@ -40,7 +40,7 @@ async function onDecode(content) {
     console.log(qr.value.foundProduct);
 
     let alreadyInBasket = visitor.basket?.products?.some(
-        (prod) => prod === qr.value.foundProduct._id
+        (prod) => prod._id === qr.value.foundProduct._id
     );
 
     if (alreadyInBasket) {

@@ -150,6 +150,22 @@ button {
     }
 }
 
+.bg-fuchsia {
+    background-color: $fuchsia;
+}
+
+.bg-green {
+    background-color: $neon-green;
+}
+
+.bg-orange {
+    background-color: $icon-blue;
+}
+
+.bg-blue {
+    background-color: $silver;
+}
+
 .visitor-wrapper {
     &.fuchsia {
         border: 2px solid $fuchsia;
