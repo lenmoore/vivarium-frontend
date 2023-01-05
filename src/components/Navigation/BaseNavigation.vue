@@ -52,7 +52,7 @@ function renderLinks() {
     if (isAuthenticated.value && isAdmin.value) {
         console.log('dude');
         navLinks.value.linx = [
-            { name: 'admin.capsule', label: 'kapslid', query: {} },
+            { name: 'admin.audience', label: 'kapslid', query: {} },
             { name: 'superadmin.games', label: 'mangud', query: {} },
             { name: 'superadmin.phases', label: 'faasid', query: {} },
             {
