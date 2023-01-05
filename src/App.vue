@@ -1,7 +1,12 @@
 <template>
     <div class="page">
         <div class="d-flex align-items-start justify-content-between w-100">
-            <!--            <a v-if="!(isAdmin || isActor)" href="/character">X</a>-->
+            <span>
+                <a v-if="!(isAdmin || isActor)" href="/character">X</a> - - -
+                <RouterLink :to="{ path: '/visitor/logout' }"
+                    >logout?</RouterLink
+                >
+            </span>
             <a :href="getActiveHomeLink()" class="text-decoration-none"
                 ><h1 class="h1-color text-decoration-none">
                     VIVAARIUM | ID_{{ visitor.wardrobe_number || '?' }}
