@@ -22,6 +22,8 @@ onBeforeMount(async () => {
     const activePerformance = computed(() => {
         return performanceStore.getActivePerformance;
     });
+    await humanityStore.fetchProducts();
+
     await performanceStore.getCurrentPerformanceVisitors(
         activePerformance.value._id
     );
