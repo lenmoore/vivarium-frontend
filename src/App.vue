@@ -1,10 +1,13 @@
 <template>
     <div class="page">
-        <a :href="getActiveHomeLink()" class="text-decoration-none"
-            ><h1 class="h1-color text-decoration-none">
-                VIVAARIUM | ID_{{ visitor.wardrobe_number || '?' }}
-            </h1>
-        </a>
+        <div class="d-flex align-items-start justify-content-between w-100">
+            <!--            <a v-if="!(isAdmin || isActor)" href="/character">X</a>-->
+            <a :href="getActiveHomeLink()" class="text-decoration-none"
+                ><h1 class="h1-color text-decoration-none">
+                    VIVAARIUM | ID_{{ visitor.wardrobe_number || '?' }}
+                </h1>
+            </a>
+        </div>
 
         <!--        <a class="font-size-xs" href="https://10.0.0.244:3000/api/games">-->
         <!--            kliki mind kui login lehte pole ja advanced -> proceed-->

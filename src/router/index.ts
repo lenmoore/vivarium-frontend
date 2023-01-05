@@ -234,6 +234,11 @@ const routes: Array<RouteRecordRaw> = [
         component: () =>
             import('../views/HumanityQuestionnaire/PhaseTwoIsDone.vue'),
     },
+    {
+        path: '/character',
+        name: 'character',
+        component: () => import('../views/VisitorAuth/CharacterSheet.vue'),
+    },
 ];
 
 const router = createRouter({
