@@ -35,7 +35,7 @@ async function onDecode(content) {
     // await timeout(1000);
 
     qr.value.foundProduct = products.value.find(
-        (product) => product._id === content
+        (product) => product._id === content || product.image.includes(content)
     );
     console.log(qr.value.foundProduct);
 
