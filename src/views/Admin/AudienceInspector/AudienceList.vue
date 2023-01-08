@@ -3,13 +3,15 @@ import { usePerformanceStore } from '../../../store/performance.store';
 import { computed, onBeforeMount, ref, reactive, watch } from 'vue';
 import { useHumanityShopStore } from '../../../store/humanity-shop/humanity-shop.store';
 import router from '../../../router/index';
+import AudienceSummary from './AudienceSummary.vue';
+import { cloneDeep } from 'lodash';
+import ProductsSummary from './ProductsSummary.vue';
 
 const performanceStore = usePerformanceStore();
 const humanityStore = useHumanityShopStore();
 
 const isAdmin = ref(localStorage.getItem('admin') === 'true');
 const isActor = ref(localStorage.getItem('actor') === 'true');
-let showOnlyColor = ref(localStorage.getItem('actor_color'));
 
 let viewOptions = ref({
     showSummaryList: true,
@@ -19,6 +21,7 @@ let viewOptions = ref({
     ready: false,
 });
 onBeforeMount(async () => {
+    await performanceStore.getPerformances();
     const activePerformance = computed(() => {
         return performanceStore.getActivePerformance;
     });
@@ -35,6 +38,8 @@ let games = computed(() => performanceStore.games);
 let gamesPreCapsule = computed(() => performanceStore.games);
 let gamesInCapsule = computed(() => performanceStore.games);
 let showOnlyColorRoute = ref(router.currentRoute.value.query.color);
+let showOnlyColor = ref(localStorage.getItem('actor_color'));
+
 let visitors = computed(() => performanceStore.getVisitors);
 
 function toggleViewOptions(show) {
@@ -63,25 +68,26 @@ function toggleViewOptions(show) {
 let allProductsEverSelected = ref([]);
 let countedProducts = ref([]);
 let mappedVisitors = reactive([]);
+let coolAlgorithmedVisitors = reactive({});
 let allAnswers = ref([]);
+
 watch(visitors, async () => {
-    let visitorsToMap = [];
+    await sortThemGuys();
+});
+
+async function sortThemGuys() {
+    let visitorsToMap = ref(visitors.value);
     allProductsEverSelected = ref([]);
     countedProducts = ref([]);
     mappedVisitors = reactive([]);
+    coolAlgorithmedVisitors = {
+        turq: new Set(),
+        fuchsia: new Set(),
+        silver: new Set(),
+        lime: new Set(),
+    };
     allAnswers = ref([]);
-    if (showOnlyColor.value.length || showOnlyColorRoute.value) {
-        visitorsToMap = ref(
-            visitors.value.filter(
-                (visitor) =>
-                    visitor.confirmed_humanity_value ===
-                        showOnlyColorRoute.value ||
-                    visitor.confirmed_humanity_value === showOnlyColor.value
-            )
-        );
-    } else {
-        visitorsToMap = ref(visitors.value);
-    }
+
     mappedVisitors = visitorsToMap.value.map((visitor) => {
         let basket = visitor.basket;
 
@@ -118,55 +124,28 @@ watch(visitors, async () => {
         let turqProducts = basket?.products?.map(
             (p) => p.humanity_values?.orange?.average
         );
-        console.log(redQuiz);
-        console.log(redProducts);
+
         let fuchsia = [...redQuiz, ...redProducts];
         let lime = [...greenQuiz, ...limeProducts];
         let silver = [...blueQuiz, ...silverProducts];
         let turq = [...orangeQuiz, ...turqProducts];
 
-        let avg_hum_values = [
-            {
-                color: 'lime',
-                val: Math.floor(lime?.reduce((a, b) => a + b)),
-            },
-            {
-                color: 'fuchsia',
-                val: Math.floor(fuchsia?.reduce((a, b) => a + b)),
-            },
-            {
-                color: 'silver',
-                val: Math.floor(silver?.reduce((a, b) => a + b)),
-            },
-            {
-                color: 'turq',
-                val: Math.floor(turq?.reduce((a, b) => a + b)),
-            },
-        ];
+        let avg_hum_values = {
+            lime: lime?.reduce((a, b) => a + b),
+            fuchsia: fuchsia?.reduce((a, b) => a + b),
+            silver: silver?.reduce((a, b) => a + b),
+            turq: turq?.reduce((a, b) => a + b),
+        };
         visitor.quiz_results.forEach((p) => {
             allAnswers.value.push(p);
         });
-        if (visitor.confirmed_humanity_value !== 'none') {
-            return {
-                ...visitor,
-                basket,
-                avg_hum_values,
-            };
-        }
-        let highest = avg_hum_values.find(
-            (value) =>
-                value.val === Math.max(...avg_hum_values.map((o) => o.val))
-        );
         return {
             ...visitor,
             basket,
             avg_hum_values,
-            highest,
         };
     });
 
-    await getProducts(mappedVisitors);
-    // await performanceStore.getGames();]
     games = computed(() => performanceStore.games);
     gamesPreCapsule = games.value.filter(
         (g) => g.pre_capsule && g.game_type !== 'SHOP'
@@ -185,48 +164,46 @@ watch(visitors, async () => {
         (g) =>
             g.open_for_colors.includes(color) && g.open_for_colors.length === 1
     );
-});
+    let peopleCount = mappedVisitors.length / 4;
 
-async function confirmColors() {
-    console.log(mappedVisitors);
-    console.log(mappedVisitors.length);
-    let viiiiis = [];
-    mappedVisitors.forEach((visitor) => {
-        if (
-            visitor.confirmed_humanity_value === 'none' ||
-            !visitor.confirmed_humanity_value
-        ) {
-            viiiiis.push({
-                ...visitor,
-                confirmed_humanity_value: visitor.highest.color,
-            });
-        }
-    });
-    await performanceStore.updateVisitors(viiiiis);
-    location.reload();
+    // turq
+    let sortedByTurq = mappedVisitors.sort(
+        (a, b) => b.avg_hum_values?.turq - a.avg_hum_values?.turq
+    );
+    for (let i = 0; i < peopleCount; i++) {
+        coolAlgorithmedVisitors.turq.add(sortedByTurq[i]);
+    }
+
+    // silver
+    let sortedBySilver = mappedVisitors.sort(
+        (a, b) => b.avg_hum_values?.silver - a.avg_hum_values?.silver
+    );
+    for (let i = 0; i < peopleCount; i++) {
+        coolAlgorithmedVisitors.silver.add(sortedBySilver[i]);
+    }
+
+    // violet
+    let sortedByFuchsia = mappedVisitors.sort(
+        (a, b) => b.avg_hum_values?.fuchsia - a.avg_hum_values?.fuchsia
+    );
+    for (let i = 0; i < peopleCount; i++) {
+        coolAlgorithmedVisitors.fuchsia.add(sortedByFuchsia[i]);
+    }
+
+    // lime
+    let sortedByLime = mappedVisitors.sort(
+        (a, b) => b.avg_hum_values?.lime - a.avg_hum_values?.lime
+    );
+    for (let i = 0; i < peopleCount; i++) {
+        coolAlgorithmedVisitors.lime.add(sortedByLime[i]);
+    }
+
+    viewOptions.value.ready = true;
 }
 
-async function getProducts(visitores) {
-    visitores.forEach((visitor) => {
-        visitor.basket?.products?.forEach((p) => {
-            allProductsEverSelected.value.push(p);
-        });
-    });
-
-    products.value.forEach((product) => {
-        let count = allProductsEverSelected.value.filter(
-            (p) => p?._id === product?._id
-        ).length;
-        if (!countedProducts?.value?.find((cP) => cP?._id === product?._id)) {
-            countedProducts?.value?.push({ ...product, count: count });
-        }
-    });
-
-    console.log(countedProducts);
-    countedProducts.value = countedProducts?.value?.sort(
-        (a, b) => b.count - a.count
-    );
-    viewOptions.value.ready = true;
+async function confirmColors() {
+    // todo fix this
+    location.reload();
 }
 </script>
 
@@ -244,6 +221,7 @@ async function getProducts(visitores) {
                 :to="{ name: 'admin.audience', query: { color: 'turq' } }"
                 class="mx-2 p-2"
                 style="background-color: paleturquoise"
+                @click="sortThemGuys"
             >
                 Türkiis
             </RouterLink>
@@ -253,6 +231,7 @@ async function getProducts(visitores) {
                 :to="{ name: 'admin.audience', query: { color: 'fuchsia' } }"
                 class="mx-2 p-2"
                 style="background-color: lightpink"
+                @click="sortThemGuys"
             >
                 Violett
             </RouterLink>
@@ -262,6 +241,7 @@ async function getProducts(visitores) {
                 :to="{ name: 'admin.audience', query: { color: 'silver' } }"
                 class="mx-2 p-2"
                 style="background-color: silver"
+                @click="sortThemGuys"
             >
                 Hõbevalge
             </RouterLink>
@@ -271,6 +251,7 @@ async function getProducts(visitores) {
                 :to="{ name: 'admin.audience', query: { color: 'lime' } }"
                 class="mx-2 p-2"
                 style="background-color: lime"
+                @click="sortThemGuys"
             >
                 Laim
             </RouterLink>
@@ -321,72 +302,20 @@ async function getProducts(visitores) {
 
             <div v-if="viewOptions.ready">
                 <div v-if="viewOptions.showSummaryList" class="visitors">
-                    <div
-                        v-for="visitor in mappedVisitors"
-                        :key="visitor._id"
-                        :class="
-                            (visitor.highest && visitor.highest.color) ||
-                            visitor.confirmed_humanity_value
-                        "
-                        class="visitor-wrapper mt-2 text-center"
-                    >
-                        <h5>Garderoobinumber: {{ visitor.wardrobe_number }}</h5>
-                        <small
-                            >|
-                            <span
-                                v-for="val in visitor.avg_hum_values"
-                                :key="visitor.wardrobe_number + val.val"
-                            >
-                                {{ val.color }}: {{ val.val }} |
-                            </span></small
-                        >
-                        <br />
-                        Tooteid korvis: {{ visitor.basket.products.length }},
-                        {{
-                            visitor.confirmed_humanity_value ||
-                            (visitor.highest && visitor.highest.color)
-                        }}
-
-                        <div class="border-top">
-                            Korvis:
-                            <small
-                                v-for="product in visitor.basket.products"
-                                :key="product.title"
-                                >{{ product.title }},
-                            </small>
-                        </div>
-                        <div class="border-top">
-                            Vastused:
-                            <small
-                                v-for="result in visitor.quiz_results"
-                                :key="result.result_text"
-                                >{{ result.result_text }},
-                            </small>
-                        </div>
-                    </div>
+                    <AudienceSummary
+                        :color="showOnlyColorRoute || showOnlyColor"
+                        :cool-algorithmed-visitors="coolAlgorithmedVisitors"
+                    />
                 </div>
                 <div
                     v-else-if="
                         viewOptions.showProductsSummary && countedProducts
                     "
                 >
-                    <div>
-                        <div
-                            v-for="product in countedProducts"
-                            :key="product._id"
-                        >
-                            <div
-                                v-if="product.count > 0"
-                                class="d-flex m-1 p-1 align-items-center"
-                            >
-                                <img :src="product.image" alt="" height="100" />
-                                <h4 class="m-1 p-1">
-                                    {{ product.count }} x
-                                    {{ product.title }}
-                                </h4>
-                            </div>
-                        </div>
-                    </div>
+                    <ProductsSummary
+                        :color="showOnlyColorRoute || showOnlyColor"
+                        :cool-algorithmed-visitors="coolAlgorithmedVisitors"
+                    />
                 </div>
                 <div v-else-if="viewOptions.showQuizSummaryInCapsule">
                     <div

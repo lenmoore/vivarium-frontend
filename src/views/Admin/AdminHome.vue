@@ -24,7 +24,7 @@ watch(router.currentRoute, () => {
 });
 </script>
 <template>
-    <div class="admin-home container">
+    <div class="admin-home">
         <!--        <div class="w-100 d-flex align-items-center justify-content-center">-->
         <!--            <RouterLink-->
         <!--                :class="-->
