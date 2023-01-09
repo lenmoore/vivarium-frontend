@@ -12,7 +12,9 @@ Array.from(props.coolAlgorithmedVisitors[props.color]).forEach((visitor) =>
 <template>
     <div>
         <div
-            v-for="(game, i) in props.games"
+            v-for="(game, i) in props.games.filter((g) =>
+                g.open_for_colors.includes(props.color)
+            )"
             :key="game._id + i"
             class="border my-2 p-4"
         >

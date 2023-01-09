@@ -73,6 +73,7 @@ let capsuleColor = colors[visitor.confirmed_humanity_value];
 
 async function startGame() {
     console.log('active game id', state?.active_game?._id);
+    state.last_step = false;
     state.step_counter = 0;
     state.game_loading = true;
 
@@ -148,6 +149,7 @@ function step(i) {
             );
     } else {
         state.last_step = true;
+        localStorage.setItem(state.active_game._id, 'done');
     }
     state.visitor_current_step_selected_option_text = ref(
         gameStepsWithVisitorSelectedValues.find(
@@ -159,6 +161,19 @@ function step(i) {
         state.visitor_current_step_selected_option_text
     );
 }
+
+watch(state.last_step, () => {
+    if (
+        state.last_step === true &&
+        localStorage.getItem(state.active_game._id) === 'done'
+    ) {
+        setTimeout(async () => {
+            await performanceStore.getPhases();
+            window.location.reload();
+            console.log('yo');
+        }, 120000);
+    }
+});
 </script>
 <template>
     <div v-if="state.game_loading">

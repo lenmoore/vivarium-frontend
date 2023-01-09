@@ -431,9 +431,9 @@ async function confirmColors() {
                     Kapslimängud
                 </button>
             </div>
-            {{ visitors.length }} inimest teatris.
             <div v-if="viewOptions.ready">
                 <div v-if="viewOptions.showSummaryList" class="visitors">
+                    {{ visitors.length }} inimest teatris.
                     <AudienceSummary
                         :color="showOnlyColorRoute || showOnlyColor"
                         :cool-algorithmed-visitors="coolAlgorithmedVisitors"

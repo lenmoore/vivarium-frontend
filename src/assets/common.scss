@@ -84,7 +84,7 @@ body {
                 margin-right: 0.5rem;
                 -webkit-backdrop-filter: blur(5px);
                 //border: 1px solid rgba(238, 218, 200, 0.3);
-                overflow: hidden;
+                overflow: scroll;;
 
                 .app-router-view {
                     overflow: scroll;

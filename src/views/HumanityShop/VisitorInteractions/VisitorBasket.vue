@@ -1,10 +1,15 @@
 <script setup>
 import { useVisitorStore } from '../../../store/visitor.store';
-import { ref, onBeforeMount, reactive } from 'vue';
+import { ref, onBeforeMount, reactive, watch } from 'vue';
 import { useHumanityShopStore } from '../../../store/humanity-shop/humanity-shop.store';
 
+import { getCurrentInstance } from 'vue';
+import { usePerformanceStore } from '../../../store/performance.store';
+
+const instance = getCurrentInstance();
 const visitorStore = useVisitorStore();
 const humanityStore = useHumanityShopStore();
+const performanceStore = usePerformanceStore();
 
 let showWantToRemoveModal = ref(false);
 let removeItemId = ref('');
@@ -35,9 +40,29 @@ async function removeProduct(item) {
     removeItemId = '';
     location.replace('/visitor/humanity-shop/scan');
 }
+
+let hasSeenShopIntro = ref(localStorage.getItem('hasSeenShopIntro') === '1');
+console.log(hasSeenShopIntro);
+let showStore = hasSeenShopIntro;
+setInterval(async function () {
+    await performanceStore.getPhases();
+    if (basket.products.length === 0) {
+        await humanityStore.getVisitorBasket();
+    }
+    instance?.proxy?.$forceUpdate();
+}, 120000);
+
+function setSeenShopIntro() {
+    localStorage.setItem('hasSeenShopIntro', '1');
+    showStore = true;
+    instance?.proxy?.$forceUpdate();
+}
 </script>
 <template>
-    <div class="h-100 d-flex flex-column justify-content-between">
+    <div
+        v-if="showStore"
+        class="h-100 d-flex flex-column justify-content-between"
+    >
         <div
             class="h-100 d-flex flex-column justify-content-between basket-list"
         >
@@ -134,6 +159,23 @@ async function removeProduct(item) {
             </div>
             <div v-else-if="basket.products.length === 9"></div>
         </div>
+    </div>
+    <div v-else>
+        <p>
+            Mida võtaksid sina kaasa üksikule saarele? Mis esemed võtaksid sa
+            kaasa kosmoseekspeditsioonile, kus kõik eluks vajalik on olemas? Mis
+            esemed annavad sulle hea tunde?
+        </p>
+        <p>
+            Tutvu meie poega. Kuva QR-koode ja saa ülevaade meie valikust. Käi
+            näitusele ring peale ja vali välja 9 objekti.
+        </p>
+        <p>Sul on aega kuni kl 19.15.</p>
+        <p>Ära kiirusta. Mõtle läbi.</p>
+
+        <button class="btn btn-primary w-100" @click="setSeenShopIntro">
+            Alusta
+        </button>
     </div>
 </template>
 

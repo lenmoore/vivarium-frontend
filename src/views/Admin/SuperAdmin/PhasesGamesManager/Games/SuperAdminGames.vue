@@ -58,7 +58,7 @@ async function onSubmitGame() {
                         <span
                             v-for="color in game.open_for_colors"
                             :key="color + '_' + game.name"
-                            :class="color"
+                            :class="color + ' ' + 'bg-' + color"
                             class="color-badge"
                         >
                             __
