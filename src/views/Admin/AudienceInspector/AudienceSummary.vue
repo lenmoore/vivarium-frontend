@@ -19,7 +19,43 @@ sortedVisitors?.value?.sort((a, b) => a.wardrobe_number - b.wardrobe_number);
 </script>
 <template>
     <div>
-        <div>{{ sortedVisitors.length }} inimest sinu kapslis.</div>
+        <div v-if="props.color != null">
+            {{ sortedVisitors.length }} inimest sinu kapslis.
+        </div>
+        <div v-else>
+            <div>
+                lime ({{ props.coolAlgorithmedVisitors.lime.size }}):
+                <span
+                    v-for="visitor in props.coolAlgorithmedVisitors.lime"
+                    :key="visitor._id + 'short'"
+                    >{{ visitor.wardrobe_number }},
+                </span>
+            </div>
+            <div>
+                fuchsia ({{ props.coolAlgorithmedVisitors.fuchsia.size }}):
+                <span
+                    v-for="visitor in props.coolAlgorithmedVisitors.fuchsia"
+                    :key="visitor._id + 'short'"
+                    >{{ visitor.wardrobe_number }},
+                </span>
+            </div>
+            <div>
+                silver ({{ props.coolAlgorithmedVisitors.silver.size }}):
+                <span
+                    v-for="visitor in props.coolAlgorithmedVisitors.silver"
+                    :key="visitor._id + 'short'"
+                    >{{ visitor.wardrobe_number }},
+                </span>
+            </div>
+            <div>
+                turq ({{ props.coolAlgorithmedVisitors.turq.size }}):
+                <span
+                    v-for="visitor in props.coolAlgorithmedVisitors.turq"
+                    :key="visitor._id + 'short'"
+                    >{{ visitor.wardrobe_number }},
+                </span>
+            </div>
+        </div>
         <div
             v-for="visitor in sortedVisitors"
             :key="visitor._id"

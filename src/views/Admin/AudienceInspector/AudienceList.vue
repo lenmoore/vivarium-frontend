@@ -134,9 +134,21 @@ async function sortThemGuys() {
             silver: silver?.reduce((a, b) => a + b),
             turq: turq?.reduce((a, b) => a + b),
         };
+        let maxKey,
+            maxValue = 0;
+
+        for (const [key, value] of Object.entries(avg_hum_values)) {
+            if (value > maxValue) {
+                maxValue = value;
+                maxKey = key;
+            }
+        }
+        let highest = maxKey;
+
         return {
             ...visitor,
             basket,
+            highest,
             avg_hum_values,
         };
     });
@@ -159,83 +171,171 @@ async function sortThemGuys() {
         (g) =>
             g.open_for_colors.includes(color) && g.open_for_colors.length === 1
     );
-    let peopleCountModulo = mappedVisitors.length % 4;
+    let peopleCountModulo = visitors.value.length % 4;
 
-    let peopleCount = mappedVisitors.length / 4;
-    console.log(
-        mappedVisitors.length,
-        '%',
-        peopleCount,
-        '=',
-        peopleCountModulo
-    );
-    for (let i = 0; i < peopleCountModulo; i++) {
-        let vis = mappedVisitors.pop();
-        let maxKey,
-            maxValue = 0;
+    let peopleCount =
+        (visitors.value.length - peopleCountModulo) / 4 + peopleCountModulo;
+    let alreadyAddedSomewhere = new Set();
 
-        for (const [key, value] of Object.entries(vis.avg_hum_values)) {
-            if (value > maxValue) {
-                maxValue = value;
-                maxKey = key;
+    dividePeople();
+
+    function dividePeople() {
+        console.log(
+            visitors.value.length,
+            '%',
+            peopleCount,
+            '=',
+            peopleCountModulo
+        );
+        // for (let i = 0; i < peopleCountModulo; i++) {
+        //     let vis = mappedVisitors.pop();
+        //     let maxKey = '';
+        //     let maxValue = 0;
+        //
+        //     console.log(vis);
+        //     if (vis) {
+        //         for (const [key, value] of Object.entries(vis.avg_hum_values)) {
+        //             console.log(key, value);
+        //             if (value > maxValue) {
+        //                 maxValue = value;
+        //                 maxKey = key;
+        //             }
+        //         }
+        //         if (maxKey.length) {
+        //             coolAlgorithmedVisitors[maxKey].add(vis);
+        //         }
+        //     }
+        // }
+
+        // turq
+        let sortedByTurq = mappedVisitors.sort(
+            (a, b) => b.avg_hum_values?.turq - a.avg_hum_values?.turq
+        );
+        for (let i = 0; i < visitors.value.length; i++) {
+            if (
+                !alreadyAddedSomewhere.has(sortedByTurq[i]) &&
+                sortedByTurq[i]?.highest === 'turq' &&
+                coolAlgorithmedVisitors.turq.size < peopleCount
+            ) {
+                coolAlgorithmedVisitors.turq.add(sortedByTurq[i]);
+                alreadyAddedSomewhere.add(sortedByTurq[i]);
             }
         }
 
-        coolAlgorithmedVisitors[maxKey].add(vis);
+        // silver
+        let sortedBySilver = mappedVisitors.sort(
+            (a, b) => b.avg_hum_values?.silver - a.avg_hum_values?.silver
+        );
+        for (let i = 0; i < visitors.value.length; i++) {
+            if (
+                !alreadyAddedSomewhere.has(sortedBySilver[i]) &&
+                sortedBySilver[i]?.highest === 'silver' &&
+                coolAlgorithmedVisitors.silver.size < peopleCount
+            ) {
+                coolAlgorithmedVisitors.silver.add(sortedBySilver[i]);
+                alreadyAddedSomewhere.add(sortedBySilver[i]);
+            }
+            //     coolAlgorithmedVisitors.silver.add(sortedBySilver[i]);
+        }
+
+        // lime
+        let sortedByLime = mappedVisitors.sort(
+            (a, b) => b.avg_hum_values?.lime - a.avg_hum_values?.lime
+        );
+        for (let i = 0; i < visitors.value.length; i++) {
+            if (
+                !alreadyAddedSomewhere.has(sortedByLime[i]) &&
+                sortedByLime[i]?.highest === 'lime' &&
+                coolAlgorithmedVisitors.lime.size < peopleCount
+            ) {
+                coolAlgorithmedVisitors.lime.add(sortedByLime[i]);
+                alreadyAddedSomewhere.add(sortedByLime[i]);
+            }
+            //     coolAlgorithmedVisitors.lime.add(sortedByLime[i]);
+        }
+        // violet
+        let sortedByFuchsia = mappedVisitors.sort(
+            (a, b) => b.avg_hum_values?.fuchsia - a.avg_hum_values?.fuchsia
+        );
+        for (let i = 0; i < visitors.value.length; i++) {
+            if (
+                !alreadyAddedSomewhere.has(sortedByFuchsia[i]) &&
+                sortedByFuchsia[i]?.highest === 'fuchsia' &&
+                coolAlgorithmedVisitors.fuchsia.size < peopleCount
+            ) {
+                coolAlgorithmedVisitors.fuchsia.add(sortedByFuchsia[i]);
+                alreadyAddedSomewhere.add(sortedByFuchsia[i]);
+            }
+            //     coolAlgorithmedVisitors.fuchsia.add(sortedByFuchsia[i]);
+        }
     }
 
-    // turq
-    let sortedByTurq = mappedVisitors.sort(
-        (a, b) => b.avg_hum_values?.turq - a.avg_hum_values?.turq
-    );
-    for (let i = 0; i < peopleCount; i++) {
-        coolAlgorithmedVisitors.turq.add(sortedByTurq[i]);
-    }
-
-    // silver
-    let sortedBySilver = mappedVisitors.sort(
-        (a, b) => b.avg_hum_values?.silver - a.avg_hum_values?.silver
-    );
-    for (let i = 0; i < peopleCount; i++) {
-        coolAlgorithmedVisitors.silver.add(sortedBySilver[i]);
-    }
-
-    // violet
-    let sortedByFuchsia = mappedVisitors.sort(
-        (a, b) => b.avg_hum_values?.fuchsia - a.avg_hum_values?.fuchsia
-    );
-    for (let i = 0; i < peopleCount; i++) {
-        coolAlgorithmedVisitors.fuchsia.add(sortedByFuchsia[i]);
-    }
-
-    // lime
-    let sortedByLime = mappedVisitors.sort(
-        (a, b) => b.avg_hum_values?.lime - a.avg_hum_values?.lime
-    );
-    for (let i = 0; i < peopleCount; i++) {
-        coolAlgorithmedVisitors.lime.add(sortedByLime[i]);
-    }
-
+    console.log(alreadyAddedSomewhere.size, mappedVisitors.length);
+    // while (alreadyAddedSomewhere.size < visitors.value.length) {
+    dividePeople();
+    dividePeople();
+    dividePeople();
+    dividePeople();
+    dividePeople();
+    dividePeople();
+    dividePeople();
+    dividePeople();
+    dividePeople();
+    dividePeople();
+    // }
     viewOptions.value.ready = true;
 }
 
 async function confirmColors() {
     let viiiiis = [];
-    for (const colorValue of ['lime', 'turq', 'fuchsia', 'silver']) {
-        coolAlgorithmedVisitors[colorValue].forEach((visitor) => {
-            if (
-                visitor.confirmed_humanity_value === 'none' ||
-                !visitor.confirmed_humanity_value
-            ) {
-                viiiiis.push({
-                    ...visitor,
-                    confirmed_humanity_value: colorValue,
-                });
-            }
+
+    coolAlgorithmedVisitors.lime.forEach((visitor) => {
+        // if (
+        //     visitor.confirmed_humanity_value === 'none' ||
+        //     !visitor.confirmed_humanity_value
+        // ) {
+        viiiiis.push({
+            ...visitor,
+            confirmed_humanity_value: 'lime',
         });
-        await performanceStore.updateVisitors(viiiiis);
-    }
-    location.reload();
+        // }
+    });
+    coolAlgorithmedVisitors.silver.forEach((visitor) => {
+        // if (
+        //     visitor.confirmed_humanity_value === 'none' ||
+        //     !visitor.confirmed_humanity_value
+        // ) {
+        viiiiis.push({
+            ...visitor,
+            confirmed_humanity_value: 'silver',
+        });
+        // }
+    });
+    coolAlgorithmedVisitors.turq.forEach((visitor) => {
+        // if (
+        //     visitor.confirmed_humanity_value === 'none' ||
+        //     !visitor.confirmed_humanity_value
+        // ) {
+        viiiiis.push({
+            ...visitor,
+            confirmed_humanity_value: 'turq',
+        });
+        // }
+    });
+    coolAlgorithmedVisitors.fuchsia.forEach((visitor) => {
+        // if (
+        //     visitor.confirmed_humanity_value === 'none' ||
+        //     !visitor.confirmed_humanity_value
+        // ) {
+        viiiiis.push({
+            ...visitor,
+            confirmed_humanity_value: 'fuchsia',
+        });
+        // }
+    });
+
+    await performanceStore.updateVisitors(viiiiis);
+    // location.reload();
 }
 </script>
 
@@ -331,7 +431,7 @@ async function confirmColors() {
                     Kapslimängud
                 </button>
             </div>
-
+            {{ visitors.length }} inimest teatris.
             <div v-if="viewOptions.ready">
                 <div v-if="viewOptions.showSummaryList" class="visitors">
                     <AudienceSummary
