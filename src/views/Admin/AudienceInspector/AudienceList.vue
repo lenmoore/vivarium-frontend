@@ -6,6 +6,7 @@ import router from '../../../router/index';
 import AudienceSummary from './AudienceSummary.vue';
 import { cloneDeep } from 'lodash';
 import ProductsSummary from './ProductsSummary.vue';
+import QuizSummary from './QuizSummary.vue';
 
 const performanceStore = usePerformanceStore();
 const humanityStore = useHumanityShopStore();
@@ -20,9 +21,10 @@ let viewOptions = ref({
     showQuizSummaryPreCapsule: false,
     ready: false,
 });
+let activePerformance = {};
 onBeforeMount(async () => {
     await performanceStore.getPerformances();
-    const activePerformance = computed(() => {
+    activePerformance = computed(() => {
         return performanceStore.getActivePerformance;
     });
     await humanityStore.fetchProducts();
@@ -33,7 +35,6 @@ onBeforeMount(async () => {
 });
 
 const baskets = computed(() => humanityStore.getBaskets);
-const products = computed(() => humanityStore.getProducts);
 let games = computed(() => performanceStore.games);
 let gamesPreCapsule = computed(() => performanceStore.games);
 let gamesInCapsule = computed(() => performanceStore.games);
@@ -65,19 +66,17 @@ function toggleViewOptions(show) {
     }
 }
 
-let allProductsEverSelected = ref([]);
 let countedProducts = ref([]);
 let mappedVisitors = reactive([]);
 let coolAlgorithmedVisitors = reactive({});
-let allAnswers = ref([]);
 
 watch(visitors, async () => {
     await sortThemGuys();
 });
 
 async function sortThemGuys() {
+    coolAlgorithmedVisitors = reactive({});
     let visitorsToMap = ref(visitors.value);
-    allProductsEverSelected = ref([]);
     countedProducts = ref([]);
     mappedVisitors = reactive([]);
     coolAlgorithmedVisitors = {
@@ -86,7 +85,6 @@ async function sortThemGuys() {
         silver: new Set(),
         lime: new Set(),
     };
-    allAnswers = ref([]);
 
     mappedVisitors = visitorsToMap.value.map((visitor) => {
         let basket = visitor.basket;
@@ -136,9 +134,6 @@ async function sortThemGuys() {
             silver: silver?.reduce((a, b) => a + b),
             turq: turq?.reduce((a, b) => a + b),
         };
-        visitor.quiz_results.forEach((p) => {
-            allAnswers.value.push(p);
-        });
         return {
             ...visitor,
             basket,
@@ -164,7 +159,30 @@ async function sortThemGuys() {
         (g) =>
             g.open_for_colors.includes(color) && g.open_for_colors.length === 1
     );
+    let peopleCountModulo = mappedVisitors.length % 4;
+
     let peopleCount = mappedVisitors.length / 4;
+    console.log(
+        mappedVisitors.length,
+        '%',
+        peopleCount,
+        '=',
+        peopleCountModulo
+    );
+    for (let i = 0; i < peopleCountModulo; i++) {
+        let vis = mappedVisitors.pop();
+        let maxKey,
+            maxValue = 0;
+
+        for (const [key, value] of Object.entries(vis.avg_hum_values)) {
+            if (value > maxValue) {
+                maxValue = value;
+                maxKey = key;
+            }
+        }
+
+        coolAlgorithmedVisitors[maxKey].add(vis);
+    }
 
     // turq
     let sortedByTurq = mappedVisitors.sort(
@@ -202,7 +220,21 @@ async function sortThemGuys() {
 }
 
 async function confirmColors() {
-    // todo fix this
+    let viiiiis = [];
+    for (const colorValue of ['lime', 'turq', 'fuchsia', 'silver']) {
+        coolAlgorithmedVisitors[colorValue].forEach((visitor) => {
+            if (
+                visitor.confirmed_humanity_value === 'none' ||
+                !visitor.confirmed_humanity_value
+            ) {
+                viiiiis.push({
+                    ...visitor,
+                    confirmed_humanity_value: colorValue,
+                });
+            }
+        });
+        await performanceStore.updateVisitors(viiiiis);
+    }
     location.reload();
 }
 </script>
@@ -266,7 +298,7 @@ async function confirmColors() {
                     class="btn btn-outline-primary"
                     @click="toggleViewOptions('audience')"
                 >
-                    Publiku ulevaade
+                    Kõik
                 </button>
                 <button
                     :class="{
@@ -276,7 +308,7 @@ async function confirmColors() {
                     class="btn btn-outline-primary"
                     @click="toggleViewOptions('products')"
                 >
-                    Tooted kapslis kaasas
+                    Tooted kaasas
                 </button>
                 <button
                     :class="{
@@ -286,7 +318,7 @@ async function confirmColors() {
                     class="btn btn-outline-primary"
                     @click="toggleViewOptions('quiz-pre-capsule')"
                 >
-                    Quizi vastused enne kapslit
+                    2. ja 3. mäng
                 </button>
                 <button
                     :class="{
@@ -296,7 +328,7 @@ async function confirmColors() {
                     class="btn btn-outline-primary"
                     @click="toggleViewOptions('quiz-in-capsule')"
                 >
-                    Quizid kapslis
+                    Kapslimängud
                 </button>
             </div>
 
@@ -318,77 +350,18 @@ async function confirmColors() {
                     />
                 </div>
                 <div v-else-if="viewOptions.showQuizSummaryInCapsule">
-                    <div
-                        v-for="(game, i) in gamesInCapsule"
-                        :key="game._id + i"
-                    >
-                        <div
-                            v-if="
-                                game.open_for_colors.includes(showOnlyColor) ||
-                                game.open_for_colors.includes(
-                                    showOnlyColorRoute
-                                )
-                            "
-                        >
-                            <h1>{{ i }} {{ game.name }}</h1>
-                            <div
-                                v-for="step in game.game_steps"
-                                :key="step._id"
-                                class="py-2"
-                            >
-                                <h4>{{ step.question_text }}</h4>
-                                <div
-                                    v-for="option in step.question_options"
-                                    :key="option.option_text"
-                                >
-                                    {{ option.option_text }}
-                                    <strong
-                                        >({{
-                                            allAnswers.filter(
-                                                (ans) =>
-                                                    ans.result_text ===
-                                                        option.option_text &&
-                                                    ans.step === step._id
-                                            ).length
-                                        }})</strong
-                                    >
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <QuizSummary
+                        :color="showOnlyColorRoute || showOnlyColor"
+                        :cool-algorithmed-visitors="coolAlgorithmedVisitors"
+                        :games="gamesInCapsule"
+                    />
                 </div>
                 <div v-else-if="viewOptions.showQuizSummaryPreCapsule">
-                    <div
-                        v-for="(game, i) in gamesPreCapsule"
-                        :key="game._id + i"
-                        class="border my-2 p-4"
-                    >
-                        <div>
-                            <div
-                                v-for="step in game.game_steps"
-                                :key="step._id"
-                                class="py-2"
-                            >
-                                <h4>{{ step.question_text }}</h4>
-                                <div
-                                    v-for="option in step.question_options"
-                                    :key="option.option_text"
-                                >
-                                    {{ option.option_text }}
-                                    <strong
-                                        >({{
-                                            allAnswers.filter(
-                                                (ans) =>
-                                                    ans.result_text ===
-                                                        option.option_text &&
-                                                    ans.step === step._id
-                                            ).length
-                                        }})</strong
-                                    >
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <QuizSummary
+                        :color="showOnlyColorRoute || showOnlyColor"
+                        :cool-algorithmed-visitors="coolAlgorithmedVisitors"
+                        :games="gamesPreCapsule"
+                    />
                 </div>
             </div>
 
