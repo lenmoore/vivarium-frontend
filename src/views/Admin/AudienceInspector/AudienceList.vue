@@ -14,13 +14,34 @@ const humanityStore = useHumanityShopStore();
 const isAdmin = ref(localStorage.getItem('admin') === 'true');
 const isActor = ref(localStorage.getItem('actor') === 'true');
 
+let showSummaryList = ref(router.currentRoute.value.query.showSummary);
+let showOnlyColorRoute = ref(router.currentRoute.value.query.color);
+let showProductsSummary = ref(router.currentRoute.value.query.products);
+let showPreCapsuleQuizzes = ref(router.currentRoute.value.query.preCapsuleQuiz);
+let showCapsuleQuizzes = ref(router.currentRoute.value.query.capsuleQuiz);
+
+console.log(showSummaryList);
+console.log(showOnlyColorRoute);
+console.log(showProductsSummary);
+
 let viewOptions = ref({
-    showSummaryList: true,
-    showProductsSummary: false,
-    showQuizSummaryInCapsule: false,
-    showQuizSummaryPreCapsule: false,
+    showSummaryList: showSummaryList.value === 'yes',
+    showProductsSummary: showProductsSummary.value === 'yes',
+    showQuizSummaryInCapsule: showCapsuleQuizzes.value === 'yes',
+    showQuizSummaryPreCapsule: showPreCapsuleQuizzes.value === 'yes',
     ready: false,
 });
+
+if (
+    !(
+        viewOptions.value.showQuizSummaryInCapsule ||
+        viewOptions.value.showSummaryList ||
+        viewOptions.value.showProductsSummary ||
+        viewOptions.value.showQuizSummaryPreCapsule
+    )
+) {
+    toggleViewOptions('products');
+}
 let activePerformance = {};
 onBeforeMount(async () => {
     await performanceStore.getPerformances();
@@ -38,32 +59,34 @@ const baskets = computed(() => humanityStore.getBaskets);
 let games = computed(() => performanceStore.games);
 let gamesPreCapsule = computed(() => performanceStore.games);
 let gamesInCapsule = computed(() => performanceStore.games);
-let showOnlyColorRoute = ref(router.currentRoute.value.query.color);
 let showOnlyColor = ref(localStorage.getItem('actor_color'));
 
 let visitors = computed(() => performanceStore.getVisitors);
 
 function toggleViewOptions(show) {
-    viewOptions.value.showSummaryList = false;
-    viewOptions.value.showProductsSummary = false;
-    viewOptions.value.showQuizSummaryPreCapsule = false;
-    viewOptions.value.showQuizSummaryInCapsule = false;
-
+    let query = {
+        color: router.currentRoute.value.query.color,
+    };
     switch (show) {
         case 'products':
-            viewOptions.value.showProductsSummary = true;
+            console.log('trying to show products');
+
+            query.products = 'yes';
+
             break;
         case 'quiz-in-capsule':
-            viewOptions.value.showQuizSummaryInCapsule = true;
+            query.capsuleQuiz = 'yes';
             break;
         case 'quiz-pre-capsule':
-            viewOptions.value.showQuizSummaryPreCapsule = true;
+            query.preCapsuleQuiz = 'yes';
             break;
         case 'audience':
         default:
-            viewOptions.value.showSummaryList = true;
+            query.showSummary = 'yes';
             break;
     }
+    console.log(router.currentRoute.value);
+    router.push({ name: 'admin.audience', query: query });
 }
 
 let countedProducts = ref([]);
@@ -176,21 +199,31 @@ async function sortThemGuys() {
     let peopleCount = (visitors.value.length - peopleCountModulo) / 4;
     let notYetSomewhere = new Set(mappedVisitors);
 
-    console.log(notYetSomewhere.size, ' not yet somewhere');
+    // console.log(notYetSomewhere.size, ' not yet somewhere');
     dividePeople();
 
-    function dividePeople() {
-        console.log(
-            visitors.value.length,
-            '%',
-            peopleCount,
-            '=',
-            peopleCountModulo
+    function firstSort(color) {
+        let sortedByColor = mappedVisitors.sort(
+            (a, b) => b.avg_hum_values[color] - a.avg_hum_values[color]
         );
-        console.log(mappedVisitors);
+        for (let i = 0; i < peopleCount / 3; i++) {
+            if (
+                notYetSomewhere.has(sortedByColor[i]) &&
+                sortedByColor[i]?.highest === color &&
+                coolAlgorithmedVisitors[color].size < peopleCount / 3
+            ) {
+                addToAlgorithmedVisitors(color, sortedByColor[i]);
+            }
+        }
+    }
+
+    function dividePeople() {
+        // first do some division of extremists
+        ['silver', 'fuchsia', 'turq', 'lime'].forEach((color) =>
+            firstSort(color)
+        );
 
         while (notYetSomewhere.size) {
-            console.log(notYetSomewhere.size, ' not yet somewhere');
             notYetSomewhere.forEach((silverGuy) => {
                 let maxKey = '';
                 let maxValue = 0;
@@ -202,14 +235,14 @@ async function sortThemGuys() {
                         maxKey = key;
                     }
                 }
-                console.log(peopleCount + peopleCountModulo, 'max size');
-                console.log(coolAlgorithmedVisitors[maxKey].size);
+                // console.log(peopleCount + peopleCountModulo, 'max size');
+                // console.log(coolAlgorithmedVisitors[maxKey].size);
 
                 if (
                     maxKey.length &&
                     coolAlgorithmedVisitors[maxKey].size <= peopleCount
                 ) {
-                    console.log('maxkey is ', maxKey);
+                    // console.log('maxkey is ', maxKey);
                     addToAlgorithmedVisitors(maxKey, silverGuy);
                 } else {
                     // console.log(
@@ -227,21 +260,21 @@ async function sortThemGuys() {
                     ) {
                         addToAlgorithmedVisitors(secondMaxValue[0], silverGuy);
                     } else {
-                        console.log(
-                            'fuck couldnt be added anywhere -- secondmaxvalue ',
-                            secondMaxValue
-                        );
+                        // console.log(
+                        //     'fuck couldnt be added anywhere -- secondmaxvalue ',
+                        //     secondMaxValue
+                        // );
                         let thirdMaxValue = Object.entries(
                             silverGuy.avg_hum_values
                         ).sort((a, b) => a - b)[2];
-                        console.log('thirdMaxValue', thirdMaxValue);
+                        // console.log('thirdMaxValue', thirdMaxValue);
                         if (
-                            secondMaxValue.length &&
-                            coolAlgorithmedVisitors[secondMaxValue[0]].size <=
+                            thirdMaxValue.length &&
+                            coolAlgorithmedVisitors[thirdMaxValue[0]].size <=
                                 peopleCount
                         ) {
                             addToAlgorithmedVisitors(
-                                secondMaxValue[0],
+                                thirdMaxValue[0],
                                 silverGuy
                             );
                         } else {
@@ -266,7 +299,7 @@ async function sortThemGuys() {
         notYetSomewhere.delete(visitor);
     }
 
-    console.log(notYetSomewhere);
+    // console.log(notYetSomewhere);
 
     viewOptions.value.ready = true;
 }
