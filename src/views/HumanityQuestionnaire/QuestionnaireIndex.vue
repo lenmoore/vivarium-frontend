@@ -67,7 +67,7 @@ let colors = {
     silver: 'blue',
     lime: 'green',
 };
-let capsuleColor = colors[visitor.confirmed_humanity_value];
+let capsuleColor = colors[visitor?.confirmed_humanity_value];
 
 // todo this is a little hack for determining the correct color capsule game when in the capsule, the check should be stricter and come from the store.
 

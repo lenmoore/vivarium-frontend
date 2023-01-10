@@ -129,10 +129,10 @@ async function sortThemGuys() {
         let turq = [...orangeQuiz, ...turqProducts];
 
         let avg_hum_values = {
-            lime: lime?.reduce((a, b) => a + b),
-            fuchsia: fuchsia?.reduce((a, b) => a + b),
-            silver: silver?.reduce((a, b) => a + b),
-            turq: turq?.reduce((a, b) => a + b),
+            lime: lime?.reduce((a, b) => a + b, 0),
+            fuchsia: fuchsia?.reduce((a, b) => a + b, 0),
+            silver: silver?.reduce((a, b) => a + b, 0),
+            turq: turq?.reduce((a, b) => a + b, 0),
         };
         let maxKey,
             maxValue = 0;
@@ -175,8 +175,9 @@ async function sortThemGuys() {
 
     let peopleCount =
         (visitors.value.length - peopleCountModulo) / 4 + peopleCountModulo;
-    let alreadyAddedSomewhere = new Set();
+    let notYetSomewhere = new Set(mappedVisitors);
 
+    console.log(notYetSomewhere.length, ' not yet somewhere');
     dividePeople();
 
     function dividePeople() {
@@ -187,69 +188,53 @@ async function sortThemGuys() {
             '=',
             peopleCountModulo
         );
-        // for (let i = 0; i < peopleCountModulo; i++) {
-        //     let vis = mappedVisitors.pop();
-        //     let maxKey = '';
-        //     let maxValue = 0;
-        //
-        //     console.log(vis);
-        //     if (vis) {
-        //         for (const [key, value] of Object.entries(vis.avg_hum_values)) {
-        //             console.log(key, value);
-        //             if (value > maxValue) {
-        //                 maxValue = value;
-        //                 maxKey = key;
-        //             }
-        //         }
-        //         if (maxKey.length) {
-        //             coolAlgorithmedVisitors[maxKey].add(vis);
-        //         }
-        //     }
-        // }
+        console.log(mappedVisitors);
 
-        // turq
-        let sortedByTurq = mappedVisitors.sort(
-            (a, b) => b.avg_hum_values?.turq - a.avg_hum_values?.turq
-        );
-        for (let i = 0; i < visitors.value.length; i++) {
-            if (
-                !alreadyAddedSomewhere.has(sortedByTurq[i]) &&
-                sortedByTurq[i]?.highest === 'turq' &&
-                coolAlgorithmedVisitors.turq.size < peopleCount
-            ) {
-                coolAlgorithmedVisitors.turq.add(sortedByTurq[i]);
-                alreadyAddedSomewhere.add(sortedByTurq[i]);
-            }
-        }
+        // algorithm 1 start
 
         // silver
         let sortedBySilver = mappedVisitors.sort(
             (a, b) => b.avg_hum_values?.silver - a.avg_hum_values?.silver
         );
-        for (let i = 0; i < visitors.value.length; i++) {
+        for (let i = 0; i < peopleCount + peopleCountModulo; i++) {
             if (
-                !alreadyAddedSomewhere.has(sortedBySilver[i]) &&
+                notYetSomewhere.has(sortedBySilver[i]) &&
                 sortedBySilver[i]?.highest === 'silver' &&
-                coolAlgorithmedVisitors.silver.size < peopleCount
+                coolAlgorithmedVisitors.silver.size < peopleCount + 1
             ) {
                 coolAlgorithmedVisitors.silver.add(sortedBySilver[i]);
-                alreadyAddedSomewhere.add(sortedBySilver[i]);
+                notYetSomewhere.delete(sortedBySilver[i]);
             }
             //     coolAlgorithmedVisitors.silver.add(sortedBySilver[i]);
+        }
+
+        // turq
+        let sortedByTurq = mappedVisitors.sort(
+            (a, b) => b.avg_hum_values?.turq - a.avg_hum_values?.turq
+        );
+        for (let i = 0; i < peopleCount + peopleCountModulo; i++) {
+            if (
+                notYetSomewhere.has(sortedByTurq[i]) &&
+                sortedByTurq[i]?.highest === 'turq' &&
+                coolAlgorithmedVisitors.turq.size < peopleCount + 1
+            ) {
+                coolAlgorithmedVisitors.turq.add(sortedByTurq[i]);
+                notYetSomewhere.delete(sortedByTurq[i]);
+            }
         }
 
         // lime
         let sortedByLime = mappedVisitors.sort(
             (a, b) => b.avg_hum_values?.lime - a.avg_hum_values?.lime
         );
-        for (let i = 0; i < visitors.value.length; i++) {
+        for (let i = 0; i < peopleCount + peopleCountModulo; i++) {
             if (
-                !alreadyAddedSomewhere.has(sortedByLime[i]) &&
+                notYetSomewhere.has(sortedByLime[i]) &&
                 sortedByLime[i]?.highest === 'lime' &&
-                coolAlgorithmedVisitors.lime.size < peopleCount
+                coolAlgorithmedVisitors.lime.size < peopleCount + 1
             ) {
                 coolAlgorithmedVisitors.lime.add(sortedByLime[i]);
-                alreadyAddedSomewhere.add(sortedByLime[i]);
+                notYetSomewhere.delete(sortedByLime[i]);
             }
             //     coolAlgorithmedVisitors.lime.add(sortedByLime[i]);
         }
@@ -257,32 +242,78 @@ async function sortThemGuys() {
         let sortedByFuchsia = mappedVisitors.sort(
             (a, b) => b.avg_hum_values?.fuchsia - a.avg_hum_values?.fuchsia
         );
-        for (let i = 0; i < visitors.value.length; i++) {
+        for (let i = 0; i < peopleCount + peopleCountModulo; i++) {
             if (
-                !alreadyAddedSomewhere.has(sortedByFuchsia[i]) &&
+                notYetSomewhere.has(sortedByFuchsia[i]) &&
                 sortedByFuchsia[i]?.highest === 'fuchsia' &&
-                coolAlgorithmedVisitors.fuchsia.size < peopleCount
+                coolAlgorithmedVisitors.fuchsia.size < peopleCount + 1
             ) {
                 coolAlgorithmedVisitors.fuchsia.add(sortedByFuchsia[i]);
-                alreadyAddedSomewhere.add(sortedByFuchsia[i]);
+                notYetSomewhere.delete(sortedByFuchsia[i]);
             }
             //     coolAlgorithmedVisitors.fuchsia.add(sortedByFuchsia[i]);
         }
+
+        // algorithm 1 end
     }
 
-    console.log(alreadyAddedSomewhere.size, mappedVisitors.length);
-    // while (alreadyAddedSomewhere.size < visitors.value.length) {
-    dividePeople();
-    dividePeople();
-    dividePeople();
-    dividePeople();
-    dividePeople();
-    dividePeople();
-    dividePeople();
-    dividePeople();
-    dividePeople();
-    dividePeople();
-    // }
+    console.log(notYetSomewhere);
+
+    function addToAlgorithmedVisitors(maxKey, oldKey, visitor) {
+        coolAlgorithmedVisitors[maxKey].add(visitor);
+        coolAlgorithmedVisitors[oldKey].delete(visitor);
+    }
+
+    function fix(fixColour) {
+        console.log('fixing ', fixColour);
+        let arrayToFix = Array.from(coolAlgorithmedVisitors[fixColour])
+            .sort(
+                (a, b) =>
+                    a.avg_hum_values[fixColour] - b.avg_hum_values[fixColour]
+            )
+            .splice(
+                0,
+                coolAlgorithmedVisitors[fixColour].size -
+                    (peopleCount + peopleCountModulo)
+            );
+        console.log(arrayToFix);
+
+        arrayToFix.forEach((silverGuy) => {
+            let maxKey = '';
+            let maxValue = 0;
+            for (const [key, value] of Object.entries(
+                silverGuy.avg_hum_values
+            )) {
+                if (value > maxValue && key !== fixColour) {
+                    maxValue = value;
+                    maxKey = key;
+                }
+            }
+            if (
+                maxKey.length &&
+                coolAlgorithmedVisitors[fixColour].size <
+                    peopleCount + peopleCountModulo
+            ) {
+                //     addToAlgorithmedVisitors(maxKey, silverGuy);
+                addToAlgorithmedVisitors(maxKey, silverGuy.highest, silverGuy);
+            } else {
+                console.log('fuck couldnt be added anywhere');
+            }
+        });
+    }
+
+    if (coolAlgorithmedVisitors.turq.size > peopleCount) {
+        fix('turq');
+    }
+    if (coolAlgorithmedVisitors.lime.size > peopleCount) {
+        fix('lime');
+    }
+    if (coolAlgorithmedVisitors.fuchsia.size > peopleCount) {
+        fix('fuchsia');
+    }
+    if (coolAlgorithmedVisitors.silver.size > peopleCount) {
+        fix('silver');
+    }
     viewOptions.value.ready = true;
 }
 
@@ -433,7 +464,8 @@ async function confirmColors() {
             </div>
             <div v-if="viewOptions.ready">
                 <div v-if="viewOptions.showSummaryList" class="visitors">
-                    {{ visitors.length }} inimest teatris.
+                    {{ visitors.length }} inimest teatris. Eeldatav kapsli
+                    suurus: {{ Math.floor(visitors.length / 4) }} +- 3
                     <AudienceSummary
                         :color="showOnlyColorRoute || showOnlyColor"
                         :cool-algorithmed-visitors="coolAlgorithmedVisitors"

@@ -25,37 +25,41 @@ onBeforeMount(async () => {
 const products = computed(() => humanityShopStore.getProducts);
 
 async function onDecode(content) {
-    qr.value.isValid = true;
-    console.log('dude hello?');
-    console.log(content);
-    qr.value.result = content;
-    turnCameraOff();
+    if (content.length) {
+        qr.value.isValid = true;
+        console.log('dude hello?');
+        console.log(content);
+        qr.value.result = content;
+        turnCameraOff();
 
-    // pretend it's taking really long
-    // await timeout(1000);
+        // pretend it's taking really long
+        // await timeout(1000);
 
-    qr.value.foundProduct = products.value.find(
-        (product) => product._id === content || product.image.includes(content)
-    );
-    console.log(qr.value.foundProduct);
+        qr.value.foundProduct = products.value.find(
+            (product) =>
+                product.image.includes(content) || product._id === content
+        );
+        console.log(qr.value);
 
-    let alreadyInBasket = visitor.basket?.products?.some(
-        (prod) => prod._id === qr.value.foundProduct._id
-    );
+        let alreadyInBasket = visitor.basket?.products?.some(
+            (prod) => prod._id === qr.value.foundProduct._id
+        );
 
-    if (alreadyInBasket) {
-        console.log('dude');
-        qr.value.isValid = false;
+        console.log('brr');
+        if (alreadyInBasket) {
+            console.log('dude');
+            qr.value.isValid = false;
+        }
+
+        if (visitor.basket?.products.length === 9) {
+            qr.value.basketFull = true;
+            qr.value.isValid = false;
+        }
+        console.log(qr.value.foundProduct);
+        console.log(qr.value.isValid);
+        // await timeout(2000);
+        // turnCameraOn();
     }
-
-    if (visitor.basket?.products.length === 9) {
-        qr.value.basketFull = true;
-        qr.value.isValid = false;
-    }
-    console.log(qr.value.foundProduct);
-    console.log(qr.value.isValid);
-    // await timeout(2000);
-    // turnCameraOn();
 }
 
 async function addProductToBasket() {

@@ -4,6 +4,7 @@ import { computed, onBeforeMount, reactive, ref, watch } from 'vue';
 import { usePerformanceStore } from '@/store/performance.store';
 import router from '@/router';
 import { LocationQueryRaw } from 'vue-router';
+import moment from 'moment';
 
 const performanceStore = usePerformanceStore();
 const authStore = useAuthStore();
@@ -69,7 +70,7 @@ function renderLinks() {
     } else if (isAuthenticated.value && isActor.value) {
         console.log('emm hallo');
         navLinks.value.linx = [
-            { name: 'admin.home', label: 'kapslid', query: {} },
+            { name: 'admin.audience', label: 'kapslid', query: {} },
             // { name: 'superadmin.phases', label: 'faasid', query: {} },
         ];
     } else if (isAuthenticated.value && !isActor.value && !isAdmin.value) {
@@ -113,6 +114,57 @@ async function goTo(link: {
     // } else {
     //     await router.push('/');
     // }
+}
+
+// todo timer has to be synced for everyone
+let timer = ref({
+    timerGoing: false,
+    timerStartedAt: new Date().getTime(),
+    timerMinutes: 0,
+    showTimerConfirm: false,
+});
+
+let timerString = ref('');
+
+function askStartTimer(time: number) {
+    console.log(time);
+    timer.value.timerMinutes = time;
+    timer.value.showTimerConfirm = true;
+}
+
+function dontStart() {
+    timer.value.timerMinutes = 0;
+    timer.value.showTimerConfirm = false;
+}
+
+function startTimer() {
+    timer.value.timerStartedAt = new Date().getTime();
+    timer.value.timerGoing = true;
+    timer.value.showTimerConfirm = false;
+
+    // Set the date we're counting down to
+    let minutes = timer.value.timerMinutes + new Date().getMinutes();
+    var countDownDate = new Date().setMinutes(minutes);
+
+    // Update the count down every 1 second
+    var x = setInterval(function () {
+        // Get today's date and time
+
+        // Find the distance between now and the count down date
+        var distance = countDownDate - new Date().getTime();
+
+        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        // Display the result in the element with id="demo"
+        timerString.value = minutes + 'm:' + seconds + 's ';
+
+        // If the count down is finished, write some text
+        if (distance < 0) {
+            clearInterval(x);
+            timerString.value = ' AEG LABI ';
+        }
+    }, 1000);
 }
 
 function logout() {
@@ -162,14 +214,30 @@ function logout() {
         <button class="btn" @click="logout">logout</button>
     </nav>
     <nav v-else-if="isAuthenticated && isActor">
-        <span
-            v-for="(link, i) in navLinks.linx"
-            :key="`${navLinks.linx.length}_${i}`"
-        >
-            <button class="nav-item" @click="goTo(link)">
-                {{ link.label }}
-            </button>
-        </span>
+        <!--        <div v-if="timer.showTimerConfirm">-->
+        <!--            Kindel, et alustad taimerit?-->
+        <!--            <button class="btn btn-primary" @click="startTimer">Jah</button>-->
+        <!--            <button class="btn btn-outline-primary" @click="dontStart">-->
+        <!--                Tühista-->
+        <!--            </button>-->
+        <!--        </div>-->
+        <!--        <div v-else-if="timer.timerGoing">-->
+        <!--            <h3>{{ timerString }}</h3>-->
+        <!--        </div>-->
+        <!--        <div v-else class="timers">-->
+        <!--            <button @click="askStartTimer(7)">7min taimer</button>-->
+        <!--            <button @click="askStartTimer(9)">9min taimer</button>-->
+        <!--            <button @click="askStartTimer(10)">10min taimer</button>-->
+        <!--        </div>-->
+
+        <!--        <span-->
+        <!--            v-for="(link, i) in navLinks.linx"-->
+        <!--            :key="`${navLinks.linx.length}_${i}`"-->
+        <!--        >-->
+        <!--            <button class="nav-item" @click="goTo(link)">-->
+        <!--                {{ link.label }}-->
+        <!--            </button>-->
+        <!--        </span>-->
         <!--        <button class="btn" @click="logout">logout</button>-->
     </nav>
     <nav v-else-if="isAuthenticated.value && !isActor.value && !isAdmin.value">

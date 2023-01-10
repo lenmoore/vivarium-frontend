@@ -9,7 +9,10 @@
             <!--            </span>-->
             <a :href="getActiveHomeLink()" class="text-decoration-none"
                 ><h1 class="h1-color text-decoration-none">
-                    VIVAARIUM | ID_{{ visitor.wardrobe_number || '?' }}
+                    VIVAARIUM
+                    <span v-if="!isAdmin && !isActor"
+                        >| ID_{{ visitor.wardrobe_number || '?' }}</span
+                    >
                 </h1>
             </a>
             <a :href="getActiveHomeLink()" class="text-decoration-none"
