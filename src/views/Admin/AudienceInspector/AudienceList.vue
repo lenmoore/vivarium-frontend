@@ -204,46 +204,7 @@ async function sortThemGuys() {
                 }
                 console.log(peopleCount + peopleCountModulo, 'max size');
                 console.log(coolAlgorithmedVisitors[maxKey].size);
-
-                if (
-                    maxKey.length &&
-                    coolAlgorithmedVisitors[maxKey].size <= peopleCount
-                ) {
-                    console.log('maxkey is ', maxKey);
-                    addToAlgorithmedVisitors(maxKey, silverGuy);
-                } else {
-                    // console.log(
-                    //     'fuck couldnt be added anywhere -- firstvalue ',
-                    //     maxKey
-                    // );
-                    let secondMaxValue = Object.entries(
-                        silverGuy.avg_hum_values
-                    ).sort((a, b) => a - b)[1];
-                    // console.log('secondMaxValue', secondMaxValue);
-                    if (
-                        secondMaxValue.length &&
-                        coolAlgorithmedVisitors[secondMaxValue[0]].size <=
-                            peopleCount
-                    ) {
-                        addToAlgorithmedVisitors(secondMaxValue[0], silverGuy);
-                    } else {
-                        console.log(
-                            'fuck couldnt be added anywhere -- secondmaxvalue ',
-                            secondMaxValue
-                        );
-                        let thirdMaxValue = Object.entries(
-                            silverGuy.avg_hum_values
-                        ).sort((a, b) => a - b)[2];
-                        console.log('thirdMaxValue', thirdMaxValue);
-                        // if (
-                        //     secondMaxValue.length &&
-                        //     coolAlgorithmedVisitors[secondMaxValue[0]].size <=
-                        //         peopleCount
-                        // ) {
-                        addToAlgorithmedVisitors(secondMaxValue[0], silverGuy);
-                        // }
-                    }
-                }
+                notYetSomewhere.delete(silverGuy);
             });
         }
     }
