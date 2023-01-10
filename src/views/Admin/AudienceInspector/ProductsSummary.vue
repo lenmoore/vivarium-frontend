@@ -1,70 +1,29 @@
 <script setup>
-import { computed, defineProps, onBeforeMount, ref } from 'vue';
-import { useHumanityShopStore } from '../../../store/humanity-shop/humanity-shop.store';
+import { computed, onBeforeMount, reactive, ref } from 'vue';
+import { usePerformanceStore } from '../../../store/performance.store';
+import router from '../../../router/index';
 
 import { getCurrentInstance } from 'vue';
 
 const instance = getCurrentInstance();
-const props = defineProps(['coolAlgorithmedVisitors', 'color']);
-let countedProducts = [];
-const humanityStore = useHumanityShopStore();
-let products = [];
+const performanceStore = usePerformanceStore();
 
-onBeforeMount(() => {
-    products = computed(() => humanityStore.getProducts);
-    getColorProducts();
+let countedProducts = computed(() => performanceStore.sortedProducts);
+let showOnlyColorRoute = ref(router.currentRoute.value.query.color);
+
+onBeforeMount(async () => {
+    console.log(router.currentRoute);
+    console.log('does it even..mount,', showOnlyColorRoute);
+    await performanceStore.getActorCapsuleProducts(showOnlyColorRoute.value);
+    countedProducts = computed(() => performanceStore.sortedProducts);
+    console.log(countedProducts);
 });
 
-function coloredVisitors(color) {
-    switch (color) {
-        case 'turq':
-            return Array.from(props.coolAlgorithmedVisitors.turq);
-        case 'fuchsia':
-            return Array.from(props.coolAlgorithmedVisitors.fuchsia);
-        case 'silver':
-            return Array.from(props.coolAlgorithmedVisitors.silver);
-        case 'lime':
-            return Array.from(props.coolAlgorithmedVisitors.lime);
-        default:
-            return [
-                ...Array.from(props.coolAlgorithmedVisitors.turq),
-                ...Array.from(props.coolAlgorithmedVisitors.fuchsia),
-                ...Array.from(props.coolAlgorithmedVisitors.lime),
-                ...Array.from(props.coolAlgorithmedVisitors.silver),
-            ];
-    }
-}
-
-async function getColorProducts() {
-    let allProductsEverSelected = ref([]);
-    coloredVisitors(props.color).forEach((visitor) => {
-        visitor.basket?.products?.forEach((p) => {
-            console.log(visitor.wardrobe_number);
-            allProductsEverSelected.value.push({
-                product: p,
-                visitor: visitor.wardrobe_number,
-            });
-        });
-    });
-
-    products.value.forEach((product) => {
-        let foundProducts = allProductsEverSelected.value.filter(
-            (p) => p.product?._id === product?._id
-        );
-        let count = foundProducts.length;
-        let visitorsWhoHaveThisProduct = foundProducts.map((v) => v.visitor);
-        if (!countedProducts?.find((cP) => cP?._id === product?._id)) {
-            countedProducts?.push({
-                ...product,
-                count: count,
-                visitors: visitorsWhoHaveThisProduct,
-            });
-        }
-    });
-
-    countedProducts = countedProducts?.sort((a, b) => b.count - a.count);
+setInterval(async function () {
+    await performanceStore.getActorCapsuleProducts(showOnlyColorRoute.value);
+    countedProducts = computed(() => performanceStore.sortedProducts);
     instance?.proxy?.$forceUpdate();
-}
+}, 120000);
 </script>
 <template>
     <div v-for="product in countedProducts" :key="product._id">

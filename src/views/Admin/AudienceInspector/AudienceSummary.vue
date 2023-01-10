@@ -1,56 +1,144 @@
 <script setup>
-import { defineProps, ref } from 'vue';
+import { computed, onBeforeMount, onMounted, reactive, ref, watch } from 'vue';
+import { usePerformanceStore } from '../../../store/performance.store';
+import router from '../../../router/index';
+import { cloneDeep } from 'lodash';
+import { getCurrentInstance } from 'vue';
 
-const props = defineProps(['coolAlgorithmedVisitors', 'color']);
-let sortedVisitors = [];
-if (props?.color?.length > 0) {
-    sortedVisitors = ref(
-        Array.from(props.coolAlgorithmedVisitors[props.color])
-    );
-} else {
-    sortedVisitors = [
-        ...Array.from(props.coolAlgorithmedVisitors.turq),
-        ...Array.from(props.coolAlgorithmedVisitors.fuchsia),
-        ...Array.from(props.coolAlgorithmedVisitors.lime),
-        ...Array.from(props.coolAlgorithmedVisitors.silver),
-    ];
-    console.log(sortedVisitors);
+const instance = getCurrentInstance();
+const performanceStore = usePerformanceStore();
+
+let sortedVisitors = ref([]);
+let showOnlyColorRoute = ref(router.currentRoute.value.query.color || 'all');
+let mappedVisitors = ref([]);
+onMounted(async () => {
+    await performanceStore.getActorCapsuleVisitors(showOnlyColorRoute.value);
+
+    console.log(router.currentRoute);
+    console.log('does it even..mount,', showOnlyColorRoute);
+    sortedVisitors = computed(() => performanceStore.getVisitors);
+
+    sort();
+});
+
+watch(sortedVisitors, () => {
+    console.log('watsch');
+    sort();
+});
+
+function sort() {
+    let visitorsToMap = ref(sortedVisitors);
+
+    mappedVisitors = visitorsToMap.value.map((visitor) => {
+        let basket = visitor.basket;
+
+        let redQuiz = visitor?.quiz_results
+            ? visitor?.quiz_results?.map((qR) => {
+                  return qR.result_humanity_values?.fuchsia;
+              })
+            : [];
+        let greenQuiz = visitor?.quiz_results
+            ? visitor?.quiz_results?.map((qR) => {
+                  return qR?.result_humanity_values?.lime;
+              })
+            : [];
+        let blueQuiz = visitor?.quiz_results
+            ? visitor?.quiz_results?.map((qR) => {
+                  return qR?.result_humanity_values?.silver;
+              })
+            : [];
+        let orangeQuiz = visitor?.quiz_results
+            ? visitor?.quiz_results?.map((qR) => {
+                  return qR?.result_humanity_values?.turq;
+              })
+            : [];
+
+        let redProducts = basket?.products?.map(
+            (p) => p.humanity_values?.fuchsia?.average
+        );
+        let silverProducts = basket?.products?.map(
+            (p) => p.humanity_values?.blue?.average
+        );
+        let limeProducts = basket?.products?.map(
+            (p) => p.humanity_values?.green?.average
+        );
+        let turqProducts = basket?.products?.map(
+            (p) => p.humanity_values?.orange?.average
+        );
+
+        let fuchsia = [...redQuiz, ...redProducts];
+        let lime = [...greenQuiz, ...limeProducts];
+        let silver = [...blueQuiz, ...silverProducts];
+        let turq = [...orangeQuiz, ...turqProducts];
+
+        let avg_hum_values = {
+            lime: lime?.reduce((a, b) => a + b, 0),
+            fuchsia: fuchsia?.reduce((a, b) => a + b, 0),
+            silver: silver?.reduce((a, b) => a + b, 0),
+            turq: turq?.reduce((a, b) => a + b, 0),
+        };
+        let maxKey,
+            maxValue = 0;
+
+        for (const [key, value] of Object.entries(avg_hum_values)) {
+            if (value > maxValue) {
+                maxValue = value;
+                maxKey = key;
+            }
+        }
+        let highest = maxKey;
+
+        return {
+            ...visitor,
+            basket,
+            highest,
+            avg_hum_values,
+        };
+    });
+    instance?.proxy?.$forceUpdate();
+
+    console.log('mappe', mappedVisitors);
 }
-sortedVisitors?.value?.sort((a, b) => a.wardrobe_number - b.wardrobe_number);
+
+setInterval(async function () {
+    await performanceStore.getActorCapsuleVisitors(showOnlyColorRoute.value);
+    sort();
+    instance?.proxy?.$forceUpdate();
+}, 120000);
 </script>
 <template>
     <div>
-        {{ sortedVisitors.length }} inimest sinu kapslis.
+        {{ mappedVisitors.length }} inimest sinu kapslis.
 
-        <div v-if="!props.color.length">
+        <div v-if="!showOnlyColorRoute.length">
             <div>
-                lime ({{ props.coolAlgorithmedVisitors.lime.size }}):
+                lime ({{ sortedVisitors.lime.size }}):
                 <span
-                    v-for="visitor in props.coolAlgorithmedVisitors.lime"
+                    v-for="visitor in sortedVisitors.lime"
                     :key="visitor._id + 'short'"
                     >{{ visitor.wardrobe_number }},
                 </span>
             </div>
             <div>
-                fuchsia ({{ props.coolAlgorithmedVisitors.fuchsia.size }}):
+                fuchsia ({{ sortedVisitors.fuchsia.size }}):
                 <span
-                    v-for="visitor in props.coolAlgorithmedVisitors.fuchsia"
+                    v-for="visitor in sortedVisitors.fuchsia"
                     :key="visitor._id + 'short'"
                     >{{ visitor.wardrobe_number }},
                 </span>
             </div>
             <div>
-                silver ({{ props.coolAlgorithmedVisitors.silver.size }}):
+                silver ({{ sortedVisitors.silver.size }}):
                 <span
-                    v-for="visitor in props.coolAlgorithmedVisitors.silver"
+                    v-for="visitor in sortedVisitors.silver"
                     :key="visitor._id + 'short'"
                     >{{ visitor.wardrobe_number }},
                 </span>
             </div>
             <div>
-                turq ({{ props.coolAlgorithmedVisitors.turq.size }}):
+                turq ({{ sortedVisitors.turq.size }}):
                 <span
-                    v-for="visitor in props.coolAlgorithmedVisitors.turq"
+                    v-for="visitor in sortedVisitors.turq"
                     :key="visitor._id + 'short'"
                     >{{ visitor.wardrobe_number }},
                 </span>
@@ -59,9 +147,9 @@ sortedVisitors?.value?.sort((a, b) => a.wardrobe_number - b.wardrobe_number);
         <br />
         <div>
             <div
-                v-for="visitor in sortedVisitors"
+                v-for="visitor in mappedVisitors"
                 :key="visitor._id"
-                :class="props.color + ' ' + visitor.confirmed_humanity_value"
+                :class="visitor.confirmed_humanity_value"
                 class="visitor-wrapper mt-2 text-center d-flex justify-content-between"
             >
                 <div class="d-flex">
@@ -97,18 +185,18 @@ sortedVisitors?.value?.sort((a, b) => a.wardrobe_number - b.wardrobe_number);
                         </small>
                     </div>
                     <div>
-                        <small class="font-size-xs bg-fuchsia p-1 m-1">{{
-                            Math.floor(visitor.avg_hum_values.fuchsia)
-                        }}</small>
-                        <small class="font-size-xs bg-green p-1 m-1">{{
-                            Math.floor(visitor.avg_hum_values.lime)
-                        }}</small>
-                        <small class="font-size-xs bg-orange p-1 m-1">{{
-                            Math.floor(visitor.avg_hum_values.turq)
-                        }}</small>
-                        <small class="font-size-xs bg-blue p-1 m-1">{{
-                            Math.floor(visitor.avg_hum_values.silver)
-                        }}</small>
+                        <!--                        <small class="font-size-xs bg-fuchsia p-1 m-1">{{-->
+                        <!--                            Math.floor(visitor.avg_hum_values.fuchsia)-->
+                        <!--                        }}</small>-->
+                        <!--                        <small class="font-size-xs bg-green p-1 m-1">{{-->
+                        <!--                            Math.floor(visitor.avg_hum_values.lime)-->
+                        <!--                        }}</small>-->
+                        <!--                        <small class="font-size-xs bg-orange p-1 m-1">{{-->
+                        <!--                            Math.floor(visitor.avg_hum_values.turq)-->
+                        <!--                        }}</small>-->
+                        <!--                        <small class="font-size-xs bg-blue p-1 m-1">{{-->
+                        <!--                            Math.floor(visitor.avg_hum_values.silver)-->
+                        <!--                        }}</small>-->
                     </div>
                 </div>
             </div>

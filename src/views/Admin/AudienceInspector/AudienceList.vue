@@ -32,27 +32,12 @@ let viewOptions = ref({
     ready: false,
 });
 
-if (
-    !(
-        viewOptions.value.showQuizSummaryInCapsule ||
-        viewOptions.value.showSummaryList ||
-        viewOptions.value.showProductsSummary ||
-        viewOptions.value.showQuizSummaryPreCapsule
-    )
-) {
-    toggleViewOptions('products');
-}
 let activePerformance = {};
 onBeforeMount(async () => {
-    await performanceStore.getPerformances();
     activePerformance = computed(() => {
         return performanceStore.getActivePerformance;
     });
     await humanityStore.fetchProducts();
-
-    await performanceStore.getCurrentPerformanceVisitors(
-        activePerformance.value._id
-    );
 });
 
 const baskets = computed(() => humanityStore.getBaskets);
@@ -65,28 +50,30 @@ let visitors = computed(() => performanceStore.getVisitors);
 
 function toggleViewOptions(show) {
     let query = {
-        color: router.currentRoute.value.query.color,
+        color: showOnlyColorRoute.value || showOnlyColor.value,
     };
+    let name = '';
     switch (show) {
         case 'products':
             console.log('trying to show products');
 
-            query.products = 'yes';
+            name = 'admin.audience.products';
 
             break;
         case 'quiz-in-capsule':
-            query.capsuleQuiz = 'yes';
+            name = 'admin.audience.quiz-in-capsule';
             break;
         case 'quiz-pre-capsule':
-            query.preCapsuleQuiz = 'yes';
+            name = 'admin.audience.quiz-pre-capsule';
             break;
         case 'audience':
         default:
-            query.showSummary = 'yes';
+            name = 'admin.audience.overview';
             break;
     }
     console.log(router.currentRoute.value);
-    router.push({ name: 'admin.audience', query: query });
+    console.log('Query_ > ', query);
+    router.push({ name: name, query });
 }
 
 let countedProducts = ref([]);
@@ -94,7 +81,9 @@ let mappedVisitors = reactive([]);
 let coolAlgorithmedVisitors = reactive({});
 
 watch(visitors, async () => {
-    await sortThemGuys();
+    if (visitors.value[0]?.confirmed_humanity_value === 'none') {
+        await sortThemGuys();
+    }
 });
 
 async function sortThemGuys() {
@@ -363,12 +352,17 @@ async function confirmColors() {
             v-if="isAdmin"
             class="d-flex justify-content-around align-items-center"
         >
-            <RouterLink :to="{ name: 'admin.audience' }" class="mx-2"
+            <RouterLink
+                :to="{ name: 'admin.audience.overview', query: {} }"
+                class="mx-2"
                 >Publik kõik
             </RouterLink>
             <RouterLink
                 :class="{ 'font-size-xl': showOnlyColorRoute === 'turq' }"
-                :to="{ name: 'admin.audience', query: { color: 'turq' } }"
+                :to="{
+                    name: 'admin.audience.overview',
+                    query: { color: 'turq' },
+                }"
                 class="mx-2 p-2"
                 style="background-color: paleturquoise"
                 @click="sortThemGuys"
@@ -378,7 +372,10 @@ async function confirmColors() {
 
             <RouterLink
                 :class="{ 'font-size-xl': showOnlyColorRoute === 'fuchsia' }"
-                :to="{ name: 'admin.audience', query: { color: 'fuchsia' } }"
+                :to="{
+                    name: 'admin.audience.overview',
+                    query: { color: 'fuchsia' },
+                }"
                 class="mx-2 p-2"
                 style="background-color: lightpink"
                 @click="sortThemGuys"
@@ -388,7 +385,10 @@ async function confirmColors() {
 
             <RouterLink
                 :class="{ 'font-size-xl': showOnlyColorRoute === 'silver' }"
-                :to="{ name: 'admin.audience', query: { color: 'silver' } }"
+                :to="{
+                    name: 'admin.audience.overview',
+                    query: { color: 'silver' },
+                }"
                 class="mx-2 p-2"
                 style="background-color: silver"
                 @click="sortThemGuys"
@@ -398,7 +398,10 @@ async function confirmColors() {
 
             <RouterLink
                 :class="{ 'font-size-xl': showOnlyColorRoute === 'lime' }"
-                :to="{ name: 'admin.audience', query: { color: 'lime' } }"
+                :to="{
+                    name: 'admin.audience.overview',
+                    query: { color: 'lime' },
+                }"
                 class="mx-2 p-2"
                 style="background-color: lime"
                 @click="sortThemGuys"
@@ -449,39 +452,40 @@ async function confirmColors() {
                     Kapslimängud
                 </button>
             </div>
-            <div v-if="viewOptions.ready">
-                <div v-if="viewOptions.showSummaryList" class="visitors">
-                    {{ visitors.length }} inimest teatris. Eeldatav kapsli
-                    suurus: {{ Math.floor(visitors.length / 4) }} +- 3
-                    <AudienceSummary
-                        :color="showOnlyColorRoute || showOnlyColor"
-                        :cool-algorithmed-visitors="coolAlgorithmedVisitors"
-                    />
-                </div>
-                <div
-                    v-else-if="
-                        viewOptions.showProductsSummary && countedProducts
-                    "
-                >
-                    <ProductsSummary
-                        :color="showOnlyColorRoute || showOnlyColor"
-                        :cool-algorithmed-visitors="coolAlgorithmedVisitors"
-                    />
-                </div>
-                <div v-else-if="viewOptions.showQuizSummaryInCapsule">
-                    <QuizSummary
-                        :color="showOnlyColorRoute || showOnlyColor"
-                        :cool-algorithmed-visitors="coolAlgorithmedVisitors"
-                        :games="gamesInCapsule"
-                    />
-                </div>
-                <div v-else-if="viewOptions.showQuizSummaryPreCapsule">
-                    <QuizSummary
-                        :color="showOnlyColorRoute || showOnlyColor"
-                        :cool-algorithmed-visitors="coolAlgorithmedVisitors"
-                        :games="gamesPreCapsule"
-                    />
-                </div>
+            <div>
+                <RouterView :key="$route.fullPath" />
+                <!--                <div v-if="viewOptions.showSummaryList" class="visitors">-->
+                <!--                    {{ visitors.length }} inimest teatris. Eeldatav kapsli-->
+                <!--                    suurus: {{ Math.floor(visitors.length / 4) }} +- 3-->
+                <!--                    <AudienceSummary-->
+                <!--                        :color="showOnlyColorRoute || showOnlyColor"-->
+                <!--                        :cool-algorithmed-visitors="coolAlgorithmedVisitors"-->
+                <!--                    />-->
+                <!--                </div>-->
+                <!--                <div-->
+                <!--                    v-else-if="-->
+                <!--                        viewOptions.showProductsSummary && countedProducts-->
+                <!--                    "-->
+                <!--                >-->
+                <!--                    <ProductsSummary-->
+                <!--                        :color="showOnlyColorRoute || showOnlyColor"-->
+                <!--                        :cool-algorithmed-visitors="coolAlgorithmedVisitors"-->
+                <!--                    />-->
+                <!--                </div>-->
+                <!--                <div v-else-if="viewOptions.showQuizSummaryInCapsule">-->
+                <!--                    <QuizSummary-->
+                <!--                        :color="showOnlyColorRoute || showOnlyColor"-->
+                <!--                        :cool-algorithmed-visitors="coolAlgorithmedVisitors"-->
+                <!--                        :games="gamesInCapsule"-->
+                <!--                    />-->
+                <!--                </div>-->
+                <!--                <div v-else-if="viewOptions.showQuizSummaryPreCapsule">-->
+                <!--                    <QuizSummary-->
+                <!--                        :color="showOnlyColorRoute || showOnlyColor"-->
+                <!--                        :cool-algorithmed-visitors="coolAlgorithmedVisitors"-->
+                <!--                        :games="gamesPreCapsule"-->
+                <!--                    />-->
+                <!--                </div>-->
             </div>
 
             <div v-if="isAdmin">

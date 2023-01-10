@@ -53,7 +53,7 @@ function renderLinks() {
     if (isAuthenticated.value && isAdmin.value) {
         console.log('dude');
         navLinks.value.linx = [
-            { name: 'admin.audience', label: 'kapslid', query: {} },
+            { name: 'admin.audience.overview', label: 'kapslid', query: {} },
             { name: 'superadmin.games', label: 'mangud', query: {} },
             { name: 'superadmin.phases', label: 'faasid', query: {} },
             {
@@ -70,7 +70,7 @@ function renderLinks() {
     } else if (isAuthenticated.value && isActor.value) {
         console.log('emm hallo');
         navLinks.value.linx = [
-            { name: 'admin.audience', label: 'kapslid', query: {} },
+            { name: 'admin.audience.overview', label: 'kapslid', query: {} },
             // { name: 'superadmin.phases', label: 'faasid', query: {} },
         ];
     } else if (isAuthenticated.value && !isActor.value && !isAdmin.value) {

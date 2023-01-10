@@ -3,8 +3,8 @@ import { useVisitorStore } from '../../../store/visitor.store';
 import { ref, onBeforeMount, reactive, watch } from 'vue';
 import { useHumanityShopStore } from '../../../store/humanity-shop/humanity-shop.store';
 
-import { getCurrentInstance } from 'vue';
 import { usePerformanceStore } from '../../../store/performance.store';
+import { getCurrentInstance } from 'vue';
 
 const instance = getCurrentInstance();
 const visitorStore = useVisitorStore();

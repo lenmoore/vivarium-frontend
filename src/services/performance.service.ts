@@ -196,6 +196,39 @@ class PerformanceService {
             return data;
         });
     }
+
+    //     app.get(
+    //     '/api/actor-state/audience-list',
+    //     [requireUser],
+    //     getActorStateAudienceListHandler
+    // );
+    async fetchActorCapsuleVisitors(colour: string) {
+        return await api
+            .get('/actor-state/audience-list?colour=' + colour)
+            .then(({ data }) => {
+                return data;
+            });
+    }
+
+    async fetchActorCapsuleProducts(colour: string) {
+        console.log(colour);
+        return await api
+            .get('/actor-state/products-in-capsule?colour=' + colour)
+            .then(({ data }) => {
+                console.log(data);
+                return data;
+            });
+    }
+
+    //     app.get(
+    //     '/api/actor-state/products-in-capsule',
+    //     [requireUser],
+    //     getActorStateProductsHandler
+    // );
+    //
+    //     app.get('/api/actor-state', [requireUser], getActorStateHandler);
+    //     app.put('/api/actor-state', [requireUser], updateActorStateHandler);
+    //     app.post('/api/actor-state', [requireUser], createActorStateHandler);
 }
 
 export default new PerformanceService();

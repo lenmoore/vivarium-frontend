@@ -9,6 +9,7 @@ export type RootPerformanceState = {
     phases: Phase[];
     games: Game[];
     activePhase: Phase;
+    sortedProducts?: [];
     visitors: Visitor[];
 };
 export const usePerformanceStore = defineStore({
@@ -21,6 +22,7 @@ export const usePerformanceStore = defineStore({
             activePerformance: {},
             activePhase: {},
             visitors: [] as Visitor[],
+            sortedProducts: [],
         } as RootPerformanceState),
 
     getters: {
@@ -117,6 +119,19 @@ export const usePerformanceStore = defineStore({
             console.log(visitors);
             this.visitors = await PerformanceService.updateVisitors(visitors);
             return this.visitors;
+        },
+
+        async getActorCapsuleVisitors(colour: string) {
+            console.log('HALLO');
+            this.visitors = await PerformanceService.fetchActorCapsuleVisitors(
+                colour
+            );
+            return this.visitors;
+        },
+        async getActorCapsuleProducts(colour: string): Promise<any> {
+            this.sortedProducts =
+                await PerformanceService.fetchActorCapsuleProducts(colour);
+            return this.sortedProducts;
         },
     },
 });

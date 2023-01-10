@@ -1,6 +1,8 @@
 <script setup>
-import { defineProps, ref } from 'vue';
+import { defineProps, onBeforeMount, ref } from 'vue';
+import { usePerformanceStore } from '../../../store/performance.store';
 
+const performanceStore = usePerformanceStore();
 const props = defineProps(['coolAlgorithmedVisitors', 'color', 'games']);
 const allAnswers = [];
 Array.from(props.coolAlgorithmedVisitors[props.color]).forEach((visitor) =>
@@ -8,6 +10,10 @@ Array.from(props.coolAlgorithmedVisitors[props.color]).forEach((visitor) =>
         allAnswers.push(p);
     })
 );
+onBeforeMount(async () => {
+    console.log('dude why');
+    await performanceStore.getActorCapsuleVisitors(props.color);
+});
 </script>
 <template>
     <div>

@@ -28,11 +28,11 @@ watch(router.currentRoute, () => {
         <!--        <div class="w-100 d-flex align-items-center justify-content-center">-->
         <!--            <RouterLink-->
         <!--                :class="-->
-        <!--                    getRoute === 'admin.audience'-->
+        <!--                    getRoute === 'admin.audience.overview'-->
         <!--                        ? 'btn-primary'-->
         <!--                        : 'btn-outline-primary'-->
         <!--                "-->
-        <!--                :to="{ name: 'admin.audience' }"-->
+        <!--                :to="{ name: 'admin.audience.overview' }"-->
         <!--                class="btn btn-outline-primary"-->
         <!--            >-->
         <!--                Publik kapslites-->

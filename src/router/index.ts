@@ -197,7 +197,6 @@ const routes: Array<RouteRecordRaw> = [
     {
         path: '/admin',
         name: 'admin.home',
-        redirect: 'admin/capsule',
         component: () => import('../views/Admin/AdminHome.vue'),
         children: [
             {
@@ -205,6 +204,40 @@ const routes: Array<RouteRecordRaw> = [
                 name: 'admin.audience',
                 component: () =>
                     import('../views/Admin/AudienceInspector/AudienceList.vue'),
+                children: [
+                    {
+                        path: 'overview',
+                        name: 'admin.audience.overview',
+                        component: () =>
+                            import(
+                                '../views/Admin/AudienceInspector/AudienceSummary.vue'
+                            ),
+                    },
+                    {
+                        path: 'products',
+                        name: 'admin.audience.products',
+                        component: () =>
+                            import(
+                                '../views/Admin/AudienceInspector/ProductsSummary.vue'
+                            ),
+                    },
+                    {
+                        path: 'quiz-in-capsule',
+                        name: 'admin.audience.quiz-in-capsule',
+                        component: () =>
+                            import(
+                                '../views/Admin/AudienceInspector/QuizSummary.vue'
+                            ),
+                    },
+                    {
+                        path: 'quiz-pre-capsule',
+                        name: 'admin.audience.quiz-pre-capsule',
+                        component: () =>
+                            import(
+                                '../views/Admin/AudienceInspector/QuizSummary.vue'
+                            ),
+                    },
+                ],
             },
             {
                 path: 'capsule',
