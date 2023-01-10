@@ -173,11 +173,10 @@ async function sortThemGuys() {
     );
     let peopleCountModulo = visitors.value.length % 4;
 
-    let peopleCount =
-        (visitors.value.length - peopleCountModulo) / 4 + peopleCountModulo;
+    let peopleCount = (visitors.value.length - peopleCountModulo) / 4;
     let notYetSomewhere = new Set(mappedVisitors);
 
-    console.log(notYetSomewhere.length, ' not yet somewhere');
+    console.log(notYetSomewhere.size, ' not yet somewhere');
     dividePeople();
 
     function dividePeople() {
@@ -190,130 +189,72 @@ async function sortThemGuys() {
         );
         console.log(mappedVisitors);
 
-        // algorithm 1 start
+        while (notYetSomewhere.size) {
+            console.log(notYetSomewhere.size, ' not yet somewhere');
+            notYetSomewhere.forEach((silverGuy) => {
+                let maxKey = '';
+                let maxValue = 0;
+                for (const [key, value] of Object.entries(
+                    silverGuy.avg_hum_values
+                )) {
+                    if (value > maxValue) {
+                        maxValue = value;
+                        maxKey = key;
+                    }
+                }
+                console.log(peopleCount + peopleCountModulo, 'max size');
+                console.log(coolAlgorithmedVisitors[maxKey].size);
 
-        // silver
-        let sortedBySilver = mappedVisitors.sort(
-            (a, b) => b.avg_hum_values?.silver - a.avg_hum_values?.silver
-        );
-        for (let i = 0; i < peopleCount + peopleCountModulo; i++) {
-            if (
-                notYetSomewhere.has(sortedBySilver[i]) &&
-                sortedBySilver[i]?.highest === 'silver' &&
-                coolAlgorithmedVisitors.silver.size < peopleCount + 1
-            ) {
-                coolAlgorithmedVisitors.silver.add(sortedBySilver[i]);
-                notYetSomewhere.delete(sortedBySilver[i]);
-            }
-            //     coolAlgorithmedVisitors.silver.add(sortedBySilver[i]);
+                if (
+                    maxKey.length &&
+                    coolAlgorithmedVisitors[maxKey].size <= peopleCount
+                ) {
+                    console.log('maxkey is ', maxKey);
+                    addToAlgorithmedVisitors(maxKey, silverGuy);
+                } else {
+                    // console.log(
+                    //     'fuck couldnt be added anywhere -- firstvalue ',
+                    //     maxKey
+                    // );
+                    let secondMaxValue = Object.entries(
+                        silverGuy.avg_hum_values
+                    ).sort((a, b) => a - b)[1];
+                    // console.log('secondMaxValue', secondMaxValue);
+                    if (
+                        secondMaxValue.length &&
+                        coolAlgorithmedVisitors[secondMaxValue[0]].size <=
+                            peopleCount
+                    ) {
+                        addToAlgorithmedVisitors(secondMaxValue[0], silverGuy);
+                    } else {
+                        console.log(
+                            'fuck couldnt be added anywhere -- secondmaxvalue ',
+                            secondMaxValue
+                        );
+                        let thirdMaxValue = Object.entries(
+                            silverGuy.avg_hum_values
+                        ).sort((a, b) => a - b)[2];
+                        console.log('thirdMaxValue', thirdMaxValue);
+                        // if (
+                        //     secondMaxValue.length &&
+                        //     coolAlgorithmedVisitors[secondMaxValue[0]].size <=
+                        //         peopleCount
+                        // ) {
+                        addToAlgorithmedVisitors(secondMaxValue[0], silverGuy);
+                        // }
+                    }
+                }
+            });
         }
+    }
 
-        // turq
-        let sortedByTurq = mappedVisitors.sort(
-            (a, b) => b.avg_hum_values?.turq - a.avg_hum_values?.turq
-        );
-        for (let i = 0; i < peopleCount + peopleCountModulo; i++) {
-            if (
-                notYetSomewhere.has(sortedByTurq[i]) &&
-                sortedByTurq[i]?.highest === 'turq' &&
-                coolAlgorithmedVisitors.turq.size < peopleCount + 1
-            ) {
-                coolAlgorithmedVisitors.turq.add(sortedByTurq[i]);
-                notYetSomewhere.delete(sortedByTurq[i]);
-            }
-        }
-
-        // lime
-        let sortedByLime = mappedVisitors.sort(
-            (a, b) => b.avg_hum_values?.lime - a.avg_hum_values?.lime
-        );
-        for (let i = 0; i < peopleCount + peopleCountModulo; i++) {
-            if (
-                notYetSomewhere.has(sortedByLime[i]) &&
-                sortedByLime[i]?.highest === 'lime' &&
-                coolAlgorithmedVisitors.lime.size < peopleCount + 1
-            ) {
-                coolAlgorithmedVisitors.lime.add(sortedByLime[i]);
-                notYetSomewhere.delete(sortedByLime[i]);
-            }
-            //     coolAlgorithmedVisitors.lime.add(sortedByLime[i]);
-        }
-        // violet
-        let sortedByFuchsia = mappedVisitors.sort(
-            (a, b) => b.avg_hum_values?.fuchsia - a.avg_hum_values?.fuchsia
-        );
-        for (let i = 0; i < peopleCount + peopleCountModulo; i++) {
-            if (
-                notYetSomewhere.has(sortedByFuchsia[i]) &&
-                sortedByFuchsia[i]?.highest === 'fuchsia' &&
-                coolAlgorithmedVisitors.fuchsia.size < peopleCount + 1
-            ) {
-                coolAlgorithmedVisitors.fuchsia.add(sortedByFuchsia[i]);
-                notYetSomewhere.delete(sortedByFuchsia[i]);
-            }
-            //     coolAlgorithmedVisitors.fuchsia.add(sortedByFuchsia[i]);
-        }
-
-        // algorithm 1 end
+    function addToAlgorithmedVisitors(maxKey, visitor) {
+        coolAlgorithmedVisitors[maxKey].add(visitor);
+        notYetSomewhere.delete(visitor);
     }
 
     console.log(notYetSomewhere);
 
-    function addToAlgorithmedVisitors(maxKey, oldKey, visitor) {
-        coolAlgorithmedVisitors[maxKey].add(visitor);
-        coolAlgorithmedVisitors[oldKey].delete(visitor);
-    }
-
-    function fix(fixColour) {
-        console.log('fixing ', fixColour);
-        let arrayToFix = Array.from(coolAlgorithmedVisitors[fixColour])
-            .sort(
-                (a, b) =>
-                    a.avg_hum_values[fixColour] - b.avg_hum_values[fixColour]
-            )
-            .splice(
-                0,
-                coolAlgorithmedVisitors[fixColour].size -
-                    (peopleCount + peopleCountModulo)
-            );
-        console.log(arrayToFix);
-
-        arrayToFix.forEach((silverGuy) => {
-            let maxKey = '';
-            let maxValue = 0;
-            for (const [key, value] of Object.entries(
-                silverGuy.avg_hum_values
-            )) {
-                if (value > maxValue && key !== fixColour) {
-                    maxValue = value;
-                    maxKey = key;
-                }
-            }
-            if (
-                maxKey.length &&
-                coolAlgorithmedVisitors[fixColour].size <
-                    peopleCount + peopleCountModulo
-            ) {
-                //     addToAlgorithmedVisitors(maxKey, silverGuy);
-                addToAlgorithmedVisitors(maxKey, silverGuy.highest, silverGuy);
-            } else {
-                console.log('fuck couldnt be added anywhere');
-            }
-        });
-    }
-
-    if (coolAlgorithmedVisitors.turq.size > peopleCount) {
-        fix('turq');
-    }
-    if (coolAlgorithmedVisitors.lime.size > peopleCount) {
-        fix('lime');
-    }
-    if (coolAlgorithmedVisitors.fuchsia.size > peopleCount) {
-        fix('fuchsia');
-    }
-    if (coolAlgorithmedVisitors.silver.size > peopleCount) {
-        fix('silver');
-    }
     viewOptions.value.ready = true;
 }
 
