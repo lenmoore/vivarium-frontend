@@ -208,6 +208,18 @@ class PerformanceService {
             });
     }
 
+    async fetchActorState() {
+        return await api.get('/actor-state').then(({ data }) => {
+            return data;
+        });
+    }
+
+    async editActorStateSetTimer(update: any) {
+        return await api.put('/actor-state', update).then(({ data }) => {
+            return data;
+        });
+    }
+
     async fetchActorCapsuleProducts(colour: string) {
         console.log(colour);
         return await api

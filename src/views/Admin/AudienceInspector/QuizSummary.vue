@@ -1,8 +1,8 @@
 <script setup>
 import { computed, defineProps, onBeforeMount, onMounted, ref } from 'vue';
 import { usePerformanceStore } from '../../../store/performance.store';
-import { getCurrentInstance } from 'vue';
 import router from '../../../router/index';
+import { getCurrentInstance } from 'vue';
 
 const instance = getCurrentInstance();
 const performanceStore = usePerformanceStore();
@@ -14,6 +14,7 @@ let preCapsule =
 
 console.log(preCapsule.value);
 let games = ref([]);
+let phases = ref([]);
 
 let mappedGames = [];
 const allAnswers = ref([]);
@@ -24,11 +25,12 @@ onMounted(async () => {
     await performanceStore.getGames();
 
     games = computed(() => performanceStore.games);
-
+    phases = computed(() => performanceStore.phases);
     await sort();
 });
 
 async function sort() {
+    phases = computed(() => performanceStore.phases);
     games = computed(() => performanceStore.games);
     console.log(games);
     let sortedVisitors = computed(() => performanceStore.getVisitors);
@@ -47,8 +49,22 @@ async function sort() {
             (g.open_for_colors.includes(showOnlyColorRoute.value) ||
                 g.open_for_colors.includes(showOnlyColor))
     );
-    console.log('games-', games);
+
     instance?.proxy?.$forceUpdate();
+}
+
+function getGameActiveButton(game) {
+    const phases = computed(() => performanceStore.phases);
+    let phaseToEdit = phases.value.find((p) => p.phase_game._id === game._id);
+    return phaseToEdit.active ? 'Lopeta' : 'Aktiveeri';
+}
+
+async function activateQuestionnaire(game) {
+    const phases = computed(() => performanceStore.phases);
+    let phaseToEdit = phases.value.find((p) => p.phase_game._id === game._id);
+    console.log('make this inactive: ', phaseToEdit);
+    await performanceStore.editPhase(phaseToEdit);
+    location.reload();
 }
 
 setInterval(async function () {
@@ -61,9 +77,9 @@ setInterval(async function () {
         <div
             v-for="(game, i) in games"
             :key="game._id + i"
-            class="border my-2 p-4"
+            class="border my-2 p-4 row"
         >
-            <div>
+            <div class="col-9">
                 <div
                     v-for="step in game.game_steps"
                     :key="step._id"
@@ -75,7 +91,7 @@ setInterval(async function () {
                         :key="option.option_text"
                     >
                         {{ option.option_text }}
-                        <strong
+                        <span
                             >({{
                                 allAnswers.filter(
                                     (ans) =>
@@ -83,12 +99,24 @@ setInterval(async function () {
                                         ans.step._id === step._id &&
                                         ans.result_text === option.option_text
                                 ).length
-                            }})</strong
+                            }})</span
                         >
                     </div>
                 </div>
             </div>
+            <div class="col-3 d-flex justify-content-end align-items-start">
+                <button
+                    :class="
+                        getGameActiveButton(game) === 'Aktiveeri'
+                            ? 'btn-outline-primary'
+                            : 'btn-primary'
+                    "
+                    class="btn"
+                    @click="activateQuestionnaire(game)"
+                >
+                    {{ getGameActiveButton(game) }}
+                </button>
+            </div>
         </div>
-        {{ allAnswers[0] }}
     </div>
 </template>

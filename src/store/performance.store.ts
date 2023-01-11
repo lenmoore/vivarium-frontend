@@ -121,6 +121,14 @@ export const usePerformanceStore = defineStore({
             return this.visitors;
         },
 
+        async getActorState() {
+            return await PerformanceService.fetchActorState();
+        },
+
+        async editActorStateSetTimer(update: any) {
+            return await PerformanceService.editActorStateSetTimer(update);
+        },
+
         async getActorCapsuleVisitors(colour: string) {
             console.log('HALLO');
             this.visitors = await PerformanceService.fetchActorCapsuleVisitors(
