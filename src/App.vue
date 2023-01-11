@@ -30,7 +30,7 @@
                 v-else
                 class="w-100 d-flex align-items-center justify-content-end"
             >
-                <div v-if="timerState.isRunning">
+                <div v-if="timerState.isRunning" class="font-size-xl">
                     {{ timerString }}
                 </div>
                 <div
