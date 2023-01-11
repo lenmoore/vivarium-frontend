@@ -187,17 +187,15 @@ async function startTimer(minutes: number) {
     console.log(timers);
     let startThisTimer = timers.value.find((t: any) => t.minutes === minutes);
     console.log(startThisTimer);
-    if (startThisTimer.startTime.length < 1) {
-        console.log('FIUCK');
-        startThisTimer.startTime = new Date();
-        console.log(timers);
-        actorState.value.timers = timers.value;
-        console.log(actorState.value);
-        await performanceStore.editActorStateSetTimer({
-            ...actorState.value,
-        });
-        location.reload();
-    }
+    console.log('FIUCK');
+    startThisTimer.startTime = new Date();
+    console.log(timers);
+    actorState.value.timers = timers.value;
+    console.log(actorState.value);
+    await performanceStore.editActorStateSetTimer({
+        ...actorState.value,
+    });
+    location.reload();
 }
 
 // timerState.value.countDownDate = new Date('Jan 5, 2024 15:37:25').getTime();
