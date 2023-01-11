@@ -160,7 +160,8 @@ function setSeenShopIntro() {
             <div v-else-if="basket.products.length === 9"></div>
         </div>
     </div>
-    <div v-else>
+    <div v-else class="d-flex flex-column justify-content-center h-100">
+        <h2>Tere tulemast poodi.</h2>
         <p>
             Mida võtaksid sina kaasa üksikule saarele? Mis esemed võtaksid sa
             kaasa kosmoseekspeditsioonile, kus kõik eluks vajalik on olemas? Mis
@@ -170,7 +171,7 @@ function setSeenShopIntro() {
             Tutvu meie poega. Kuva QR-koode ja saa ülevaade meie valikust. Käi
             näitusele ring peale ja vali välja 9 objekti.
         </p>
-        <p>Sul on aega kuni kl 19.15.</p>
+        <p>Sul on aega kuni kl 18.15.</p>
         <p>Ära kiirusta. Mõtle läbi.</p>
 
         <button class="btn btn-primary w-100" @click="setSeenShopIntro">

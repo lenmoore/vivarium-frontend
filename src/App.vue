@@ -147,6 +147,7 @@ function getActiveHomeLink() {
     activeGame = games.value.find(
         (game) => game?._id === activePhase?.value?.phase_game?._id
     );
+    console.log(isActor);
     if (isAdmin.value) {
         return '/';
     } else if (isActor.value) {
@@ -163,17 +164,17 @@ function getActiveHomeLink() {
 }
 
 function isInFuture(timer: any) {
-    console.log(timer);
+    // console.log(timer);
     if (timer.startTime.length > 0) {
-        console.log(timer.startTime.length);
+        // console.log(timer.startTime.length);
         let countdownDate =
             new Date(timer.startTime).getTime() + timer.minutes * 60000;
         // let countdownDate = new Date('Jan 5, 2024 15:37:25').getTime();
-        console.log(new Date(timer.startTime).getTime());
-        console.log(countdownDate);
-        console.log(new Date().getTime());
+        // console.log(new Date(timer.startTime).getTime());
+        // console.log(countdownDate);
+        // console.log(new Date().getTime());
         let isInFuture = new Date().getTime() - countdownDate < timer.minutes;
-        console.log('isinifuture', isInFuture);
+        // console.log('isinifuture', isInFuture);
         if (isInFuture) {
             activeTimer.value = timer;
             timerState.value.countDownDate = countdownDate;
@@ -184,10 +185,10 @@ function isInFuture(timer: any) {
 }
 
 async function startTimer(minutes: number) {
-    console.log(timers);
+    // console.log(timers);
     let startThisTimer = timers.value.find((t: any) => t.minutes === minutes);
-    console.log(startThisTimer);
-    console.log('FIUCK');
+    // console.log(startThisTimer);
+    // console.log('FIUCK');
     startThisTimer.startTime = new Date();
     console.log(timers);
     actorState.value.timers = timers.value;
@@ -209,7 +210,7 @@ setInterval(() => {
             instance?.proxy?.$forceUpdate();
             timerState.value.isRunning = true;
         }
-        console.log('tootab v');
+        // console.log('tootab v');
         // Get today's date and time
         let now = new Date().getTime();
 
@@ -224,7 +225,7 @@ setInterval(() => {
         timerState.value.seconds = seconds;
 
         timerString.value = minutes + ':' + seconds;
-        console.log(timerString.value);
+        // console.log(timerString.value);
         timerState.value.isRunning = true;
 
         timerState.value.isRunning = true;

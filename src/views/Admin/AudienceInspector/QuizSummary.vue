@@ -15,10 +15,12 @@ let preCapsule =
 console.log(preCapsule.value);
 let games = ref([]);
 let phases = ref([]);
+let isLoading = ref(false);
 
 let mappedGames = [];
 const allAnswers = ref([]);
 onMounted(async () => {
+    isLoading.value = true;
     await performanceStore.getActorCapsuleVisitors(
         showOnlyColorRoute.value || showOnlyColor
     );
@@ -27,6 +29,7 @@ onMounted(async () => {
     games = computed(() => performanceStore.games);
     phases = computed(() => performanceStore.phases);
     await sort();
+    isLoading.value = false;
 });
 
 async function sort() {
@@ -74,11 +77,15 @@ setInterval(async function () {
 </script>
 <template>
     <div>
+        <div v-if="isLoading">
+            <img alt="loader" src="/public/Spinner-1s-200px.gif" />
+        </div>
         <div
             v-for="(game, i) in games"
             :key="game._id + i"
             class="border my-2 p-4 row"
         >
+            <div class="col-12">{{ game.name }}</div>
             <div class="col-9">
                 <div
                     v-for="step in game.game_steps"
