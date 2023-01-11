@@ -160,8 +160,6 @@ class PerformanceService {
             });
     }
 
-    async deletePerformance() {}
-
     async addVisitor(newVisitor: Visitor) {
         return await api.post(`/visitors`, newVisitor).then(({ data }) => {
             return data;

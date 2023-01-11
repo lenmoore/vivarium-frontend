@@ -37,13 +37,13 @@ onBeforeMount(async () => {
     activePerformance = computed(() => {
         return performanceStore.getActivePerformance;
     });
-    await humanityStore.fetchProducts();
+    // await humanityStore.fetchProducts();
 });
 
 const baskets = computed(() => humanityStore.getBaskets);
-let games = computed(() => performanceStore.games);
-let gamesPreCapsule = computed(() => performanceStore.games);
-let gamesInCapsule = computed(() => performanceStore.games);
+// let games = computed(() => performanceStore.games);
+// let gamesPreCapsule = computed(() => performanceStore.games);
+// let gamesInCapsule = computed(() => performanceStore.games);
 let showOnlyColor = ref(localStorage.getItem('actor_color'));
 
 let visitors = computed(() => performanceStore.getVisitors);
@@ -82,6 +82,7 @@ let coolAlgorithmedVisitors = reactive({});
 
 watch(visitors, async () => {
     if (visitors.value[0]?.confirmed_humanity_value === 'none') {
+        console.log('apparently need to sort>');
         await sortThemGuys();
     }
 });
@@ -91,12 +92,12 @@ async function sortThemGuys() {
     let visitorsToMap = ref(visitors.value);
     countedProducts = ref([]);
     mappedVisitors = reactive([]);
-    coolAlgorithmedVisitors = {
-        turq: new Set(),
-        fuchsia: new Set(),
-        silver: new Set(),
-        lime: new Set(),
-    };
+    // coolAlgorithmedVisitors = {
+    //     turq: new Set(),
+    //     fuchsia: new Set(),
+    //     silver: new Set(),
+    //     lime: new Set(),
+    // };
 
     mappedVisitors = visitorsToMap.value.map((visitor) => {
         let basket = visitor.basket;
@@ -165,24 +166,24 @@ async function sortThemGuys() {
         };
     });
 
-    games = computed(() => performanceStore.games);
-    gamesPreCapsule = games.value.filter(
-        (g) => g.pre_capsule && g.game_type !== 'SHOP'
-    );
-    gamesInCapsule = games.value.filter(
-        (g) => !g.pre_capsule && g.game_type !== 'SHOP'
-    );
-
-    let color = {
-        turq: 'orange',
-        fuchsia: 'fuchsia',
-        silver: 'blue',
-        lime: 'green',
-    }[showOnlyColorRoute.value || 'all'];
-    games = games.value.filter(
-        (g) =>
-            g.open_for_colors.includes(color) && g.open_for_colors.length === 1
-    );
+    // games = computed(() => performanceStore.games);
+    // gamesPreCapsule = games.value.filter(
+    //     (g) => g.pre_capsule && g.game_type !== 'SHOP'
+    // );
+    // gamesInCapsule = games.value.filter(
+    //     (g) => !g.pre_capsule && g.game_type !== 'SHOP'
+    // );
+    //
+    // let color = {
+    //     turq: 'orange',
+    //     fuchsia: 'fuchsia',
+    //     silver: 'blue',
+    //     lime: 'green',
+    // }[showOnlyColorRoute.value || 'all'];
+    // games = games.value.filter(
+    //     (g) =>
+    //         g.open_for_colors.includes(color) && g.open_for_colors.length === 1
+    // );
     let peopleCountModulo = visitors.value.length % 4;
 
     let peopleCount = (visitors.value.length - peopleCountModulo) / 4;
@@ -199,7 +200,7 @@ async function sortThemGuys() {
             if (
                 notYetSomewhere.has(sortedByColor[i]) &&
                 sortedByColor[i]?.highest === color &&
-                coolAlgorithmedVisitors[color].size < peopleCount / 3
+                coolAlgorithmedVisitors[color]?.size < peopleCount / 3
             ) {
                 addToAlgorithmedVisitors(color, sortedByColor[i]);
             }

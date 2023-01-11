@@ -64,9 +64,10 @@ watch(router.currentRoute, async () => {
     await performanceStore.getPhases();
 });
 onBeforeMount(async () => {
-    // await performanceStore.getGames();
-    // await performanceStore.getPhases();
-    // await performanceStore.getPerformances();
+    if (visitor.archived === true) {
+        localStorage.clear();
+        location.replace('/');
+    }
     activeGame = games.value.find(
         (game) => game?._id === activePhase?.value?.phase_game?._id
     );

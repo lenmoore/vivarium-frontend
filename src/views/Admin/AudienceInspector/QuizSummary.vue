@@ -1,26 +1,65 @@
 <script setup>
-import { defineProps, onBeforeMount, ref } from 'vue';
+import { computed, defineProps, onBeforeMount, onMounted, ref } from 'vue';
 import { usePerformanceStore } from '../../../store/performance.store';
+import { getCurrentInstance } from 'vue';
+import router from '../../../router/index';
 
+const instance = getCurrentInstance();
 const performanceStore = usePerformanceStore();
-const props = defineProps(['coolAlgorithmedVisitors', 'color', 'games']);
-const allAnswers = [];
-Array.from(props.coolAlgorithmedVisitors[props.color]).forEach((visitor) =>
-    visitor.quiz_results.forEach((p) => {
-        allAnswers.push(p);
-    })
-);
-onBeforeMount(async () => {
-    console.log('dude why');
-    await performanceStore.getActorCapsuleVisitors(props.color);
+
+let showOnlyColorRoute = ref(router.currentRoute.value.query.color || 'all');
+let showOnlyColor = ref(localStorage.getItem('actor_color'));
+let preCapsule =
+    router.currentRoute.value.name === 'admin.audience.quiz-pre-capsule';
+
+console.log(preCapsule.value);
+let games = ref([]);
+
+let mappedGames = [];
+const allAnswers = ref([]);
+onMounted(async () => {
+    await performanceStore.getActorCapsuleVisitors(
+        showOnlyColorRoute.value || showOnlyColor
+    );
+    await performanceStore.getGames();
+
+    games = computed(() => performanceStore.games);
+
+    await sort();
 });
+
+async function sort() {
+    games = computed(() => performanceStore.games);
+    console.log(games);
+    let sortedVisitors = computed(() => performanceStore.getVisitors);
+
+    sortedVisitors.value.forEach((visitor) => {
+        visitor.quiz_results.forEach((qR) => {
+            if (qR.result_text !== '-') {
+                allAnswers.value.push(qR);
+            }
+        });
+    });
+    games = games?.value?.filter(
+        (g) =>
+            g.game_type !== 'SHOP' &&
+            g.pre_capsule === preCapsule &&
+            (g.open_for_colors.includes(showOnlyColorRoute.value) ||
+                g.open_for_colors.includes(showOnlyColor))
+    );
+    console.log('games-', games);
+    instance?.proxy?.$forceUpdate();
+}
+
+setInterval(async function () {
+    await performanceStore.getActorCapsuleVisitors(showOnlyColorRoute.value);
+    instance?.proxy?.$forceUpdate();
+}, 120000);
 </script>
 <template>
     <div>
         <div
-            v-for="(game, i) in props.games.filter((g) =>
-                g.open_for_colors.includes(props.color)
-            )"
+            v-for="(game, i) in games"
             :key="game._id + i"
             class="border my-2 p-4"
         >
@@ -40,9 +79,9 @@ onBeforeMount(async () => {
                             >({{
                                 allAnswers.filter(
                                     (ans) =>
-                                        ans.result_text ===
-                                            option.option_text &&
-                                        ans.step === step._id
+                                        ans.step &&
+                                        ans.step._id === step._id &&
+                                        ans.result_text === option.option_text
                                 ).length
                             }})</strong
                         >
@@ -50,5 +89,6 @@ onBeforeMount(async () => {
                 </div>
             </div>
         </div>
+        {{ allAnswers[0] }}
     </div>
 </template>

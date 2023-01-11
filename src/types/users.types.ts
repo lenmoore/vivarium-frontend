@@ -55,6 +55,7 @@ export class Visitor implements IUser {
     basket?: Basket;
     quiz_results?: [];
     confirmed_humanity_value: '';
+    archived: boolean;
 
     constructor(user: any) {
         this._id = user._id;
@@ -70,6 +71,7 @@ export class Visitor implements IUser {
         this.wardrobe_number = user.wardrobe_number;
         this.basket = user.basket;
         this.quiz_results = user.quiz_results || [];
+        this.archived = user.archived;
         this.confirmed_humanity_value = user.confirmed_humanity_value || 'none';
     }
 
@@ -86,6 +88,7 @@ export class Visitor implements IUser {
             wants_newsletter: json.wants_newsletter,
             wardrobe_number: json.wardrobe_number,
             basket: json.basket,
+            archived: json.archived,
             quiz_results: json.quiz_results,
             confirmed_humanity_value: json.confirmed_humanity_value,
         });
@@ -99,6 +102,7 @@ export class Visitor implements IUser {
             username: visitor?.username,
             performance: visitor?.performance,
             wants_summary: visitor?.wants_summary,
+            archived: visitor?.archived,
             wants_newsletter: visitor?.wants_newsletter,
             wardrobe_number: visitor?.wardrobe_number,
             basket: visitor?.basket,
