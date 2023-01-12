@@ -7,6 +7,9 @@ import { computed, defineEmits, onBeforeMount, watchEffect } from 'vue';
 import router from '../../router/index';
 import moment from 'moment';
 
+import { getCurrentInstance } from 'vue';
+
+const instance = getCurrentInstance();
 const performanceStore = usePerformanceStore();
 onBeforeMount(async () => {
     await performanceStore.getPerformances();
@@ -36,6 +39,8 @@ async function onLogin() {
     const localVisitor = await visitorStore.login(visitor).data;
     localStorage.setItem('visitorId', localVisitor.visitorId);
     localStorage.setItem('visitor', visitor);
+    instance?.proxy?.$forceUpdate();
+
     await router.push({ name: 'visitor.intro' });
 }
 </script>
