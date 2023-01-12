@@ -48,7 +48,6 @@ async function sort() {
     games = games?.value?.filter(
         (g) =>
             g.game_type !== 'SHOP' &&
-            g.pre_capsule === preCapsule &&
             (g.open_for_colors.includes(showOnlyColorRoute.value) ||
                 g.open_for_colors.includes(showOnlyColor))
     );
@@ -59,7 +58,7 @@ async function sort() {
 function getGameActiveButton(game) {
     const phases = computed(() => performanceStore.phases);
     let phaseToEdit = phases?.value?.find(
-        (p) => p?.phase_game._id === game?._id
+        (p) => p?.phase_game?._id === game?._id
     );
     return phaseToEdit?.active ? 'Lopeta' : 'Aktiveeri';
 }
