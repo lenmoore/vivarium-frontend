@@ -107,11 +107,6 @@ function turnCameraOff() {
                         <div class="product-title">
                             {{ qr.foundProduct.title }}
                         </div>
-                        <img
-                            :src="qr.foundProduct.image"
-                            alt=""
-                            class="product-image"
-                        />
                         <div v-if="qr.isValid" class="btns">
                             <button
                                 class="btn btn-outline-primary"
@@ -137,6 +132,12 @@ function turnCameraOff() {
                                 Olgu
                             </button>
                         </div>
+
+                        <img
+                            :src="qr.foundProduct.image"
+                            alt=""
+                            class="product-image"
+                        />
                     </div>
                 </div>
             </QrStream>
