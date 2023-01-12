@@ -93,7 +93,7 @@ import { getCurrentInstance } from 'vue';
 const instance = getCurrentInstance();
 const performanceStore = usePerformanceStore();
 const visitorStore = useVisitorStore();
-const visitor = reactive(visitorStore.getVisitor);
+let visitor = reactive(visitorStore.getVisitor);
 let showLoginBtn = localStorage.getItem('accessToken') == null;
 const isAdmin = ref(localStorage.getItem('admin') === 'true');
 const isActor = ref(localStorage.getItem('actor') === 'true');
@@ -119,6 +119,9 @@ watch(router.currentRoute, async () => {
     await performanceStore.getPhases();
 });
 onBeforeMount(async () => {
+    visitor = await visitorStore.fetchVisitor(
+        localStorage.getItem('visitorId') || ''
+    );
     if (visitor.archived === true) {
         localStorage.clear();
         location.replace('/');
