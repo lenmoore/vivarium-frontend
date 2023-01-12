@@ -11,7 +11,7 @@
                 >
                     Cancel
                 </button>
-                <button class="btn btn-primary" @on-click="submit">
+                <button class="btn btn-primary" @on-click.prevent="submit">
                     {{ submitLabel }}
                 </button>
             </div>

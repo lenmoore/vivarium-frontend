@@ -259,3 +259,26 @@ h5 {
 .font-size-extra-super-small {
     font-size: 4px;
 }
+
+@media screen and (max-width: 350px) {
+    .extra-small-for-tiny-mobile {
+        font-size: 0.75rem !important;
+
+        * {
+            font-size: 0.75rem !important;
+            padding: 0 !important;
+        }
+    }
+
+    .small-for-tiny-mobile {
+        font-size: 2rem !important;
+    }
+
+    .column-for-tiny-mobile {
+        margin-top: 1rem !important;
+        margin-bottom: 1rem !important;
+        display: flex !important;
+        flex-direction: column !important;
+
+    }
+}

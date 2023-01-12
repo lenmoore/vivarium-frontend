@@ -77,9 +77,20 @@ async function addProductToBasket() {
     // location.reload();
 }
 
-function onInit() {
-    qr.value.foundProduct = null;
-    resetValidationState();
+let loading = ref(false);
+
+async function onInit(promise) {
+    this.loading = true;
+
+    try {
+        await promise;
+        qr.value.foundProduct = null;
+        resetValidationState();
+    } catch (error) {
+        console.error(error);
+    } finally {
+        this.loading = false;
+    }
 }
 
 function resetValidationState() {
@@ -92,16 +103,22 @@ function turnCameraOff() {
 </script>
 <template>
     <div>
-        <div class="d-flex justify-content-center mb-4">
+        <div
+            class="d-flex justify-content-center mb-4 extra-small-for-tiny-mobile column-for-tiny-mobile"
+        >
             <h2>Skänni midagi!</h2>
             <a
                 class="btn btn-outline-primary"
                 href="/visitor/humanity-shop/basket"
-                >Vajuta, et minna korvi</a
+                >> Korvi</a
             >
         </div>
         <div class="scanner-wrapper">
             <QrStream @decode="onDecode" @init="onInit">
+                <div v-if="loading" class="loading-indicator">
+                    Laen...
+                    <img alt="loader" src="/public/Spinner-1s-200px.gif" />
+                </div>
                 <div v-if="qr.foundProduct" class="validation-success">
                     <div class="product-add">
                         <div class="product-title">
@@ -171,6 +188,18 @@ function turnCameraOff() {
         .product-image {
             height: 250px;
             width: 250px;
+        }
+
+        @media screen and (max-width: 350px) {
+            .product-title {
+                margin-top: 1.5rem;
+                font-size: 1rem;
+            }
+
+            .product-image {
+                height: 150px;
+                width: 150px;
+            }
         }
 
         .btns {

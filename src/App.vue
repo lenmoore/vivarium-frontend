@@ -7,7 +7,9 @@
             <!--                    >logout?</RouterLink-->
             <!--                >-->
             <!--            </span>-->
-            <a :href="getActiveHomeLink()" class="text-decoration-none"
+            <a
+                :href="getActiveHomeLink()"
+                class="text-decoration-none extra-small-for-tiny-mobile"
                 ><h1 class="h1-color text-decoration-none">
                     VIVAARIUM
                     <span v-if="!isAdmin && !isActor"
@@ -19,9 +21,11 @@
             <a
                 v-if="!isActor && !isAdmin"
                 :href="getActiveHomeLink()"
-                class="text-decoration-none"
+                class="text-decoration-none small-for-tiny-mobile"
                 ><h1>
-                    <span class="material-symbols-outlined h1-color large-icon">
+                    <span
+                        class="material-symbols-outlined h1-color large-icon small-for-tiny-mobile"
+                    >
                         sync
                     </span>
                 </h1></a

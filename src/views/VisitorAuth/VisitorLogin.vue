@@ -36,7 +36,7 @@ async function onLogin() {
     const localVisitor = await visitorStore.login(visitor).data;
     localStorage.setItem('visitorId', localVisitor.visitorId);
     localStorage.setItem('visitor', visitor);
-    router.push({ name: 'visitor.intro' });
+    await router.push({ name: 'visitor.intro' });
 }
 </script>
 

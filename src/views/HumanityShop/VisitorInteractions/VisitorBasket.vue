@@ -63,19 +63,17 @@ function setSeenShopIntro() {
         v-if="showStore"
         class="h-100 d-flex flex-column justify-content-between"
     >
-        <div
-            class="h-100 d-flex flex-column justify-content-between basket-list"
-        >
+        <div>
             <div
-                v-if="basket.products.length === 9"
-                class="text-bg-success p-2"
+                v-if="basket.products.length >= 9"
+                class="text-bg-success extra-small-for-tiny-mobile p-2"
             >
                 Korvi mahub 9 toodet. Kui tahad veel midagi lisada, pead
                 millestki loobuma. Tee oma otsuseid hoolikalt.
             </div>
             <div
                 v-else
-                class="d-flex align-items-center justify-content-between"
+                class="d-flex align-items-center justify-content-between column-for-tiny-mobile p-4"
             >
                 <div>
                     Korvis hetkel {{ productsInBasket.length || 0 }} toodet.
@@ -87,7 +85,7 @@ function setSeenShopIntro() {
                     Vajuta, et tootekood skaneerida
                 </a>
             </div>
-            <div class="basket-items-wrapper">
+            <div class="basket-items-wrapper extra-small-for-tiny-mobile">
                 <div
                     v-for="(item, i) in productsInBasket"
                     :key="item._id + i"
@@ -112,7 +110,7 @@ function setSeenShopIntro() {
                         v-if="
                             showWantToRemoveModal && removeItemId === item._id
                         "
-                        class="d-flex justify-content-end m-2"
+                        class="d-flex justify-content-end m-2 extra-small-for-tiny-mobile column-for-tiny-mobile"
                     >
                         Kindel, et eemaldad toote?
                         <button
@@ -153,11 +151,11 @@ function setSeenShopIntro() {
         <div class="bottom-fixed d-flex flex-column">
             <div
                 v-if="basket.products.length === 0"
-                class="align-items-center justify-content-center d-flex w-100"
+                class="align-items-center justify-content-center d-flex w-100 extra-small-for-tiny-mobile"
             >
                 Su korvis pole veel tooteid.
             </div>
-            <div v-else-if="basket.products.length === 9"></div>
+            <div v-else-if="basket.products.length >= 9"></div>
         </div>
     </div>
     <div v-else class="d-flex flex-column justify-content-center h-100">
@@ -191,6 +189,21 @@ function setSeenShopIntro() {
         justify-content: space-between;
         align-items: center;
         border: 1px solid orange;
+    }
+}
+
+@media screen and (max-width: 350px) {
+    .basket-item {
+        margin-bottom: 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border: 1px solid orange;
+
+        img {
+            width: 60px !important;
+            height: 60px !important;
+        }
     }
 }
 
