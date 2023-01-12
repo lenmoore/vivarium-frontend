@@ -92,13 +92,14 @@ async function sortThemGuys() {
     let visitorsToMap = ref(visitors.value);
     countedProducts = ref([]);
     mappedVisitors = reactive([]);
-    // coolAlgorithmedVisitors = {
-    //     turq: new Set(),
-    //     fuchsia: new Set(),
-    //     silver: new Set(),
-    //     lime: new Set(),
-    // };
+    coolAlgorithmedVisitors = {
+        turq: new Set(),
+        fuchsia: new Set(),
+        silver: new Set(),
+        lime: new Set(),
+    };
 
+    console.log(mappedVisitors);
     mappedVisitors = visitorsToMap.value.map((visitor) => {
         let basket = visitor.basket;
 
@@ -188,8 +189,8 @@ async function sortThemGuys() {
 
     let peopleCount = (visitors.value.length - peopleCountModulo) / 4;
     let notYetSomewhere = new Set(mappedVisitors);
-
-    // console.log(notYetSomewhere.size, ' not yet somewhere');
+    // console.log(notYetSomewhere);
+    console.log(notYetSomewhere.size, ' not yet somewhere');
     dividePeople();
 
     function firstSort(color) {
@@ -230,7 +231,7 @@ async function sortThemGuys() {
 
                 if (
                     maxKey.length &&
-                    coolAlgorithmedVisitors[maxKey].size <= peopleCount
+                    coolAlgorithmedVisitors[maxKey]?.size <= peopleCount
                 ) {
                     // console.log('maxkey is ', maxKey);
                     addToAlgorithmedVisitors(maxKey, silverGuy);
@@ -245,7 +246,7 @@ async function sortThemGuys() {
                     // console.log('secondMaxValue', secondMaxValue);
                     if (
                         secondMaxValue.length &&
-                        coolAlgorithmedVisitors[secondMaxValue[0]].size <=
+                        coolAlgorithmedVisitors[secondMaxValue[0]]?.size <=
                             peopleCount
                     ) {
                         addToAlgorithmedVisitors(secondMaxValue[0], silverGuy);
@@ -260,7 +261,7 @@ async function sortThemGuys() {
                         // console.log('thirdMaxValue', thirdMaxValue);
                         if (
                             thirdMaxValue.length &&
-                            coolAlgorithmedVisitors[thirdMaxValue[0]].size <=
+                            coolAlgorithmedVisitors[thirdMaxValue[0]]?.size <=
                                 peopleCount
                         ) {
                             addToAlgorithmedVisitors(
@@ -284,20 +285,21 @@ async function sortThemGuys() {
     }
 
     function addToAlgorithmedVisitors(maxKey, visitor) {
-        coolAlgorithmedVisitors[maxKey].add(visitor);
+        console.log(maxKey, visitor.wardrobe_number);
+        coolAlgorithmedVisitors[maxKey]?.add(visitor);
         visitor.algorithm_result = maxKey;
         notYetSomewhere.delete(visitor);
     }
 
-    // console.log(notYetSomewhere);
-
+    console.log(notYetSomewhere);
+    console.log(coolAlgorithmedVisitors);
     viewOptions.value.ready = true;
 }
 
 async function confirmColors() {
     let viiiiis = [];
 
-    coolAlgorithmedVisitors.lime.forEach((visitor) => {
+    coolAlgorithmedVisitors.lime?.forEach((visitor) => {
         // if (
         //     visitor.confirmed_humanity_value === 'none' ||
         //     !visitor.confirmed_humanity_value
@@ -308,7 +310,7 @@ async function confirmColors() {
         });
         // }
     });
-    coolAlgorithmedVisitors.silver.forEach((visitor) => {
+    coolAlgorithmedVisitors.silver?.forEach((visitor) => {
         // if (
         //     visitor.confirmed_humanity_value === 'none' ||
         //     !visitor.confirmed_humanity_value
@@ -319,7 +321,7 @@ async function confirmColors() {
         });
         // }
     });
-    coolAlgorithmedVisitors.turq.forEach((visitor) => {
+    coolAlgorithmedVisitors.turq?.forEach((visitor) => {
         // if (
         //     visitor.confirmed_humanity_value === 'none' ||
         //     !visitor.confirmed_humanity_value
@@ -330,7 +332,7 @@ async function confirmColors() {
         });
         // }
     });
-    coolAlgorithmedVisitors.fuchsia.forEach((visitor) => {
+    coolAlgorithmedVisitors.fuchsia?.forEach((visitor) => {
         // if (
         //     visitor.confirmed_humanity_value === 'none' ||
         //     !visitor.confirmed_humanity_value
@@ -458,37 +460,90 @@ async function confirmColors() {
                 <!--                <div v-if="viewOptions.showSummaryList" class="visitors">-->
                 <!--                    {{ visitors.length }} inimest teatris. Eeldatav kapsli-->
                 <!--                    suurus: {{ Math.floor(visitors.length / 4) }} +- 3-->
-                <!--                    <AudienceSummary-->
-                <!--                        :color="showOnlyColorRoute || showOnlyColor"-->
-                <!--                        :cool-algorithmed-visitors="coolAlgorithmedVisitors"-->
-                <!--                    />-->
-                <!--                </div>-->
-                <!--                <div-->
-                <!--                    v-else-if="-->
-                <!--                        viewOptions.showProductsSummary && countedProducts-->
-                <!--                    "-->
-                <!--                >-->
-                <!--                    <ProductsSummary-->
-                <!--                        :color="showOnlyColorRoute || showOnlyColor"-->
-                <!--                        :cool-algorithmed-visitors="coolAlgorithmedVisitors"-->
-                <!--                    />-->
-                <!--                </div>-->
-                <!--                <div v-else-if="viewOptions.showQuizSummaryInCapsule">-->
-                <!--                    <QuizSummary-->
-                <!--                        :color="showOnlyColorRoute || showOnlyColor"-->
-                <!--                        :cool-algorithmed-visitors="coolAlgorithmedVisitors"-->
-                <!--                        :games="gamesInCapsule"-->
-                <!--                    />-->
-                <!--                </div>-->
-                <!--                <div v-else-if="viewOptions.showQuizSummaryPreCapsule">-->
-                <!--                    <QuizSummary-->
-                <!--                        :color="showOnlyColorRoute || showOnlyColor"-->
-                <!--                        :cool-algorithmed-visitors="coolAlgorithmedVisitors"-->
-                <!--                        :games="gamesPreCapsule"-->
-                <!--                    />-->
-                <!--                </div>-->
-            </div>
+                <!--                <AudienceSummary-->
+                <!--                    :color="showOnlyColorRoute || showOnlyColor"-->
+                <!--                    :cool-algorithmed-visitors="coolAlgorithmedVisitors"-->
+                <!--                />-->
+                <div
+                    v-for="visitor in coolAlgorithmedVisitors.silver"
+                    :key="visitor._id"
+                    :class="visitor.confirmed_humanity_value"
+                    class="visitor-wrapper mt-2 text-center d-flex justify-content-between"
+                >
+                    <div class="d-flex">
+                        <span
+                            ><h2 style="width: 4em">
+                                {{ visitor.wardrobe_number }}
+                            </h2>
+                            <div class="font-size-extra-super-small">
+                                {{ visitor.highest }} _
+                                {{ visitor.algorithm_result }}
+                            </div></span
+                        >
 
+                        <div
+                            class="border-top d-flex flex-column align-items-start"
+                        >
+                            Tooteid korvis:
+                            {{ visitor.basket.products.length }},
+                            <small
+                                v-for="product in visitor.basket.products"
+                                :key="product.title"
+                                >{{ product.title }},<br />
+                            </small>
+                        </div>
+                    </div>
+                    <div class="border-top w-50">
+                        <div>
+                            Vastused: <br />
+                            <small
+                                v-for="result in visitor.quiz_results"
+                                :key="result.result_text"
+                                >{{ result.result_text }},
+                            </small>
+                        </div>
+                        <div>
+                            <small class="font-size-xs bg-fuchsia p-1 m-1">{{
+                                Math.floor(visitor.avg_hum_values.fuchsia)
+                            }}</small>
+                            <small class="font-size-xs bg-green p-1 m-1">{{
+                                Math.floor(visitor.avg_hum_values.lime)
+                            }}</small>
+                            <small class="font-size-xs bg-orange p-1 m-1">{{
+                                Math.floor(visitor.avg_hum_values.turq)
+                            }}</small>
+                            <small class="font-size-xs bg-blue p-1 m-1">{{
+                                Math.floor(visitor.avg_hum_values.silver)
+                            }}</small>
+                        </div>
+                    </div>
+                    <!--                </div>-->
+                    <!--                <div-->
+                    <!--                    v-else-if="-->
+                    <!--                        viewOptions.showProductsSummary && countedProducts-->
+                    <!--                    "-->
+                    <!--                >-->
+                    <!--                    <ProductsSummary-->
+                    <!--                        :color="showOnlyColorRoute || showOnlyColor"-->
+                    <!--                        :cool-algorithmed-visitors="coolAlgorithmedVisitors"-->
+                    <!--                    />-->
+                    <!--                </div>-->
+                    <!--                <div v-else-if="viewOptions.showQuizSummaryInCapsule">-->
+                    <!--                    <QuizSummary-->
+                    <!--                        :color="showOnlyColorRoute || showOnlyColor"-->
+                    <!--                        :cool-algorithmed-visitors="coolAlgorithmedVisitors"-->
+                    <!--                        :games="gamesInCapsule"-->
+                    <!--                    />-->
+                    <!--                </div>-->
+                    <!--                <div v-else-if="viewOptions.showQuizSummaryPreCapsule">-->
+                    <!--                    <QuizSummary-->
+                    <!--                        :color="showOnlyColorRoute || showOnlyColor"-->
+                    <!--                        :cool-algorithmed-visitors="coolAlgorithmedVisitors"-->
+                    <!--                        :games="gamesPreCapsule"-->
+                    <!--                    />-->
+                    <!--                </div>-->
+                </div>
+            </div>
             <div v-if="isAdmin">
                 <h4 style="margin-top: 20rem">
                     Ära vajuta neid nuppe, kui sul siia asja pole. Helena paneb

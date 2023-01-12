@@ -185,18 +185,18 @@ setInterval(async function () {
                         </small>
                     </div>
                     <div>
-                        <!--                        <small class="font-size-xs bg-fuchsia p-1 m-1">{{-->
-                        <!--                            Math.floor(visitor.avg_hum_values.fuchsia)-->
-                        <!--                        }}</small>-->
-                        <!--                        <small class="font-size-xs bg-green p-1 m-1">{{-->
-                        <!--                            Math.floor(visitor.avg_hum_values.lime)-->
-                        <!--                        }}</small>-->
-                        <!--                        <small class="font-size-xs bg-orange p-1 m-1">{{-->
-                        <!--                            Math.floor(visitor.avg_hum_values.turq)-->
-                        <!--                        }}</small>-->
-                        <!--                        <small class="font-size-xs bg-blue p-1 m-1">{{-->
-                        <!--                            Math.floor(visitor.avg_hum_values.silver)-->
-                        <!--                        }}</small>-->
+                        <small class="font-size-xs bg-fuchsia p-1 m-1">{{
+                            Math.floor(visitor.avg_hum_values.fuchsia)
+                        }}</small>
+                        <small class="font-size-xs bg-green p-1 m-1">{{
+                            Math.floor(visitor.avg_hum_values.lime)
+                        }}</small>
+                        <small class="font-size-xs bg-orange p-1 m-1">{{
+                            Math.floor(visitor.avg_hum_values.turq)
+                        }}</small>
+                        <small class="font-size-xs bg-blue p-1 m-1">{{
+                            Math.floor(visitor.avg_hum_values.silver)
+                        }}</small>
                     </div>
                 </div>
             </div>

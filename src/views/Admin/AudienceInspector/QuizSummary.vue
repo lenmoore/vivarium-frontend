@@ -58,8 +58,10 @@ async function sort() {
 
 function getGameActiveButton(game) {
     const phases = computed(() => performanceStore.phases);
-    let phaseToEdit = phases.value.find((p) => p.phase_game._id === game._id);
-    return phaseToEdit.active ? 'Lopeta' : 'Aktiveeri';
+    let phaseToEdit = phases?.value?.find(
+        (p) => p?.phase_game._id === game?._id
+    );
+    return phaseToEdit?.active ? 'Lopeta' : 'Aktiveeri';
 }
 
 async function activateQuestionnaire(game) {
