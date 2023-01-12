@@ -48,6 +48,7 @@ async function sort() {
     games = games?.value?.filter(
         (g) =>
             g.game_type !== 'SHOP' &&
+            g.pre_capsule === preCapsule &&
             (g.open_for_colors.includes(showOnlyColorRoute.value) ||
                 g.open_for_colors.includes(showOnlyColor))
     );

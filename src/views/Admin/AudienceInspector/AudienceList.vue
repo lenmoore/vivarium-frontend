@@ -427,7 +427,7 @@ async function confirmColors() {
                 <button
                     :class="{
                         'bg-success text-white':
-                            viewOptions.showProductsSummary,
+                            router.currentRoute.value.name.includes('products'),
                     }"
                     class="btn btn-outline-primary"
                     @click="toggleViewOptions('products')"
@@ -437,7 +437,7 @@ async function confirmColors() {
                 <button
                     :class="{
                         'bg-success text-white':
-                            viewOptions.showQuizSummaryPreCapsule,
+                            router.currentRoute.value.name.includes('pre'),
                     }"
                     class="btn btn-outline-primary"
                     @click="toggleViewOptions('quiz-pre-capsule')"
@@ -447,7 +447,9 @@ async function confirmColors() {
                 <button
                     :class="{
                         'bg-success text-white':
-                            viewOptions.showQuizSummaryInCapsule,
+                            router.currentRoute.value.name.includes(
+                                'in-capsule'
+                            ),
                     }"
                     class="btn btn-outline-primary"
                     @click="toggleViewOptions('quiz-in-capsule')"
