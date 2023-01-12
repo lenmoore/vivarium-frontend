@@ -33,7 +33,9 @@ async function onLogin() {
     console.log(activePerformance.value);
     visitor.performance = activePerformance.value._id;
 
-    await visitorStore.login(visitor);
+    const localVisitor = await visitorStore.login(visitor).data;
+    localStorage.setItem('visitorId', localVisitor.visitorId);
+    localStorage.setItem('visitor', visitor);
     router.push({ name: 'visitor.intro' });
 }
 </script>
@@ -60,6 +62,7 @@ async function onLogin() {
             :label="'Email, kui soovid VAT teatri uudiskirja'"
             :placeholder="'Email'"
             :type="'email'"
+            disabled
             name="email"
         />
     </BaseForm>

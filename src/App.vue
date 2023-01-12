@@ -66,7 +66,28 @@
                 </div>
             </div>
         </div>
-
+        <div
+            v-if="confirmedHumanityValue !== 'none'"
+            :class="
+                {
+                    turq: 'bg-orange',
+                    fuchsia: 'bg-fuchsia',
+                    silver: 'bg-blue',
+                    lime: 'bg-green',
+                    none: '',
+                }[confirmedHumanityValue]
+            "
+            class="p-1 w-100 text-center"
+        >
+            {{
+                {
+                    turq: 'Türkiis',
+                    fuchsia: 'Violett',
+                    silver: 'Hõbevalge',
+                    lime: 'Laim',
+                }[confirmedHumanityValue]
+            }}
+        </div>
         <!--        <a class="font-size-xs" href="https://10.0.0.244:3000/api/games">-->
         <!--            kliki mind kui login lehte pole ja advanced -> proceed-->
         <!--        </a>-->
@@ -118,10 +139,17 @@ watch(router.currentRoute, async () => {
     showLoginBtn = localStorage.getItem('accessToken') == null;
     await performanceStore.getPhases();
 });
+let confirmedHumanityValue = localStorage.getItem('confirmed_humanity_value');
+
 onBeforeMount(async () => {
     visitor = await visitorStore.fetchVisitor(
         localStorage.getItem('visitorId') || ''
     );
+    localStorage.setItem(
+        'confirmed_humanity_value',
+        visitor.confirmed_humanity_value
+    );
+
     if (visitor.archived === true) {
         localStorage.clear();
         location.replace('/');
