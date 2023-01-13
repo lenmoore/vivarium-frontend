@@ -108,7 +108,7 @@ function turnCameraOff() {
         >
             <h2>Skänni midagi!</h2>
             <a
-                class="btn btn-outline-primary"
+                class="btn btn-primary small-for-tiny-mobile"
                 href="/visitor/humanity-shop/basket"
                 >> Korvi</a
             >
