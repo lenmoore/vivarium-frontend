@@ -148,7 +148,9 @@ function getGameStepObj(step) {
                 </div>
             </div>
             <div class="col-3 d-flex justify-content-end align-items-start">
+                <div v-if="gameClicked">Laen...</div>
                 <button
+                    v-else
                     :class="
                         getGameActiveButton(game) === 'Aktiveeri'
                             ? 'btn-outline-primary'
