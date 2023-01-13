@@ -79,6 +79,34 @@ setInterval(async function () {
     await performanceStore.getActorCapsuleVisitors(showOnlyColorRoute.value);
     instance?.proxy?.$forceUpdate();
 }, 120000);
+
+function getGameStepObj(step) {
+    console.log(step);
+    let stepAnswers = allAnswers.value.filter(
+        (ans) => ans.step && ans.step._id === step._id
+    );
+
+    let mappedAnswers = step.question_options
+        .map((opt) => ({
+            text: opt.option_text,
+            amount: stepAnswers.filter(
+                (ans) =>
+                    ans.step &&
+                    ans.step._id === step._id &&
+                    ans.result_text === opt.option_text
+            ).length,
+        }))
+        .sort((a, b) => b.amount - a.amount);
+
+    let stepObject = {
+        _id: step._id,
+        question_text: step.question_text,
+        results: mappedAnswers,
+        peopleWhoAnswered: stepAnswers.length,
+    };
+
+    return stepObject;
+}
 </script>
 <template>
     <div>
@@ -97,22 +125,25 @@ setInterval(async function () {
                     :key="step._id"
                     class="py-2"
                 >
-                    <h4>{{ step.question_text }}</h4>
+                    <h4>{{ getGameStepObj(step).question_text }}</h4>
+
                     <div
-                        v-for="option in step.question_options"
-                        :key="option.option_text"
+                        v-for="option in getGameStepObj(step).results"
+                        :key="option.text"
+                        class="w-100 border-bottom d-flex align-items-center justify-content-between"
                     >
-                        {{ option.option_text }}
-                        <span
-                            >({{
-                                allAnswers.filter(
-                                    (ans) =>
-                                        ans.step &&
-                                        ans.step._id === step._id &&
-                                        ans.result_text === option.option_text
-                                ).length
-                            }})</span
-                        >
+                        <div class="w-75">{{ option.text }}</div>
+                        <div>
+                            <small
+                                >({{
+                                    option.amount /
+                                    getGameStepObj(step).peopleWhoAnswered
+                                }}
+                                %)</small
+                            >
+                            -
+                            <strong>{{ option.amount }}</strong>
+                        </div>
                     </div>
                 </div>
             </div>
