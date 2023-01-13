@@ -107,6 +107,11 @@ setInterval(async function () {
     sort();
     instance?.proxy?.$forceUpdate();
 }, 120000);
+
+async function deleteVisitor(visitor) {
+    await performanceStore.deleteVisitor(visitor);
+    location.reload();
+}
 </script>
 <template>
     <div>
@@ -166,6 +171,7 @@ setInterval(async function () {
                             </div>
                             <button
                                 class="btn btn-danger font-size-extra-super-small"
+                                @click="deleteVisitor(visitor)"
                             >
                                 kustuta
                             </button>

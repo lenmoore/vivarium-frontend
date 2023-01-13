@@ -195,6 +195,14 @@ class PerformanceService {
         });
     }
 
+    async deleteVisitor(visitor: Visitor): Promise<Visitor> {
+        return await api
+            .delete('/visitors/' + visitor.visitorId)
+            .then(({ data }) => {
+                return data;
+            });
+    }
+
     //     app.get(
     //     '/api/actor-state/audience-list',
     //     [requireUser],

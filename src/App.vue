@@ -198,7 +198,7 @@ function getActiveHomeLink() {
     if (isAdmin.value) {
         return '/superadmin/performances';
     } else if (isActor.value) {
-        return '/admin/audience';
+        return router.currentRoute.value.fullPath;
     }
 
     if (visitor.visitorId && activeGame && activeGame.game_type === 'SHOP') {

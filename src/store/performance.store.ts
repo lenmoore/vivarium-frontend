@@ -125,6 +125,10 @@ export const usePerformanceStore = defineStore({
             return await PerformanceService.fetchActorState();
         },
 
+        async deleteVisitor(visitor: Visitor) {
+            return await PerformanceService.deleteVisitor(visitor);
+        },
+
         async editActorStateSetTimer(update: any) {
             return await PerformanceService.editActorStateSetTimer(update);
         },
