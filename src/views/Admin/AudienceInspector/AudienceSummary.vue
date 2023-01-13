@@ -100,6 +100,8 @@ function sort() {
     console.log('mappe', mappedVisitors);
 }
 
+const isAdmin = ref(localStorage.getItem('admin') === 'true');
+
 setInterval(async function () {
     await performanceStore.getActorCapsuleVisitors(showOnlyColorRoute.value);
     sort();
@@ -152,12 +154,22 @@ setInterval(async function () {
                 :class="visitor.confirmed_humanity_value"
                 class="visitor-wrapper mt-2 text-center d-flex justify-content-between"
             >
-                {{ visitor._id }}
                 <div class="d-flex">
                     <span
                         ><h2 style="width: 4em">
                             {{ visitor.wardrobe_number }}
                         </h2>
+
+                        <div v-if="isAdmin">
+                            <div class="font-size-extra-super-small">
+                                {{ visitor._id }}
+                            </div>
+                            <button
+                                class="btn btn-danger font-size-extra-super-small"
+                            >
+                                kustuta
+                            </button>
+                        </div>
                         <div class="font-size-extra-super-small">
                             {{ visitor.highest }} _
                             {{ visitor.algorithm_result }}

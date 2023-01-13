@@ -37,6 +37,7 @@
                 <div v-if="timerState.isRunning" class="font-size-xl">
                     {{ timerString }}
                 </div>
+                <div v-else-if="timerState.loading">Laen taimerit...</div>
                 <div
                     v-else
                     class="w-100 d-flex align-items-center justify-content-end"
@@ -137,6 +138,7 @@ let timerState = ref({
     minutes: 0,
     seconds: 0,
     isRunning: false,
+    loading: false,
 });
 let timerString = ref('');
 watch(router.currentRoute, async () => {
@@ -167,7 +169,8 @@ onBeforeMount(async () => {
     activeGame = games.value.find(
         (game) => game?._id === activePhase?.value?.phase_game?._id
     );
-    if (isActor.value) {
+    if (isActor.value || isAdmin) {
+        timerState.value.loading = true;
         const data = await performanceStore.getActorState();
 
         timers.value = data.timers;
@@ -180,6 +183,7 @@ onBeforeMount(async () => {
             console.log('activetimer value', activeTimer.value);
             instance?.proxy?.$forceUpdate();
         }
+        timerState.value.loading = false;
     }
 });
 
@@ -231,6 +235,7 @@ function isInFuture(timer: any) {
 }
 
 async function startTimer(minutes: number) {
+    timerState.value.loading = true;
     // console.log(timers);
     let startThisTimer = timers.value.find((t: any) => t.minutes === minutes);
     // console.log(startThisTimer);
