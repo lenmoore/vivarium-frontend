@@ -172,6 +172,14 @@ class PerformanceService {
         });
     }
 
+    async getVisitorByDateNumber(date: string, wardrobeNumber: number) {
+        return await api
+            .get(`/performance/visitors/${date}/${wardrobeNumber}`)
+            .then(({ data }) => {
+                return data;
+            });
+    }
+
     async getCurrentPerformanceVisitors(performance: string) {
         return await api
             .get(`/performance-visitors/${performance}`)

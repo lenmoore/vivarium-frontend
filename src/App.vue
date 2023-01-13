@@ -1,6 +1,9 @@
 <template>
     <div class="page">
-        <div class="d-flex align-items-start justify-content-between w-100">
+        <div
+            v-if="router.currentRoute.value.name !== 'character'"
+            class="d-flex align-items-start justify-content-between w-100"
+        >
             <!--            <span>-->
             <!--                <a v-if="!(isAdmin || isActor)" href="/character">X</a> - - - -->
             <!--                <RouterLink :to="{ path: '/visitor/logout' }"-->
@@ -194,7 +197,6 @@ function getActiveHomeLink() {
     activeGame = games.value.find(
         (game) => game?._id === activePhase?.value?.phase_game?._id
     );
-    console.log(isActor);
     if (isAdmin.value) {
         return '/superadmin/performances';
     } else if (isActor.value) {

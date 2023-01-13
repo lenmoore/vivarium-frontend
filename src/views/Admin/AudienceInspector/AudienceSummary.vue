@@ -96,8 +96,6 @@ function sort() {
         };
     });
     instance?.proxy?.$forceUpdate();
-
-    console.log('mappe', mappedVisitors);
 }
 
 const isAdmin = ref(localStorage.getItem('admin') === 'true');
@@ -179,8 +177,8 @@ async function deleteVisitor(visitor) {
                         <div class="font-size-extra-super-small">
                             {{ visitor.highest }} _
                             {{ visitor.algorithm_result }}
-                        </div></span
-                    >
+                        </div>
+                    </span>
 
                     <div
                         class="border-top d-flex flex-column align-items-start"

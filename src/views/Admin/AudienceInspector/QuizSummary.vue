@@ -35,13 +35,15 @@ onMounted(async () => {
 async function sort() {
     phases = computed(() => performanceStore.phases);
     games = computed(() => performanceStore.games);
-    console.log(games);
     let sortedVisitors = computed(() => performanceStore.getVisitors);
 
     sortedVisitors.value.forEach((visitor) => {
         visitor.quiz_results.forEach((qR) => {
             if (qR.result_text !== '-') {
-                allAnswers.value.push(qR);
+                allAnswers.value.push({
+                    ...qR,
+                    visitor: visitor.wardrobe_number,
+                });
             }
         });
     });
@@ -70,7 +72,6 @@ async function activateQuestionnaire(game) {
     gameClicked = true;
     const phases = computed(() => performanceStore.phases);
     let phaseToEdit = phases.value.find((p) => p.phase_game._id === game._id);
-    console.log('make this inactive: ', phaseToEdit);
     await performanceStore.editPhase(phaseToEdit);
     location.reload();
 }
@@ -81,7 +82,6 @@ setInterval(async function () {
 }, 120000);
 
 function getGameStepObj(step) {
-    console.log(step);
     let stepAnswers = allAnswers.value.filter(
         (ans) => ans.step && ans.step._id === step._id
     );
@@ -95,8 +95,16 @@ function getGameStepObj(step) {
                     ans.step._id === step._id &&
                     ans.result_text === opt.option_text
             ).length,
+            visitors: stepAnswers
+                .filter(
+                    (ans) =>
+                        ans.step &&
+                        ans.step._id === step._id &&
+                        ans.result_text === opt.option_text
+                )
+                .map((ans) => ans.visitor),
         }))
-        .sort((a, b) => b.amount - a.amount);
+        .sort((a, b) => a.text.localeCompare(b.text));
 
     let stepObject = {
         _id: step._id,
@@ -130,9 +138,12 @@ function getGameStepObj(step) {
                     <div
                         v-for="option in getGameStepObj(step).results"
                         :key="option.text"
-                        class="w-100 border-bottom d-flex align-items-center justify-content-between"
+                        class="w-100 border-bottom d-flex align-items-center justify-content-between py-1"
                     >
-                        <div class="w-75">{{ option.text }}</div>
+                        <div class="w-75">
+                            <div>{{ option.text }}</div>
+                            <div class="fst-italic">{{ option.visitors }}</div>
+                        </div>
                         <div>
                             <small
                                 >({{

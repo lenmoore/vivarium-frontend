@@ -68,9 +68,9 @@ const routes: Array<RouteRecordRaw> = [
         ],
     },
     {
-        path: '/about',
-        name: 'about',
-        component: () => import('../views/AboutView.vue'),
+        path: '/character/:date/:wardrobe',
+        name: 'character',
+        component: () => import('../views/Character/CharacterSheet.vue'),
     },
     {
         path: '/login',
@@ -266,11 +266,6 @@ const routes: Array<RouteRecordRaw> = [
         name: 'visitor.quiz.done',
         component: () =>
             import('../views/HumanityQuestionnaire/PhaseTwoIsDone.vue'),
-    },
-    {
-        path: '/character',
-        name: 'character',
-        component: () => import('../views/VisitorAuth/CharacterSheet.vue'),
     },
 ];
 

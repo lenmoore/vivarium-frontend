@@ -1,0 +1,192 @@
+<script setup>
+import { onBeforeMount, reactive, ref } from 'vue';
+import router from '../../router/index';
+import { useVisitorStore } from '../../store/visitor.store';
+import { getCurrentInstance } from 'vue';
+
+const instance = getCurrentInstance();
+const visitorStore = useVisitorStore();
+let visitor = reactive({});
+
+let avg_hum_values = ref({});
+onBeforeMount(async () => {
+    console.log('GOOD MORNING TEXAS,');
+    console.log(router.currentRoute.value.fullPath);
+    console.log(router.currentRoute.value.fullPath);
+    console.log(router.currentRoute.value.fullPath);
+    console.log(router.currentRoute.value.fullPath);
+    console.log(router.currentRoute.value.fullPath);
+    console.log(router.currentRoute.value);
+    let routeDate = router.currentRoute.value.params.date;
+    let wardrobeNumber = router.currentRoute.value.params.wardrobe;
+
+    console.log(routeDate, wardrobeNumber);
+
+    visitor = await visitorStore.fetchVisitorByDateAndNumber(
+        routeDate,
+        wardrobeNumber
+    );
+
+    let basket = visitor.basket;
+
+    let redQuiz = visitor?.quiz_results
+        ? visitor?.quiz_results?.map((qR) => {
+              return qR.result_humanity_values?.fuchsia;
+          })
+        : [];
+    let greenQuiz = visitor?.quiz_results
+        ? visitor?.quiz_results?.map((qR) => {
+              return qR?.result_humanity_values?.lime;
+          })
+        : [];
+    let blueQuiz = visitor?.quiz_results
+        ? visitor?.quiz_results?.map((qR) => {
+              return qR?.result_humanity_values?.silver;
+          })
+        : [];
+    let orangeQuiz = visitor?.quiz_results
+        ? visitor?.quiz_results?.map((qR) => {
+              return qR?.result_humanity_values?.turq;
+          })
+        : [];
+
+    let redProducts = basket?.products?.map(
+        (p) => p?.humanity_values?.fuchsia?.average || 0
+    );
+    let silverProducts = basket?.products?.map(
+        (p) => p?.humanity_values?.blue?.average || 0
+    );
+    let limeProducts = basket?.products?.map(
+        (p) => p?.humanity_values?.green?.average || 0
+    );
+    let turqProducts = basket?.products?.map(
+        (p) => p?.humanity_values?.orange?.average || 0
+    );
+
+    let fuchsia = [...redQuiz, ...redProducts];
+    let lime = [...greenQuiz, ...limeProducts];
+    let silver = [...blueQuiz, ...silverProducts];
+    let turq = [...orangeQuiz, ...turqProducts];
+
+    avg_hum_values = {
+        fuchsia: fuchsia?.reduce((a, b) => a + b, 0),
+        silver: silver?.reduce((a, b) => a + b, 0),
+        turq: turq?.reduce((a, b) => a + b, 0),
+        lime: lime?.reduce((a, b) => a + b, 0),
+    };
+    instance?.proxy?.$forceUpdate();
+
+    console.log(visitor);
+});
+</script>
+
+<template>
+    <div class="container">
+        <div class="d-flex align-items-center justify-content-between">
+            <h1 class="h1-color text-decoration-none">VIVAARIUM</h1>
+            <img src="/public/img.png" width="60" />
+        </div>
+        <h2
+            :class="
+                {
+                    turq: 'bg-orange',
+                    fuchsia: 'bg-fuchsia',
+                    silver: 'bg-blue',
+                    lime: 'bg-green',
+                }[visitor.confirmed_humanity_value]
+            "
+            class="p-2 text-center"
+        >
+            ID_{{ visitor.wardrobe_number }}_{{
+                {
+                    turq: 'Türkiis',
+                    fuchsia: 'Violett',
+                    silver: 'Hõbevalge',
+                    lime: 'Laim',
+                }[visitor.confirmed_humanity_value]
+            }}
+        </h2>
+
+        <div class="py-2 text-center">
+            Sinu tulemus:
+            <small class="font-size-xs bg-fuchsia p-1 m-1">{{
+                Math.floor(avg_hum_values.fuchsia)
+            }}</small>
+            <small class="font-size-xs bg-green p-1 m-1">{{
+                Math.floor(avg_hum_values.lime)
+            }}</small>
+            <small class="font-size-xs bg-orange p-1 m-1">{{
+                Math.floor(avg_hum_values.turq)
+            }}</small>
+            <small class="font-size-xs bg-blue p-1 m-1">{{
+                Math.floor(avg_hum_values.silver)
+            }}</small>
+        </div>
+        <div class="w-100 border-bottom" />
+        <div class="py-4">
+            <strong>Mis on Vivaarium?</strong>
+            <p>
+                Vivaarium (ladina vivārium, vīvus - 'elus') on ruum või mingi
+                ala, enamasti suletud, kus enamasti teaduslikel eesmärkidel
+                hoitakse ja kasvatatakse loomi ning taimi.
+            </p>
+            <p>
+                Seekord hoiti ja kasvatati teaduslikel eesmärkidel VAT teatri
+                publikut, kes olid oma enda valikute põhjal vivaariumisse
+                jaotatud.
+            </p>
+        </div>
+
+        <div>
+            <strong>Kajakambritest. Mida see kõik üldse tähendab?</strong>
+            <p>
+                Kajakamber (inglise keeles echo chamber) on metafoor, mille
+                kaudu kirjeldatakse olukorda, kus isiku uskumust tugevdab
+                kommunikatsioon ja kordamine suletud süsteemis. Kajakambri
+                metafoor põhineb akustilisel kajakambril, kus helid kõlavad
+                õõneskambris. Kajakambrit külastades saavad inimesed otsida
+                teavet, mis tugevdab nende olemasolevaid vaateid kui
+                teadvustamata kinnitusmõju. See võib suurendada poliitilist ja
+                sotsiaalset polariseerumist ja äärmuslust.[1] See mõiste on
+                metafoor, mis põhineb akustilisel kajakambril, kus helid
+                kõlavad.
+            </p>
+            <p>
+                Internetis kajava ja homogeniseeriva mõju kirjeldamiseks
+                kasutatakse ka mõistet "kultuuriline tribalism".[2]
+            </p>
+        </div>
+        <div>
+            <h4>Võtsid kapslisse kaasa:</h4>
+
+            <div class="d-flex flex-column">
+                <div
+                    v-for="(res, i) in visitor.basket &&
+                    visitor.basket.products"
+                    :key="'product' + i"
+                    class="d-flex align-items-center border m-1"
+                >
+                    <img :src="res.image" alt="" height="50" />
+                    &nbsp;<small>{{ res.title }}</small>
+                </div>
+            </div>
+        </div>
+
+        <div
+            v-if="
+                visitor && visitor.quiz_results && visitor.quiz_results.length
+            "
+            class="py-4"
+        >
+            <h4>Tegid järgmised valikud:</h4>
+            <div
+                v-for="(res, i) in visitor.quiz_results"
+                :key="'selected' + i"
+                class="border mb-1"
+            >
+                <strong>{{ res.step.question_text }}</strong>
+                {{ res.result_text }}
+            </div>
+        </div>
+    </div>
+</template>

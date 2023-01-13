@@ -55,6 +55,19 @@ export const useVisitorStore = defineStore({
                 return data;
             });
         },
+        async fetchVisitorByDateAndNumber(
+            date: string,
+            wardrobeNumber: number
+        ): Promise<Visitor> {
+            console.log(date, wardrobeNumber);
+            return await PerformanceService.getVisitorByDateNumber(
+                date,
+                wardrobeNumber
+            ).then((data) => {
+                console.log(data);
+                return data;
+            });
+        },
     },
     persist: true,
 });
