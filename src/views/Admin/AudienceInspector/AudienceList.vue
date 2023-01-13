@@ -457,95 +457,95 @@ async function confirmColors() {
                     Kapslimängud
                 </button>
             </div>
-            <div>
-                <RouterView :key="$route.fullPath" />
-                <!--                <div v-if="viewOptions.showSummaryList" class="visitors">-->
-                <!--                    {{ visitors.length }} inimest teatris. Eeldatav kapsli-->
-                <!--                    suurus: {{ Math.floor(visitors.length / 4) }} +- 3-->
-                <!--                <AudienceSummary-->
-                <!--                    :color="showOnlyColorRoute || showOnlyColor"-->
-                <!--                    :cool-algorithmed-visitors="coolAlgorithmedVisitors"-->
-                <!--                />-->
-                <div
-                    v-for="visitor in coolAlgorithmedVisitors.silver"
-                    :key="visitor._id"
-                    :class="visitor.confirmed_humanity_value"
-                    class="visitor-wrapper mt-2 text-center d-flex justify-content-between"
-                >
-                    <div class="d-flex">
-                        <span
-                            ><h2 style="width: 4em">
-                                {{ visitor.wardrobe_number }}
-                            </h2>
-                            <div class="font-size-extra-super-small">
-                                {{ visitor.highest }} _
-                                {{ visitor.algorithm_result }}
-                            </div></span
-                        >
+            <!--            <div>-->
+            <RouterView :key="$route.fullPath" />
+            <!--                <div v-if="viewOptions.showSummaryList" class="visitors">-->
+            <!--                    {{ visitors.length }} inimest teatris. Eeldatav kapsli-->
+            <!--                    suurus: {{ Math.floor(visitors.length / 4) }} +- 3-->
+            <!--                <AudienceSummary-->
+            <!--                    :color="showOnlyColorRoute || showOnlyColor"-->
+            <!--                    :cool-algorithmed-visitors="coolAlgorithmedVisitors"-->
+            <!--                />-->
+            <!--                <div-->
+            <!--                    v-for="visitor in coolAlgorithmedVisitors.silver"-->
+            <!--                    :key="visitor._id"-->
+            <!--                    :class="visitor.confirmed_humanity_value"-->
+            <!--                    class="visitor-wrapper mt-2 text-center d-flex justify-content-between"-->
+            <!--                >-->
+            <!--                    <div class="d-flex">-->
+            <!--                        <span-->
+            <!--                            ><h2 style="width: 4em">-->
+            <!--                                {{ visitor.wardrobe_number }}-->
+            <!--                            </h2>-->
+            <!--                            <div class="font-size-extra-super-small">-->
+            <!--                                {{ visitor.highest }} _-->
+            <!--                                {{ visitor.algorithm_result }}-->
+            <!--                            </div></span-->
+            <!--                        >-->
 
-                        <div
-                            class="border-top d-flex flex-column align-items-start"
-                        >
-                            Tooteid korvis:
-                            {{ visitor.basket.products.length }},
-                            <small
-                                v-for="product in visitor.basket.products"
-                                :key="product.title"
-                                >{{ product.title }},<br />
-                            </small>
-                        </div>
-                    </div>
-                    <div class="border-top w-50">
-                        <div>
-                            Vastused: <br />
-                            <small
-                                v-for="result in visitor.quiz_results"
-                                :key="result.result_text"
-                                >{{ result.result_text }},
-                            </small>
-                        </div>
-                        <div>
-                            <small class="font-size-xs bg-fuchsia p-1 m-1">{{
-                                Math.floor(visitor.avg_hum_values.fuchsia)
-                            }}</small>
-                            <small class="font-size-xs bg-green p-1 m-1">{{
-                                Math.floor(visitor.avg_hum_values.lime)
-                            }}</small>
-                            <small class="font-size-xs bg-orange p-1 m-1">{{
-                                Math.floor(visitor.avg_hum_values.turq)
-                            }}</small>
-                            <small class="font-size-xs bg-blue p-1 m-1">{{
-                                Math.floor(visitor.avg_hum_values.silver)
-                            }}</small>
-                        </div>
-                    </div>
-                    <!--                </div>-->
-                    <!--                <div-->
-                    <!--                    v-else-if="-->
-                    <!--                        viewOptions.showProductsSummary && countedProducts-->
-                    <!--                    "-->
-                    <!--                >-->
-                    <!--                    <ProductsSummary-->
-                    <!--                        :color="showOnlyColorRoute || showOnlyColor"-->
-                    <!--                        :cool-algorithmed-visitors="coolAlgorithmedVisitors"-->
-                    <!--                    />-->
-                    <!--                </div>-->
-                    <!--                <div v-else-if="viewOptions.showQuizSummaryInCapsule">-->
-                    <!--                    <QuizSummary-->
-                    <!--                        :color="showOnlyColorRoute || showOnlyColor"-->
-                    <!--                        :cool-algorithmed-visitors="coolAlgorithmedVisitors"-->
-                    <!--                        :games="gamesInCapsule"-->
-                    <!--                    />-->
-                    <!--                </div>-->
-                    <!--                <div v-else-if="viewOptions.showQuizSummaryPreCapsule">-->
-                    <!--                    <QuizSummary-->
-                    <!--                        :color="showOnlyColorRoute || showOnlyColor"-->
-                    <!--                        :cool-algorithmed-visitors="coolAlgorithmedVisitors"-->
-                    <!--                        :games="gamesPreCapsule"-->
-                    <!--                    />-->
-                    <!--                </div>-->
-                </div>
-            </div>
+            <!--                        <div-->
+            <!--                            class="border-top d-flex flex-column align-items-start"-->
+            <!--                        >-->
+            <!--                            Tooteid korvis:-->
+            <!--                            {{ visitor.basket.products.length }},-->
+            <!--                            <small-->
+            <!--                                v-for="product in visitor.basket.products"-->
+            <!--                                :key="product.title"-->
+            <!--                                >{{ product.title }},<br />-->
+            <!--                            </small>-->
+            <!--                        </div>-->
+            <!--                    </div>-->
+            <!--                    <div class="border-top w-50">-->
+            <!--                        <div>-->
+            <!--                            Vastused: <br />-->
+            <!--                            <small-->
+            <!--                                v-for="result in visitor.quiz_results"-->
+            <!--                                :key="result.result_text"-->
+            <!--                                >{{ result.result_text }},-->
+            <!--                            </small>-->
+            <!--                        </div>-->
+            <!--                        <div>-->
+            <!--                            <small class="font-size-xs bg-fuchsia p-1 m-1">{{-->
+            <!--                                Math.floor(visitor.avg_hum_values.fuchsia)-->
+            <!--                            }}</small>-->
+            <!--                            <small class="font-size-xs bg-green p-1 m-1">{{-->
+            <!--                                Math.floor(visitor.avg_hum_values.lime)-->
+            <!--                            }}</small>-->
+            <!--                            <small class="font-size-xs bg-orange p-1 m-1">{{-->
+            <!--                                Math.floor(visitor.avg_hum_values.turq)-->
+            <!--                            }}</small>-->
+            <!--                            <small class="font-size-xs bg-blue p-1 m-1">{{-->
+            <!--                                Math.floor(visitor.avg_hum_values.silver)-->
+            <!--                            }}</small>-->
+            <!--                        </div>-->
+            <!--                    </div>-->
+            <!--                    &lt;!&ndash;                </div>&ndash;&gt;-->
+            <!--                    &lt;!&ndash;                <div&ndash;&gt;-->
+            <!--                    &lt;!&ndash;                    v-else-if="&ndash;&gt;-->
+            <!--                    &lt;!&ndash;                        viewOptions.showProductsSummary && countedProducts&ndash;&gt;-->
+            <!--                    &lt;!&ndash;                    "&ndash;&gt;-->
+            <!--                    &lt;!&ndash;                >&ndash;&gt;-->
+            <!--                    &lt;!&ndash;                    <ProductsSummary&ndash;&gt;-->
+            <!--                    &lt;!&ndash;                        :color="showOnlyColorRoute || showOnlyColor"&ndash;&gt;-->
+            <!--                    &lt;!&ndash;                        :cool-algorithmed-visitors="coolAlgorithmedVisitors"&ndash;&gt;-->
+            <!--                    &lt;!&ndash;                    />&ndash;&gt;-->
+            <!--                    &lt;!&ndash;                </div>&ndash;&gt;-->
+            <!--                    &lt;!&ndash;                <div v-else-if="viewOptions.showQuizSummaryInCapsule">&ndash;&gt;-->
+            <!--                    &lt;!&ndash;                    <QuizSummary&ndash;&gt;-->
+            <!--                    &lt;!&ndash;                        :color="showOnlyColorRoute || showOnlyColor"&ndash;&gt;-->
+            <!--                    &lt;!&ndash;                        :cool-algorithmed-visitors="coolAlgorithmedVisitors"&ndash;&gt;-->
+            <!--                    &lt;!&ndash;                        :games="gamesInCapsule"&ndash;&gt;-->
+            <!--                    &lt;!&ndash;                    />&ndash;&gt;-->
+            <!--                    &lt;!&ndash;                </div>&ndash;&gt;-->
+            <!--                    &lt;!&ndash;                <div v-else-if="viewOptions.showQuizSummaryPreCapsule">&ndash;&gt;-->
+            <!--                    &lt;!&ndash;                    <QuizSummary&ndash;&gt;-->
+            <!--                    &lt;!&ndash;                        :color="showOnlyColorRoute || showOnlyColor"&ndash;&gt;-->
+            <!--                    &lt;!&ndash;                        :cool-algorithmed-visitors="coolAlgorithmedVisitors"&ndash;&gt;-->
+            <!--                    &lt;!&ndash;                        :games="gamesPreCapsule"&ndash;&gt;-->
+            <!--                    &lt;!&ndash;                    />&ndash;&gt;-->
+            <!--                    &lt;!&ndash;                </div>&ndash;&gt;-->
+            <!--                </div>-->
+            <!--            </div>-->
             <div v-if="isAdmin">
                 <h4 style="margin-top: 20rem">
                     Ära vajuta neid nuppe, kui sul siia asja pole. Helena paneb

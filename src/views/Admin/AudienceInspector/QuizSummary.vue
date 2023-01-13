@@ -64,7 +64,10 @@ function getGameActiveButton(game) {
     return phaseToEdit?.active ? 'Lopeta' : 'Aktiveeri';
 }
 
+let gameClicked = ref(false);
+
 async function activateQuestionnaire(game) {
+    gameClicked = true;
     const phases = computed(() => performanceStore.phases);
     let phaseToEdit = phases.value.find((p) => p.phase_game._id === game._id);
     console.log('make this inactive: ', phaseToEdit);
@@ -121,7 +124,7 @@ setInterval(async function () {
                             : 'btn-primary'
                     "
                     class="btn"
-                    @click="activateQuestionnaire(game)"
+                    @click.prevent="activateQuestionnaire(game)"
                 >
                     {{ getGameActiveButton(game) }}
                 </button>

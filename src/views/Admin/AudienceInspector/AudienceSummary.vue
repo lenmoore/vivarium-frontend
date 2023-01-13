@@ -157,7 +157,7 @@ async function deleteVisitor(visitor) {
                 v-for="visitor in mappedVisitors"
                 :key="visitor._id"
                 :class="visitor.confirmed_humanity_value"
-                class="visitor-wrapper mt-2 text-center d-flex justify-content-between"
+                class="border visitor-wrapper mt-2 text-center d-flex justify-content-between"
             >
                 <div class="d-flex">
                     <span
