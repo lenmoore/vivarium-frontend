@@ -136,8 +136,10 @@ function getGameStepObj(step) {
                         <div>
                             <small
                                 >({{
-                                    option.amount /
-                                    getGameStepObj(step).peopleWhoAnswered
+                                    (option.amount /
+                                        getGameStepObj(step)
+                                            .peopleWhoAnswered) *
+                                    100
                                 }}
                                 %)</small
                             >
