@@ -54,16 +54,16 @@ function sort() {
             : [];
 
         let redProducts = basket?.products?.map(
-            (p) => p.humanity_values?.fuchsia?.average
+            (p) => p?.humanity_values?.fuchsia?.average || 0
         );
         let silverProducts = basket?.products?.map(
-            (p) => p.humanity_values?.blue?.average
+            (p) => p?.humanity_values?.blue?.average || 0
         );
         let limeProducts = basket?.products?.map(
-            (p) => p.humanity_values?.green?.average
+            (p) => p?.humanity_values?.green?.average || 0
         );
         let turqProducts = basket?.products?.map(
-            (p) => p.humanity_values?.orange?.average
+            (p) => p?.humanity_values?.orange?.average || 0
         );
 
         let fuchsia = [...redQuiz, ...redProducts];
@@ -72,10 +72,10 @@ function sort() {
         let turq = [...orangeQuiz, ...turqProducts];
 
         let avg_hum_values = {
-            lime: lime?.reduce((a, b) => a + b, 0),
             fuchsia: fuchsia?.reduce((a, b) => a + b, 0),
             silver: silver?.reduce((a, b) => a + b, 0),
             turq: turq?.reduce((a, b) => a + b, 0),
+            lime: lime?.reduce((a, b) => a + b, 0),
         };
         let maxKey,
             maxValue = 0;
