@@ -161,9 +161,11 @@ function setSeenShopIntro() {
     <div v-else class="d-flex flex-column justify-content-center h-100">
         <h2>Tere tulemast poodi.</h2>
         <p>
-            Mida võtaksid sina kaasa üksikule saarele? Mis esemed võtaksid sa
-            kaasa kosmoseekspeditsioonile, kus kõik eluks vajalik on olemas? Mis
-            esemed annavad sulle hea tunde?
+            Oled minemas pikale reisile, kus kõik eluks vajalik on olemas. Mis
+            asju võtaksid sa aga reisile kaasa selleks, et tunda end mõnusalt ja
+            turvaliselt? Mis asju võtaksid sa kaasa, et peletada igavust ja
+            arendada oskusi? Millised Vivaariumi poe objektid kõnetavad sind
+            kõige enam?
         </p>
         <p>
             Tutvu meie poega. Kuva QR-koode ja saa ülevaade meie valikust. Käi
