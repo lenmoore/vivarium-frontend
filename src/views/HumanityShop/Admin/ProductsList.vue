@@ -11,7 +11,8 @@ let products = computed(() => humanityStore.products).value;
 function sortProducts(color) {
     return products.sort(
         (a, b) =>
-            b.humanity_values[color].average - a.humanity_values[color].average
+            b.humanity_values[color]?.average -
+            a.humanity_values[color]?.average
     );
 }
 
