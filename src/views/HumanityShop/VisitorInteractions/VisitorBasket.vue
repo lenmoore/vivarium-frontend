@@ -169,7 +169,7 @@ function setSeenShopIntro() {
             Tutvu meie poega. Kuva QR-koode ja saa ülevaade meie valikust. Käi
             näitusele ring peale ja vali välja 9 objekti.
         </p>
-        <p>Sul on aega kuni kl 18.15.</p>
+        <p>Sul on aega kuni kl 14.15.</p>
         <p>Ära kiirusta. Mõtle läbi.</p>
 
         <button class="btn btn-primary w-100" @click="setSeenShopIntro">

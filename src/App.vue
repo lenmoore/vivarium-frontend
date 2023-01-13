@@ -149,29 +149,37 @@ onBeforeMount(async () => {
     visitor = await visitorStore.fetchVisitor(
         localStorage.getItem('visitorId') || ''
     );
-    localStorage.setItem(
-        'confirmed_humanity_value',
-        visitor.confirmed_humanity_value
-    );
-
-    if (visitor.archived === true) {
+    let visitorInLocalStorage = localStorage.getItem('visitor');
+    if (
+        visitor.archived === true ||
+        (visitorInLocalStorage &&
+            visitorInLocalStorage.username &&
+            visitorInLocalStorage.visitorId === null)
+    ) {
         localStorage.clear();
         location.replace('/');
+    } else {
+        localStorage.setItem(
+            'confirmed_humanity_value',
+            visitor.confirmed_humanity_value
+        );
     }
     activeGame = games.value.find(
         (game) => game?._id === activePhase?.value?.phase_game?._id
     );
-    const data = await performanceStore.getActorState();
+    if (isActor.value) {
+        const data = await performanceStore.getActorState();
 
-    timers.value = data.timers;
-    actorState.value = data;
-    let timerActive = timers.value.find((timer) => isInFuture(timer));
-    console.log(timerActive);
-    if (timerActive) {
-        console.log('YAYAYY');
-        activeTimer = timerActive;
-        console.log('activetimer value', activeTimer.value);
-        instance?.proxy?.$forceUpdate();
+        timers.value = data.timers;
+        actorState.value = data;
+        let timerActive = timers.value.find((timer) => isInFuture(timer));
+        console.log(timerActive);
+        if (timerActive) {
+            console.log('YAYAYY');
+            activeTimer = timerActive;
+            console.log('activetimer value', activeTimer.value);
+            instance?.proxy?.$forceUpdate();
+        }
     }
 });
 
@@ -184,18 +192,21 @@ function getActiveHomeLink() {
     );
     console.log(isActor);
     if (isAdmin.value) {
-        return '/';
+        return '/superadmin/performances';
     } else if (isActor.value) {
         return '/admin/audience';
     }
 
-    if (activeGame && activeGame.game_type === 'SHOP') {
-        console.log('ou');
+    if (visitor.visitorId && activeGame && activeGame.game_type === 'SHOP') {
         return '/visitor/humanity-shop/basket';
-    } else if (activeGame && activeGame.game_type === 'QUIZ') {
+    } else if (
+        visitor.visitorId &&
+        activeGame &&
+        activeGame.game_type === 'QUIZ'
+    ) {
         return '/visitor/quiz';
     }
-    return '/';
+    return router.currentRoute.value.fullPath;
 }
 
 function isInFuture(timer: any) {

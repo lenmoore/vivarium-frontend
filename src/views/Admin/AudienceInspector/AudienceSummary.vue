@@ -152,6 +152,7 @@ setInterval(async function () {
                 :class="visitor.confirmed_humanity_value"
                 class="visitor-wrapper mt-2 text-center d-flex justify-content-between"
             >
+                {{ visitor._id }}
                 <div class="d-flex">
                     <span
                         ><h2 style="width: 4em">

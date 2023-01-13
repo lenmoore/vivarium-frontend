@@ -3,7 +3,7 @@ import { useVisitorStore } from '@/store/visitor.store';
 import BaseForm from '../../components/BaseForm/index.vue';
 import BaseInput from '../../components/BaseForm/BaseInput.vue';
 import { usePerformanceStore } from '@/store/performance.store';
-import { computed, defineEmits, onBeforeMount, watchEffect } from 'vue';
+import { computed, defineEmits, onBeforeMount, ref, watchEffect } from 'vue';
 import router from '../../router/index';
 import moment from 'moment';
 
@@ -26,7 +26,10 @@ const visitor = {
     wants_summary: false,
 };
 
+let isLoading = ref(false);
+
 async function onLogin() {
+    isLoading = true;
     console.log(activePerformance.value);
     visitor.username = visitor.wardrobe_number + '_' + Date.now();
     visitor.wardrobe_number = parseInt(visitor.wardrobe_number);
@@ -36,17 +39,23 @@ async function onLogin() {
     console.log(activePerformance.value);
     visitor.performance = activePerformance.value._id;
 
-    const localVisitor = await visitorStore.login(visitor).data;
-    localStorage.setItem('visitorId', localVisitor.visitorId);
-    localStorage.setItem('visitor', visitor);
-    instance?.proxy?.$forceUpdate();
+    await visitorStore.login(visitor).data;
+    isLoading = false;
+    // if (localVisitor) {
+    // localStorage.setItem('visitorId', localVisitor.visitorId);
+    // localStorage.setItem('visitor', visitor);
+    // }
 
-    await router.push({ name: 'visitor.intro' });
+    // location.replace('/visitor/intro');
+    // instance?.proxy?.$forceUpdate();
 }
 </script>
 
 <template>
     <h1 class="container">Sisene Vivaariumisse</h1>
+    <div v-if="isLoading">
+        <img alt="loader" src="/public/Spinner-1s-200px.gif" />
+    </div>
     <BaseForm
         v-if="activePerformance"
         :show-cancel="false"

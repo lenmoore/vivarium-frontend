@@ -31,7 +31,7 @@ function goScan() {
         </p>
         <h3>Ilusat etendust!</h3>
         <p>Esmalt aga külasta kohvikut esimesel korrusel.</p>
-        <p class="strong">Teisele korrusele saab minna alates 17.45.</p>
+        <p class="strong">Teisele korrusele saab minna alates 13.45.</p>
         <a class="btn btn-primary w-100" href="/visitor/humanity-shop/basket"
             >Olen teisel korrusel</a
         >

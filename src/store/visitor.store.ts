@@ -24,6 +24,8 @@ export const useVisitorStore = defineStore({
                 localStorage.accessToken = data.accessToken;
                 localStorage.visitorId = data.visitorId;
                 this.visitor = new Visitor(data);
+
+                location.replace('/visitor/intro');
                 return data;
             });
         },
