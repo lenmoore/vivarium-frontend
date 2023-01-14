@@ -80,7 +80,7 @@ async function addProductToBasket() {
 let loading = ref(false);
 
 async function onInit(promise) {
-    this.loading = true;
+    loading.value = true;
 
     try {
         await promise;
@@ -89,7 +89,7 @@ async function onInit(promise) {
     } catch (error) {
         console.error(error);
     } finally {
-        this.loading = false;
+        loading.value = false;
     }
 }
 
@@ -103,15 +103,17 @@ function turnCameraOff() {
 </script>
 <template>
     <div>
+        <div>Korvis hetkel {{ visitor.basket.products.length }} toodet.</div>
         <div
             class="d-flex justify-content-center mb-4 extra-small-for-tiny-mobile column-for-tiny-mobile"
         >
-            <h2>Skänni midagi!</h2>
+            <h2 class="px-2">Skänni midagi!</h2>
             <a
                 class="btn btn-primary small-for-tiny-mobile"
                 href="/visitor/humanity-shop/basket"
-                >> Korvi</a
             >
+                > Korvi
+            </a>
         </div>
         <div class="scanner-wrapper">
             <QrStream @decode="onDecode" @init="onInit">

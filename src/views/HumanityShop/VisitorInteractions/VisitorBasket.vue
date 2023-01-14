@@ -73,9 +73,9 @@ function setSeenShopIntro() {
             </div>
             <div
                 v-else
-                class="d-flex align-items-center justify-content-between column-for-tiny-mobile p-4"
+                class="d-flex flex-column align-items-center justify-content-between p-4 w-100"
             >
-                <div>
+                <div class="px-2">
                     Korvis hetkel {{ productsInBasket.length || 0 }} toodet.
                 </div>
                 <a
