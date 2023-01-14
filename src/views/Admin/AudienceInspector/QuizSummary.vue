@@ -118,7 +118,7 @@ function getGameStepObj(step) {
 </script>
 <template>
     <div>
-        <div v-if="isLoading">
+        <div v-if="isLoading" class="d-flex justify-content-center">
             <img alt="loader" src="/public/Spinner-1s-200px.gif" />
         </div>
         <div

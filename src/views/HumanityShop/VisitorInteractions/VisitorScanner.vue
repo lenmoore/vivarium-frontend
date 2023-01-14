@@ -117,7 +117,7 @@ function turnCameraOff() {
         </div>
         <div class="scanner-wrapper">
             <QrStream @decode="onDecode" @init="onInit">
-                <div v-if="loading" class="loading-indicator">
+                <div v-if="loading" class="d-flex justify-content-center">
                     Laen...
                     <img alt="loader" src="/public/Spinner-1s-200px.gif" />
                 </div>

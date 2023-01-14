@@ -176,7 +176,7 @@ watch(state.last_step, () => {
 });
 </script>
 <template>
-    <div v-if="state.game_loading">
+    <div v-if="state.game_loading" class="d-flex justify-content-center">
         <img alt="loader" src="/public/Spinner-1s-200px.gif" />
     </div>
     <div
