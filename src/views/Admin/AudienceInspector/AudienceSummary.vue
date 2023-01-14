@@ -29,72 +29,75 @@ watch(sortedVisitors, () => {
 function sort() {
     let visitorsToMap = ref(sortedVisitors);
 
-    mappedVisitors = visitorsToMap.value.map((visitor) => {
-        let basket = visitor.basket;
+    mappedVisitors = visitorsToMap.value
+        .map((visitor) => {
+            let basket = visitor.basket;
 
-        let redQuiz = visitor?.quiz_results
-            ? visitor?.quiz_results?.map((qR) => {
-                  return qR.result_humanity_values?.fuchsia;
-              })
-            : [];
-        let greenQuiz = visitor?.quiz_results
-            ? visitor?.quiz_results?.map((qR) => {
-                  return qR?.result_humanity_values?.lime;
-              })
-            : [];
-        let blueQuiz = visitor?.quiz_results
-            ? visitor?.quiz_results?.map((qR) => {
-                  return qR?.result_humanity_values?.silver;
-              })
-            : [];
-        let orangeQuiz = visitor?.quiz_results
-            ? visitor?.quiz_results?.map((qR) => {
-                  return qR?.result_humanity_values?.turq;
-              })
-            : [];
+            let redQuiz = visitor?.quiz_results
+                ? visitor?.quiz_results?.map((qR) => {
+                      return qR.result_humanity_values?.fuchsia;
+                  })
+                : [];
+            let greenQuiz = visitor?.quiz_results
+                ? visitor?.quiz_results?.map((qR) => {
+                      return qR?.result_humanity_values?.lime;
+                  })
+                : [];
+            let blueQuiz = visitor?.quiz_results
+                ? visitor?.quiz_results?.map((qR) => {
+                      return qR?.result_humanity_values?.silver;
+                  })
+                : [];
+            let orangeQuiz = visitor?.quiz_results
+                ? visitor?.quiz_results?.map((qR) => {
+                      return qR?.result_humanity_values?.turq;
+                  })
+                : [];
 
-        let redProducts = basket?.products?.map(
-            (p) => p?.humanity_values?.fuchsia?.average || 0
-        );
-        let silverProducts = basket?.products?.map(
-            (p) => p?.humanity_values?.blue?.average || 0
-        );
-        let limeProducts = basket?.products?.map(
-            (p) => p?.humanity_values?.green?.average || 0
-        );
-        let turqProducts = basket?.products?.map(
-            (p) => p?.humanity_values?.orange?.average || 0
-        );
+            let redProducts = basket?.products?.map(
+                (p) => p?.humanity_values?.fuchsia?.average || 0
+            );
+            let silverProducts = basket?.products?.map(
+                (p) => p?.humanity_values?.blue?.average || 0
+            );
+            let limeProducts = basket?.products?.map(
+                (p) => p?.humanity_values?.green?.average || 0
+            );
+            let turqProducts = basket?.products?.map(
+                (p) => p?.humanity_values?.orange?.average || 0
+            );
 
-        let fuchsia = [...redQuiz, ...redProducts];
-        let lime = [...greenQuiz, ...limeProducts];
-        let silver = [...blueQuiz, ...silverProducts];
-        let turq = [...orangeQuiz, ...turqProducts];
+            let fuchsia = [...redQuiz, ...redProducts];
+            let lime = [...greenQuiz, ...limeProducts];
+            let silver = [...blueQuiz, ...silverProducts];
+            let turq = [...orangeQuiz, ...turqProducts];
 
-        let avg_hum_values = {
-            fuchsia: fuchsia?.reduce((a, b) => a + b, 0),
-            silver: silver?.reduce((a, b) => a + b, 0),
-            turq: turq?.reduce((a, b) => a + b, 0),
-            lime: lime?.reduce((a, b) => a + b, 0),
-        };
-        let maxKey,
-            maxValue = 0;
+            let avg_hum_values = {
+                fuchsia: fuchsia?.reduce((a, b) => a + b, 0),
+                silver: silver?.reduce((a, b) => a + b, 0),
+                turq: turq?.reduce((a, b) => a + b, 0),
+                lime: lime?.reduce((a, b) => a + b, 0),
+            };
+            let maxKey,
+                maxValue = 0;
 
-        for (const [key, value] of Object.entries(avg_hum_values)) {
-            if (value > maxValue) {
-                maxValue = value;
-                maxKey = key;
+            for (const [key, value] of Object.entries(avg_hum_values)) {
+                if (value > maxValue) {
+                    maxValue = value;
+                    maxKey = key;
+                }
             }
-        }
-        let highest = maxKey;
+            let highest = maxKey;
 
-        return {
-            ...visitor,
-            basket,
-            highest,
-            avg_hum_values,
-        };
-    });
+            return {
+                ...visitor,
+                basket,
+                highest,
+                avg_hum_values,
+            };
+        })
+        .sort((a, b) => a.wardrobe_number - b.wardrobe_number);
+
     instance?.proxy?.$forceUpdate();
 }
 
