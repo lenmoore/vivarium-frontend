@@ -32,9 +32,6 @@ onBeforeMount(async () => {
 });
 
 const baskets = computed(() => humanityStore.getBaskets);
-// let games = computed(() => performanceStore.games);
-// let gamesPreCapsule = computed(() => performanceStore.games);
-// let gamesInCapsule = computed(() => performanceStore.games);
 let showOnlyColor = ref(localStorage.getItem('actor_color'));
 
 let visitors = computed(() => performanceStore.getVisitors);
@@ -331,6 +328,15 @@ async function confirmColors() {
     await performanceStore.updateVisitors(viiiiis);
     // location.reload();
 }
+
+setTimeout(async () => {
+    console.log('reloading actor view');
+    console.log(activePerformance);
+    await performanceStore.getCurrentPerformanceVisitors(
+        activePerformance.value._id
+    );
+    visitors = computed(() => performanceStore.getVisitors);
+}, 12000);
 </script>
 
 <template>

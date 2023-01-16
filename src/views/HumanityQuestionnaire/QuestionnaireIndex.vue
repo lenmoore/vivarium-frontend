@@ -3,6 +3,9 @@ import { usePerformanceStore } from '../../store/performance.store';
 import { computed, onBeforeMount, reactive, ref, watch } from 'vue';
 import { useVisitorStore } from '../../store/visitor.store';
 import router from '../../router/index';
+import { getCurrentInstance } from 'vue';
+
+const instance = getCurrentInstance();
 
 const performanceStore = usePerformanceStore();
 const visitorStore = useVisitorStore();
@@ -49,6 +52,8 @@ onBeforeMount(async () => {
             (qr) => qr.game === state.active_game._id
         );
 
+    console.log(gameStepsWithVisitorSelectedValues);
+
     updateVisitor = ref(stateVIsitor);
     state.game_loading = false;
 });
@@ -79,33 +84,43 @@ async function startGame() {
         if (localStorage.getItem(state.active_game?._id) !== null) {
             console.log('visitor.quiz_results', visitor.quiz_results);
         }
-        state.current_step =
-            gameStepsWithVisitorSelectedValues[state.step_counter];
-        localStorage.setItem(state.active_game?._id, 'started');
-
-        state.game_loading = false;
-        step(0);
     }
+    state.current_step = gameStepsWithVisitorSelectedValues[state.step_counter];
+    localStorage.setItem(state.active_game?._id, 'started');
+    console.log(state.current_step);
+    state.game_loading = false;
+    step(0);
 }
 
 async function selectValue(val) {
     state.game_loading = true;
+
+    stateVIsitor = await visitorStore.fetchVisitor(
+        localStorage.getItem('visitorId')
+    );
     state.visitor_current_step_selected_option_text = val.option_text;
 
+    updateVisitor = ref(stateVIsitor);
+    console.log(updateVisitor);
+    console.log(updateVisitor.value.quiz_results);
+    console.log(state.current_step);
     let stepToUpdate = updateVisitor.value.quiz_results.find(
-        (qR) => qR.step._id === state.current_step._id
+        (qR) => qR?.step?._id === state?.current_step?._id
     );
 
+    console.log(stepToUpdate);
     stepToUpdate.result_text = val.option_text;
     stepToUpdate.result_humanity_values = val.humanity_values;
     state.game_loading = false;
     stateVIsitor = await visitorStore.editVisitor(updateVisitor.value);
+    instance?.proxy?.$forceUpdate();
 }
 
 function step(i) {
     state.game_loading = false;
     state.game_started = true;
     state.step_counter += i;
+    console.log(state.step_counter);
     if (state.step_counter < gameStepsWithVisitorSelectedValues.length) {
         state.current_step =
             gameStepsWithVisitorSelectedValues[state.step_counter].step;
@@ -113,6 +128,7 @@ function step(i) {
             state.current_step.question_options.sort((a, b) =>
                 a.option_text.localeCompare(b.option_text)
             );
+        console.log(state);
     } else {
         state.last_step = true;
         localStorage.setItem(state.active_game._id, 'done');
