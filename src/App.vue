@@ -197,12 +197,6 @@ function getActiveHomeLink() {
     activeGame = games.value.find(
         (game) => game?._id === activePhase?.value?.phase_game?._id
     );
-    if (isAdmin.value) {
-        return '/superadmin/performances';
-    } else if (isActor.value) {
-        return router.currentRoute.value.fullPath;
-    }
-
     if (visitor.visitorId && activeGame && activeGame.game_type === 'SHOP') {
         return '/visitor/humanity-shop/basket';
     } else if (
@@ -212,6 +206,12 @@ function getActiveHomeLink() {
     ) {
         return '/visitor/quiz';
     }
+    if (isAdmin.value) {
+        return '/superadmin/performances';
+    } else if (isActor.value) {
+        return router.currentRoute.value.fullPath;
+    }
+
     return router.currentRoute.value.fullPath;
 }
 
