@@ -31,13 +31,11 @@ let isLoading = ref(false);
 async function onLogin() {
     isLoading = true;
     if (visitor.wardrobe_number > 0) {
-        console.log(activePerformance.value);
         visitor.username = visitor.wardrobe_number + '_' + Date.now();
         visitor.wardrobe_number = parseInt(visitor.wardrobe_number);
         if (visitor.email.length === 0) {
             visitor.email = moment();
         }
-        console.log(activePerformance.value);
         visitor.performance = activePerformance.value._id;
 
         await visitorStore.login(visitor).data;

@@ -3,26 +3,17 @@ import { usePerformanceStore } from '../../../store/performance.store';
 import { computed, onBeforeMount, ref, reactive, watch } from 'vue';
 import { useHumanityShopStore } from '../../../store/humanity-shop/humanity-shop.store';
 import router from '../../../router/index';
-import AudienceSummary from './AudienceSummary.vue';
-import { cloneDeep } from 'lodash';
-import ProductsSummary from './ProductsSummary.vue';
-import QuizSummary from './QuizSummary.vue';
 
 const performanceStore = usePerformanceStore();
 const humanityStore = useHumanityShopStore();
 
 const isAdmin = ref(localStorage.getItem('admin') === 'true');
-const isActor = ref(localStorage.getItem('actor') === 'true');
 
 let showSummaryList = ref(router.currentRoute.value.query.showSummary);
 let showOnlyColorRoute = ref(router.currentRoute.value.query.color);
 let showProductsSummary = ref(router.currentRoute.value.query.products);
 let showPreCapsuleQuizzes = ref(router.currentRoute.value.query.preCapsuleQuiz);
 let showCapsuleQuizzes = ref(router.currentRoute.value.query.capsuleQuiz);
-
-console.log(showSummaryList);
-console.log(showOnlyColorRoute);
-console.log(showProductsSummary);
 
 let viewOptions = ref({
     showSummaryList: showSummaryList.value === 'yes',
@@ -71,8 +62,6 @@ function toggleViewOptions(show) {
             name = 'admin.audience.overview';
             break;
     }
-    console.log(router.currentRoute.value);
-    console.log('Query_ > ', query);
     router.push({ name: name, query });
 }
 
@@ -82,7 +71,6 @@ let coolAlgorithmedVisitors = reactive({});
 
 watch(visitors, async () => {
     if (visitors.value[0]?.confirmed_humanity_value === 'none') {
-        console.log('apparently need to sort>');
         await sortThemGuys();
     }
 });
@@ -99,7 +87,6 @@ async function sortThemGuys() {
         lime: new Set(),
     };
 
-    console.log(mappedVisitors);
     mappedVisitors = visitorsToMap.value.map((visitor) => {
         let basket = visitor.basket;
 
@@ -190,7 +177,6 @@ async function sortThemGuys() {
     let peopleCount = (visitors.value.length - peopleCountModulo) / 4;
     let notYetSomewhere = new Set(mappedVisitors);
     // console.log(notYetSomewhere);
-    console.log(notYetSomewhere.size, ' not yet somewhere');
     dividePeople();
 
     function firstSort(color) {
@@ -285,13 +271,11 @@ async function sortThemGuys() {
     }
 
     function addToAlgorithmedVisitors(maxKey, visitor) {
-        console.log(maxKey, visitor.wardrobe_number);
         coolAlgorithmedVisitors[maxKey]?.add(visitor);
         visitor.algorithm_result = maxKey;
         notYetSomewhere.delete(visitor);
     }
 
-    console.log(notYetSomewhere);
     console.log(coolAlgorithmedVisitors);
     viewOptions.value.ready = true;
 }

@@ -68,6 +68,14 @@ export const useVisitorStore = defineStore({
                 return data;
             });
         },
+        async fetchVisitorsByDate(date: string): Promise<Visitor> {
+            return await PerformanceService.getVisitorByDate(date).then(
+                (data) => {
+                    console.log(data);
+                    return data;
+                }
+            );
+        },
     },
     persist: true,
 });

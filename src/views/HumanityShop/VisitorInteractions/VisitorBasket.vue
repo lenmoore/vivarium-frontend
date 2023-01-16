@@ -20,18 +20,14 @@ onBeforeMount(async () => {
 });
 let visitor = ref(visitorStore.getVisitor);
 let productsInBasket = ref(visitor?.value?.basket?.products);
-console.log(productsInBasket);
 let basket = visitor.value.basket;
 
 async function removeProduct(item) {
-    console.log(item);
     showWantToRemoveModal.value = false;
-    console.log(basket.products);
     let newBasketProducts = basket.products.filter(
         (product) => product._id !== item._id
     );
 
-    console.log('newBasketProducts', newBasketProducts);
     await humanityStore.updateBasket({
         ...basket,
         products: newBasketProducts,
@@ -42,7 +38,6 @@ async function removeProduct(item) {
 }
 
 let hasSeenShopIntro = ref(localStorage.getItem('hasSeenShopIntro') === '1');
-console.log(hasSeenShopIntro);
 let showStore = hasSeenShopIntro;
 setInterval(async function () {
     await performanceStore.getPhases();

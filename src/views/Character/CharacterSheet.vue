@@ -86,6 +86,55 @@ onBeforeMount(async () => {
             <h1 class="h1-color text-decoration-none">VIVAARIUM</h1>
             <img src="/public/img.png" width="60" />
         </div>
+
+        <h2>Kellena homsesse?</h2>
+
+        <div class="py-2">
+            <p>sponsorid (TBA)</p>
+        </div>
+
+        <div class="py-2">
+            <p>
+                <strong>Algkontseptsiooni autorid</strong>: Helen Rekkor, Villem
+                Rootalu, Sander Põldsaar, Mihkel Seeder
+            </p>
+            <br />
+            <p><strong>Lavastaja</strong>: Helen Rekkor</p>
+            <p><strong>Dramaturg</strong>: Mihkel Seeder</p>
+            <p><strong>Arendaja</strong>: Helena Väinmaa</p>
+            <p><strong>Videokunstnik</strong>: Sander Põldsaar</p>
+            <p><strong>Helilooja</strong>: Villem Rootalu</p>
+            <p><strong>Valguskunstnik</strong>: Rommi Ruttas</p>
+            <br />
+            <p><strong>Tehnik</strong>: Martin Koldits</p>
+            <p><strong>Tehnilised lahendused</strong>: Raul Õitspuu</p>
+            <p>
+                <strong>Praktikant</strong>: Rebecca Tamm (TÜVKA
+                kultuurikorralduse eriala)
+            </p>
+            <br />
+            <p>
+                <strong
+                    >Esietendus 18. jaanuaril 2023 Sakala 3 Teatrimajas</strong
+                >
+            </p>
+            <p><strong>Täname</strong>: Andero Uusberg, Elisabeth Rebane</p>
+        </div>
+
+        <h3 class="pt-4">Osades:</h3>
+        <div class="py-2">
+            VIOLETT – Merilin Kirbits (Improteater IMPEERIUM) <br />
+            TÜRKIIS – Maarja Tammemägi <br />
+            LAIM – Meelis Põdersoo <br />
+            HÕBEVALGE – Tanel Saar <br />
+            ADMINISTRAATOR – Helen Rekkor <br />
+        </div>
+        <br />
+        <br />
+        <br />
+
+        <h2>Kellena homsesse?</h2>
+        <br />
         <h2
             :class="
                 {
@@ -122,40 +171,6 @@ onBeforeMount(async () => {
                 Math.floor(avg_hum_values.silver)
             }}</small>
         </div>
-        <div class="w-100 border-bottom" />
-        <div class="py-4">
-            <strong>Mis on Vivaarium?</strong>
-            <p>
-                Vivaarium (ladina vivārium, vīvus - 'elus') on ruum või mingi
-                ala, enamasti suletud, kus enamasti teaduslikel eesmärkidel
-                hoitakse ja kasvatatakse loomi ning taimi.
-            </p>
-            <p>
-                Seekord hoiti ja kasvatati teaduslikel eesmärkidel VAT teatri
-                publikut, kes olid oma enda valikute põhjal vivaariumisse
-                jaotatud.
-            </p>
-        </div>
-
-        <div>
-            <strong>Kajakambritest. Mida see kõik üldse tähendab?</strong>
-            <p>
-                Kajakamber (inglise keeles echo chamber) on metafoor, mille
-                kaudu kirjeldatakse olukorda, kus isiku uskumust tugevdab
-                kommunikatsioon ja kordamine suletud süsteemis. Kajakambri
-                metafoor põhineb akustilisel kajakambril, kus helid kõlavad
-                õõneskambris. Kajakambrit külastades saavad inimesed otsida
-                teavet, mis tugevdab nende olemasolevaid vaateid kui
-                teadvustamata kinnitusmõju. See võib suurendada poliitilist ja
-                sotsiaalset polariseerumist ja äärmuslust.[1] See mõiste on
-                metafoor, mis põhineb akustilisel kajakambril, kus helid
-                kõlavad.
-            </p>
-            <p>
-                Internetis kajava ja homogeniseeriva mõju kirjeldamiseks
-                kasutatakse ka mõistet "kultuuriline tribalism".[2]
-            </p>
-        </div>
         <div>
             <h4>Võtsid kapslisse kaasa:</h4>
 
@@ -187,6 +202,17 @@ onBeforeMount(async () => {
                 <strong>{{ res.step.question_text }}</strong>
                 {{ res.result_text }}
             </div>
+        </div>
+
+        <div>koduleht: <a href="www.vatteater.ee">www.vatteater.ee</a></div>
+        <div>
+            E-post: <a href="vat@vatteater.ee" type="email">vat@vatteater.ee</a>
+        </div>
+        <div>
+            Leia meid
+            <a href="https://www.facebook.com/teatervat">Facebookist</a>,
+            <a href="https://www.instagram.com/vatteater/">Instagramist</a>, Tik
+            Tokist
         </div>
     </div>
 </template>

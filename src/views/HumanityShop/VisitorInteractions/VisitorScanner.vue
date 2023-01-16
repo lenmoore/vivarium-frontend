@@ -27,8 +27,6 @@ const products = computed(() => humanityShopStore.getProducts);
 async function onDecode(content) {
     if (content.length) {
         qr.value.isValid = true;
-        console.log('dude hello?');
-        console.log(content);
         qr.value.result = content;
         turnCameraOff();
 
@@ -39,15 +37,12 @@ async function onDecode(content) {
             (product) =>
                 product.image.includes(content) || product._id === content
         );
-        console.log(qr.value);
 
         let alreadyInBasket = visitor.basket?.products?.some(
             (prod) => prod._id === qr.value.foundProduct._id
         );
 
-        console.log('brr');
         if (alreadyInBasket) {
-            console.log('dude');
             qr.value.isValid = false;
         }
 
@@ -55,15 +50,10 @@ async function onDecode(content) {
             qr.value.basketFull = true;
             qr.value.isValid = false;
         }
-        console.log(qr.value.foundProduct);
-        console.log(qr.value.isValid);
-        // await timeout(2000);
-        // turnCameraOn();
     }
 }
 
 async function addProductToBasket() {
-    console.log('gonna try and add this to the basket', qr.value.foundProduct);
     if (qr.value.isValid) {
         let basket = reactive(visitor).basket;
 

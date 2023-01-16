@@ -14,14 +14,11 @@ let amountOfProductsInCapsule = ref(0);
 let isLoading = ref(false);
 onBeforeMount(async () => {
     isLoading.value = true;
-    console.log(router.currentRoute);
-    console.log('does it even..mount,', showOnlyColorRoute);
     await performanceStore.getActorCapsuleProducts(showOnlyColorRoute.value);
     countedProducts = computed(() => performanceStore.sortedProducts);
     amountOfProductsInCapsule.value = countedProducts.value
         .map((p) => p.count)
         .reduce((a, b) => a + b);
-    console.log(countedProducts);
     isLoading.value = false;
 });
 

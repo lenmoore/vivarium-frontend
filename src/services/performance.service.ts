@@ -180,6 +180,14 @@ class PerformanceService {
             });
     }
 
+    async getVisitorByDate(date: string) {
+        return await api
+            .get(`/performance/visitors/${date}`)
+            .then(({ data }) => {
+                return data;
+            });
+    }
+
     async getCurrentPerformanceVisitors(performance: string) {
         return await api
             .get(`/performance-visitors/${performance}`)

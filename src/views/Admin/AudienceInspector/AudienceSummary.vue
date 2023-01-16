@@ -13,11 +13,7 @@ let showOnlyColorRoute = ref(router.currentRoute.value.query.color || 'all');
 let mappedVisitors = ref([]);
 onMounted(async () => {
     await performanceStore.getActorCapsuleVisitors(showOnlyColorRoute.value);
-
-    console.log(router.currentRoute);
-    console.log('does it even..mount,', showOnlyColorRoute);
     sortedVisitors = computed(() => performanceStore.getVisitors);
-
     sort();
 });
 
@@ -178,7 +174,7 @@ async function deleteVisitor(visitor) {
                             </button>
                         </div>
                         <div class="font-size-extra-super-small">
-                            {{ visitor.highest }} _
+                            highest: {{ visitor.highest }} _
                             {{ visitor.algorithm_result }}
                         </div>
                     </span>

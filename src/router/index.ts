@@ -68,9 +68,19 @@ const routes: Array<RouteRecordRaw> = [
         ],
     },
     {
-        path: '/character/:date/:wardrobe',
+        path: '/publik/:date/:wardrobe',
         name: 'character',
         component: () => import('../views/Character/CharacterSheet.vue'),
+    },
+    {
+        path: '/arhiiv',
+        name: 'archive',
+        component: () => import('../views/ArchiveView.vue'),
+    },
+    {
+        path: '/arhiiv/:date',
+        name: 'archive.date',
+        component: () => import('../views/ArchiveDate.vue'),
     },
     {
         path: '/login',
