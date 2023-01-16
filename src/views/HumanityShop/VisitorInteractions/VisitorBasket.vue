@@ -14,10 +14,14 @@ const performanceStore = usePerformanceStore();
 let showWantToRemoveModal = ref(false);
 let removeItemId = ref('');
 
+let hasSeenShopIntro = ref(localStorage.getItem('hasSeenShopIntro') === '1');
+let showStore = hasSeenShopIntro;
+let showSmallIntro = ref(false);
 onBeforeMount(async () => {
     await humanityStore.getVisitorBasket();
     await humanityStore.fetchProducts();
 });
+
 let visitor = ref(visitorStore.getVisitor);
 let productsInBasket = ref(visitor?.value?.basket?.products);
 let basket = visitor.value.basket;
@@ -37,8 +41,6 @@ async function removeProduct(item) {
     location.replace('/visitor/humanity-shop/scan');
 }
 
-let hasSeenShopIntro = ref(localStorage.getItem('hasSeenShopIntro') === '1');
-let showStore = hasSeenShopIntro;
 setInterval(async function () {
     await performanceStore.getPhases();
     if (basket.products.length === 0) {
@@ -46,6 +48,11 @@ setInterval(async function () {
     }
     instance?.proxy?.$forceUpdate();
 }, 120000);
+
+function toggleSmallIntro() {
+    showSmallIntro.value = !showSmallIntro.value;
+    instance?.proxy?.$forceUpdate();
+}
 
 function setSeenShopIntro() {
     localStorage.setItem('hasSeenShopIntro', '1');
@@ -59,6 +66,23 @@ function setSeenShopIntro() {
         class="h-100 d-flex flex-column justify-content-between"
     >
         <div>
+            <h1 @click="toggleSmallIntro">?</h1>
+            <div v-if="showSmallIntro">
+                <p>
+                    Oled minemas pikale reisile, kus kõik eluks vajalik on
+                    olemas. Mis asju võtaksid sa aga reisile kaasa selleks, et
+                    tunda end mõnusalt ja turvaliselt? Mis asju võtaksid sa
+                    kaasa, et peletada igavust ja arendada oskusi? Millised
+                    Vivaariumi poe objektid kõnetavad sind kõige enam?
+                </p>
+                <p>
+                    Tutvu meie poega. Kuva QR-koode ja saa ülevaade meie
+                    valikust. Käi näitusele ring peale ja vali välja 9 objekti.
+                </p>
+                <p>Sul on aega kuni kl 19.15.</p>
+                <p>Ära kiirusta. Mõtle läbi.</p>
+            </div>
+
             <div
                 v-if="basket.products.length >= 9"
                 class="text-bg-success extra-small-for-tiny-mobile p-2"

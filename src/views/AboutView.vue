@@ -1,114 +1,80 @@
-<script setup>
-import { useVisitorStore } from '@/store/visitor.store';
-import { onBeforeMount, reactive, ref } from 'vue';
-import { useHumanityShopStore } from '@/store/humanity-shop/humanity-shop.store';
-
-const visitorStore = useVisitorStore();
-
-const humanityStore = useHumanityShopStore();
-onBeforeMount(async () => {
-    if (localStorage.getItem('admin')) {
-        await visitorStore.fetchVisitor(localStorage.getItem('visitorId'));
-        await humanityStore.getVisitorBasket();
-    }
-});
-let visitor = ref(visitorStore.getVisitor);
-
-const quizResults = reactive(visitor.value.quiz_results);
-const basket = reactive(visitor.value.basket);
-
-function deleteAllQuizResults() {
-    const updateVisitor = ref(visitor);
-    updateVisitor.value.quiz_results = [];
-    console.log('update visitor:', updateVisitor.value);
-    const viss = visitorStore.editVisitor(updateVisitor.value);
-    console.log(viss);
-}
-
-function getHumanityResults() {
-    let productsAndQuizAnswers = [];
-    let humanity_values = { green: 0, red: 0, blue: 0, orange: 0 };
-    basket?.products?.forEach((product) => {
-        productsAndQuizAnswers.push(product);
-        humanity_values.green += product?.humanity_values?.green?.average;
-        humanity_values.red += product?.humanity_values?.red
-            ? product?.humanity_values?.red?.average
-            : product?.humanity_values?.fuchsia?.average;
-        humanity_values.blue += product?.humanity_values?.blue?.average;
-        humanity_values.orange += product?.humanity_values?.orange?.average;
-    });
-    quizResults.forEach((product) => {
-        productsAndQuizAnswers.push(product);
-        humanity_values.green +=
-            parseInt(product.result_humanity_values['green'] || 0) || 0;
-        humanity_values.red +=
-            parseInt(
-                product.result_humanity_values['red'] ||
-                    product.result_humanity_values['fuchsia']
-            ) || 0;
-        humanity_values.blue +=
-            parseInt(product.result_humanity_values['blue']) || 0;
-        humanity_values.orange +=
-            parseInt(product.result_humanity_values['orange']) || 0;
-    });
-    console.log(productsAndQuizAnswers);
-    return humanity_values;
-}
-
-let humanityResults = {};
-if (visitor && basket && quizResults) {
-    humanityResults = ref(getHumanityResults());
-}
-</script>
-
 <template>
-    <div v-if="visitor && quizResults" class="container">
-        <!--        <div v-if="visitor && basket && quizResults" class="border">-->
-        <!--            {{ humanityResults }}-->
-        <!--        </div>-->
-        <div>
-            <h2>ID {{ visitor.wardrobe_number }} Character sheet</h2>
-            <h2 :class="visitor.confirmed_humanity_value">
-                {{ visitor.confirmed_humanity_value }}
-            </h2>
+    <div class="container">
+        <div class="d-flex align-items-center justify-content-between">
+            <h1 class="h1-color text-decoration-none">VIVAARIUM</h1>
+            <img src="/public/img.png" width="60" />
         </div>
 
-        <div>
-            <div v-if="basket">
-                <h4>Votad kapslisse kaasa</h4>
+        <h2>Kellena homsesse?</h2>
+        <div
+            class="py-2 border-top d-flex align-items-center justify-content-between"
+        >
+            <img
+                alt=""
+                height="60"
+                src="/public/sponsors/Play_on_website_logo_01%20(1).png"
+            />
+            <img alt="" height="20" src="/public/sponsors/logo_obando.gif" />
+        </div>
 
-                <div class="d-flex flex-wrap">
-                    <div
-                        v-for="(res, i) in basket.products"
-                        :key="'product' + i"
-                        class="d-flex flex-column align-items-center border m-1"
-                    >
-                        <img :src="res.image" alt="" height="100" />
-                        <small>{{ res.title }}</small>
-                    </div>
-                </div>
-            </div>
+        <div class="py-2 d-flex justify-content-center">
+            <img alt="" src="/public/sponsors/EUfundingLogo-320x50.png" />
+        </div>
 
-            <div v-if="quizResults.length">
-                <h4>Valikud</h4>
+        <br /><br />
 
-                <div
-                    v-for="(res, i) in quizResults"
-                    :key="'selected' + i"
-                    class="border"
+        <div class="py-2">
+            <p>
+                <strong>Algkontseptsiooni autorid</strong>: Helen Rekkor, Villem
+                Rootalu, Sander Põldsaar, Mihkel Seeder
+            </p>
+            <br />
+            <p><strong>Lavastaja</strong>: Helen Rekkor</p>
+            <p><strong>Dramaturg</strong>: Mihkel Seeder</p>
+            <p><strong>Arendaja</strong>: Helena Väinmaa</p>
+            <p><strong>Videokunstnik</strong>: Sander Põldsaar</p>
+            <p><strong>Helilooja</strong>: Villem Rootalu</p>
+            <p><strong>Valguskunstnik</strong>: Rommi Ruttas</p>
+            <br />
+            <p><strong>Tehnik</strong>: Martin Koldits</p>
+            <p><strong>Tehnilised lahendused</strong>: Raul Õitspuu</p>
+            <p>
+                <strong>Praktikant</strong>: Rebecca Tamm (TÜVKA
+                kultuurikorralduse eriala)
+            </p>
+            <br />
+            <p>
+                <strong
+                    >Esietendus 18. jaanuaril 2023 Sakala 3 Teatrimajas</strong
                 >
-                    {{ res.result_text }}
-                    <small style="font-size: 10px">{{
-                        res.result_humanity_values
-                    }}</small>
-                </div>
-            </div>
-            <!--            <button-->
-            <!--                class="btn btn-outline-primary mt-4"-->
-            <!--                @click="deleteAllQuizResults"-->
-            <!--            >-->
-            <!--                Kustuta koik quizide vastused (ARA VAJUTA)-->
-            <!--            </button>-->
+            </p>
+            <p><strong>Täname</strong>: Andero Uusberg, Elisabeth Rebane</p>
+        </div>
+
+        <h3 class="pt-4">Osades:</h3>
+        <div class="py-2">
+            <span class="bg-fuchsia px-2">VIOLETT</span> – Merilin Kirbits
+            <small> (Improteater IMPEERIUM)</small> <br />
+            <span class="bg-turq px-2">TÜRKIIS</span> – Maarja Tammemägi <br />
+            <span class="bg-green px-2">LAIM</span> – Meelis Põdersoo <br />
+            <span class="bg-blue px-2">HÕBEVALGE</span> – Tanel Saar <br />
+            ADMINISTRAATOR – Helen Rekkor <br />
+        </div>
+        <br />
+        <br />
+        <br />
+
+        <h2>Kellena homsesse?</h2>
+
+        <div>koduleht: <a href="www.vatteater.ee">www.vatteater.ee</a></div>
+        <div>
+            E-post: <a href="vat@vatteater.ee" type="email">vat@vatteater.ee</a>
+        </div>
+        <div>
+            Leia meid
+            <a href="https://www.facebook.com/teatervat">Facebookist</a>,
+            <a href="https://www.instagram.com/vatteater/">Instagramist</a>, Tik
+            Tokist
         </div>
     </div>
 </template>

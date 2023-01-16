@@ -81,11 +81,11 @@ async function startGame() {
         }
         state.current_step =
             gameStepsWithVisitorSelectedValues[state.step_counter];
-    }
-    localStorage.setItem(state.active_game?._id, 'started');
+        localStorage.setItem(state.active_game?._id, 'started');
 
-    state.game_loading = false;
-    step(0);
+        state.game_loading = false;
+        step(0);
+    }
 }
 
 async function selectValue(val) {
@@ -132,7 +132,7 @@ watch(state.last_step, () => {
         setTimeout(async () => {
             await performanceStore.getPhases();
             window.location.reload();
-        }, 120000);
+        }, 12000);
     }
 });
 </script>
@@ -186,7 +186,11 @@ watch(state.last_step, () => {
                 </div>
 
                 <div class="buttons">
-                    <button class="btn btn-outline-primary" @click="step(-1)">
+                    <button
+                        v-if="state.step_counter !== 0"
+                        class="btn btn-outline-primary"
+                        @click="step(-1)"
+                    >
                         eelmine
                     </button>
                     <!--            <span-->
@@ -198,6 +202,15 @@ watch(state.last_step, () => {
                     <button class="btn btn-primary" @click="step(1)">
                         jargmine
                     </button>
+                </div>
+                <div class="d-flex align-items-center justify-content-between">
+                    <span
+                        >{{ state.step_counter + 1 }} /
+                        {{
+                            state.active_game &&
+                            state.active_game.game_steps.length
+                        }}</span
+                    >
                 </div>
             </div>
             <div v-else>Valmis. Oota edasisi juhiseid.</div>

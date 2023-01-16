@@ -88,10 +88,22 @@ onBeforeMount(async () => {
         </div>
 
         <h2>Kellena homsesse?</h2>
-
-        <div class="py-2">
-            <p>sponsorid (TBA)</p>
+        <div
+            class="py-2 border-top d-flex align-items-center justify-content-between"
+        >
+            <img
+                alt=""
+                height="60"
+                src="/public/sponsors/Play_on_website_logo_01%20(1).png"
+            />
+            <img alt="" height="20" src="/public/sponsors/logo_obando.gif" />
         </div>
+
+        <div class="py-2 d-flex justify-content-center">
+            <img alt="" src="/public/sponsors/EUfundingLogo-320x50.png" />
+        </div>
+
+        <br /><br />
 
         <div class="py-2">
             <p>
@@ -123,10 +135,11 @@ onBeforeMount(async () => {
 
         <h3 class="pt-4">Osades:</h3>
         <div class="py-2">
-            VIOLETT – Merilin Kirbits (Improteater IMPEERIUM) <br />
-            TÜRKIIS – Maarja Tammemägi <br />
-            LAIM – Meelis Põdersoo <br />
-            HÕBEVALGE – Tanel Saar <br />
+            <span class="bg-fuchsia px-2">VIOLETT</span> – Merilin Kirbits
+            <small> (Improteater IMPEERIUM)</small> <br />
+            <span class="bg-turq px-2">TÜRKIIS</span> – Maarja Tammemägi <br />
+            <span class="bg-green px-2">LAIM</span> – Meelis Põdersoo <br />
+            <span class="bg-blue px-2">HÕBEVALGE</span> – Tanel Saar <br />
             ADMINISTRAATOR – Helen Rekkor <br />
         </div>
         <br />

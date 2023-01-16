@@ -1,15 +1,11 @@
 <template>
     <div class="page">
         <div
-            v-if="router.currentRoute.value.name !== 'character'"
+            v-if="
+                !['character', 'about'].includes(router.currentRoute.value.name)
+            "
             class="d-flex align-items-start justify-content-between w-100"
         >
-            <!--            <span>-->
-            <!--                <a v-if="!(isAdmin || isActor)" href="/character">X</a> - - - -->
-            <!--                <RouterLink :to="{ path: '/visitor/logout' }"-->
-            <!--                    >logout?</RouterLink-->
-            <!--                >-->
-            <!--            </span>-->
             <a
                 :href="getActiveHomeLink()"
                 class="text-decoration-none extra-small-for-tiny-mobile"

@@ -73,6 +73,11 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('../views/Character/CharacterSheet.vue'),
     },
     {
+        path: '/kava',
+        name: 'about',
+        component: () => import('../views/AboutView.vue'),
+    },
+    {
         path: '/arhiiv',
         name: 'archive',
         component: () => import('../views/ArchiveView.vue'),
