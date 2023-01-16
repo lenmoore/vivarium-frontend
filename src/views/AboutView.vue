@@ -12,7 +12,7 @@
             <img
                 alt=""
                 height="60"
-                src="/public/sponsors/Play_on_website_logo_01%20(1).png"
+                src="/public/sponsors/Play_on_website_logo_01.png"
             />
             <img alt="" height="20" src="/public/sponsors/logo_obando.gif" />
         </div>
