@@ -8,12 +8,16 @@ import { useVisitorStore } from '../store/visitor.store';
 const instance = getCurrentInstance();
 const visitorStore = useVisitorStore();
 let visitors = ref([]);
+let sortedVisitors = ref([]);
 const date = router.currentRoute.value.params.date;
 
 onMounted(async () => {
     console.log(router.currentRoute);
     console.log(date);
     visitors = await visitorStore.fetchVisitorsByDate(date);
+    sortedVisitors = visitors?.value?.sort(
+        (a, b) => b.wardrobe_number - a.wardrobe_number
+    );
     instance?.proxy?.$forceUpdate();
 });
 </script>

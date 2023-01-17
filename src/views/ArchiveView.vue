@@ -10,10 +10,10 @@
                 :to="{ name: 'archive.date', params: { date: '2023-01-16' } }"
                 >16. jaanuari testetendus
             </RouterLink>
-            <!--            <RouterLink-->
-            <!--                :to="{ name: 'archive.date', params: { date: '2023-01-17' } }"-->
-            <!--                >17. jaanuari kontrolletendus-->
-            <!--            </RouterLink>-->
+            <RouterLink
+                :to="{ name: 'archive.date', params: { date: '2023-01-17' } }"
+                >17. jaanuari kontrolletendus
+            </RouterLink>
             <!--            <RouterLink-->
             <!--                :to="{ name: 'archive.date', params: { date: '2023-01-18' } }"-->
             <!--                >18. jaanuari esietendus-->
