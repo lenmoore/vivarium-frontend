@@ -3,7 +3,14 @@ import { useVisitorStore } from '@/store/visitor.store';
 import BaseForm from '../../components/BaseForm/index.vue';
 import BaseInput from '../../components/BaseForm/BaseInput.vue';
 import { usePerformanceStore } from '@/store/performance.store';
-import { computed, defineEmits, onBeforeMount, ref, watchEffect } from 'vue';
+import {
+    computed,
+    defineEmits,
+    onBeforeMount,
+    reactive,
+    ref,
+    watchEffect,
+} from 'vue';
 import router from '../../router/index';
 import moment from 'moment';
 
@@ -26,10 +33,12 @@ const visitor = {
     wants_summary: false,
 };
 
-let isLoading = ref(false);
+let isLoading = reactive(false);
 
 async function onLogin() {
     isLoading = true;
+    console.log(isLoading);
+    instance?.proxy?.$forceUpdate();
     if (visitor.wardrobe_number > 0) {
         visitor.username = visitor.wardrobe_number + '_' + Date.now();
         visitor.wardrobe_number = parseInt(visitor.wardrobe_number);
@@ -49,17 +58,15 @@ async function onLogin() {
     // }
 
     // location.replace('/visitor/intro');
-    // instance?.proxy?.$forceUpdate();
 }
 </script>
 
 <template>
     <h1 class="container">Sisene Vivaariumisse</h1>
-    <div v-if="isLoading" class="d-flex justify-content-center">
-        <img alt="loader" src="/public/Spinner-1s-200px.gif" />
-    </div>
+
     <BaseForm
         v-if="activePerformance"
+        :is-loading="isLoading"
         :show-cancel="false"
         :submit-label="'Sisene'"
         class="container"

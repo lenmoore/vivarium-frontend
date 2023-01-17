@@ -43,8 +43,11 @@ onBeforeMount(async () => {
         )
     );
     let games = reactive(performanceStore.games);
+    console.log(games);
     state.active_game = games.find(
-        (game) => game?._id === activePhase?.phase_game?._id
+        (game) =>
+            game?._id === activePhase?.phase_game?._id &&
+            game.open_for_colors.includes(stateVIsitor.confirmed_humanity_value)
     );
     gameStepsWithVisitorSelectedValues = ref(stateVIsitor.quiz_results);
     gameStepsWithVisitorSelectedValues =
@@ -113,6 +116,8 @@ async function selectValue(val) {
     stepToUpdate.result_humanity_values = val.humanity_values;
     state.game_loading = false;
     stateVIsitor = await visitorStore.editVisitor(updateVisitor.value);
+    localStorage.setItem('visitor', stateVIsitor);
+    console.log(stateVIsitor);
     instance?.proxy?.$forceUpdate();
 }
 

@@ -1,19 +1,23 @@
 <template>
     <div class="form-wrapper">
         <form onsubmit="return false;">
-            <slot></slot>
-
-            <div class="buttons">
-                <button
-                    v-if="showCancel"
-                    class="btn btn-outline-primary"
-                    @on-click="cancel"
-                >
-                    Cancel
-                </button>
-                <button class="btn btn-primary" @on-click.prevent="submit">
-                    {{ submitLabel }}
-                </button>
+            <div v-if="isLoading" class="d-flex justify-content-center">
+                <img alt="loader" src="/public/Spinner-1s-200px.gif" />
+            </div>
+            <div v-else>
+                <slot></slot>
+                <div class="buttons">
+                    <button
+                        v-if="showCancel"
+                        class="btn btn-outline-primary"
+                        @on-click="cancel"
+                    >
+                        Cancel
+                    </button>
+                    <button class="btn btn-primary" @on-click.prevent="submit">
+                        {{ submitLabel }}
+                    </button>
+                </div>
             </div>
         </form>
     </div>
@@ -25,7 +29,11 @@ export default {
     props: {
         showCancel: {
             type: Boolean,
-            default: true,
+            default: false,
+        },
+        isLoading: {
+            type: Boolean,
+            default: false,
         },
         submitLabel: {
             type: String,
