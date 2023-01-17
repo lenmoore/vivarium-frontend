@@ -131,7 +131,7 @@ onBeforeMount(async () => {
                     class="d-flex align-items-center border m-1"
                 >
                     <img :src="res.image" alt="" height="50" />
-                    &nbsp;<small>{{ res.title }}</small>
+                    &nbsp;<small>{{ res?.title }}</small>
                 </div>
             </div>
         </div>
@@ -148,8 +148,8 @@ onBeforeMount(async () => {
                 :key="'selected' + i"
                 class="border mb-1"
             >
-                <strong>{{ res.step.question_text }}</strong>
-                {{ res.result_text }}
+                <strong>{{ res?.step?.question_text }}</strong>
+                {{ res?.result_text }}
             </div>
         </div>
 
