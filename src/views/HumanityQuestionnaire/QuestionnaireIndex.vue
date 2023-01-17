@@ -110,7 +110,6 @@ async function selectValue(val) {
     let stepToUpdate = updateVisitor.value.quiz_results.find(
         (qR) => qR?.step?._id === state?.current_step?._id
     );
-    state.game_loading = false;
 
     console.log(stepToUpdate);
     stepToUpdate.result_text = val.option_text;
@@ -119,6 +118,8 @@ async function selectValue(val) {
     stateVIsitor = await visitorStore.editVisitor(updateVisitor.value);
     localStorage.setItem('visitor', stateVIsitor);
     console.log(stateVIsitor);
+    state.game_loading = false;
+
     instance?.proxy?.$forceUpdate();
 }
 
