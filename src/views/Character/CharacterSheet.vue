@@ -148,8 +148,10 @@ onBeforeMount(async () => {
                 :key="'selected' + i"
                 class="border mb-1"
             >
-                <strong>{{ res?.step?.question_text }}</strong>
-                {{ res?.result_text }}
+                <div v-if="res.result_text !== '-'">
+                    <strong>{{ res?.step?.question_text }}</strong>
+                    {{ res?.result_text }}
+                </div>
             </div>
         </div>
 
