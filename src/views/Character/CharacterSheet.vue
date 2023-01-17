@@ -143,12 +143,8 @@ onBeforeMount(async () => {
             class="py-4"
         >
             <h4>Tegid järgmised valikud:</h4>
-            <div
-                v-for="(res, i) in visitor.quiz_results"
-                :key="'selected' + i"
-                class="border mb-1"
-            >
-                <div v-if="res.result_text !== '-'">
+            <div v-for="(res, i) in visitor.quiz_results" :key="'selected' + i">
+                <div v-if="res.result_text !== '-'" class="border mb-1">
                     <strong>{{ res?.step?.question_text }}</strong>
                     {{ res?.result_text }}
                 </div>
