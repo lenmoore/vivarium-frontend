@@ -51,7 +51,7 @@ export const useVisitorStore = defineStore({
                     'confirmed_humanity_value',
                     data.confirmed_humanity_value
                 );
-                console.log(data);
+                console.log('what, this data? what the fuck?', data);
                 return data;
             });
         },

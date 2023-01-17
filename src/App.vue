@@ -142,14 +142,17 @@ let timerState = ref({
 let timerString = ref('');
 watch(router.currentRoute, async () => {
     showLoginBtn = localStorage.getItem('accessToken') == null;
-    await performanceStore.getPhases();
+    // await performanceStore.getPhases();
 });
 let confirmedHumanityValue = localStorage.getItem('confirmed_humanity_value');
 
 onBeforeMount(async () => {
-    visitor = await visitorStore.fetchVisitor(
-        localStorage.getItem('visitorId') || ''
-    );
+    if (localStorage.getItem('visitorId')) {
+        visitor = await visitorStore.fetchVisitor(
+            localStorage.getItem('visitorId') || 'null'
+        );
+    }
+
     let visitorInLocalStorage = localStorage.getItem('visitor');
     if (
         visitor.archived === true ||
@@ -168,7 +171,7 @@ onBeforeMount(async () => {
     activeGame = games.value.find(
         (game) => game?._id === activePhase?.value?.phase_game?._id
     );
-    if (isActor.value || isAdmin) {
+    if (isActor.value || isAdmin.value) {
         timerState.value.loading = true;
         const data = await performanceStore.getActorState();
 
@@ -177,9 +180,7 @@ onBeforeMount(async () => {
         let timerActive = timers.value.find((timer) => isInFuture(timer));
         console.log(timerActive);
         if (timerActive) {
-            console.log('YAYAYY');
             activeTimer = timerActive;
-            console.log('activetimer value', activeTimer.value);
             instance?.proxy?.$forceUpdate();
         }
         timerState.value.loading = false;

@@ -9,14 +9,18 @@ import moment from 'moment';
 const performanceStore = usePerformanceStore();
 const authStore = useAuthStore();
 
-onBeforeMount(async () => {
-    await performanceStore.getGames();
-    await performanceStore.getPhases();
-    await performanceStore.getPerformances();
-    renderLinks();
-});
 const isAdmin = ref(localStorage.getItem('admin') === 'true');
 const isActor = ref(localStorage.getItem('actor') === 'true');
+const hasAccessToken = ref(localStorage.getItem('accessToken') != null);
+onBeforeMount(async () => {
+    await performanceStore.getPhases();
+
+    if (isActor.value || isAdmin.value || hasAccessToken) {
+        await performanceStore.getGames();
+        await performanceStore.getPerformances();
+        renderLinks();
+    }
+});
 
 let confirmedHumanityValue = localStorage.getItem('confirmed_humanity_value');
 watch(router.currentRoute, () => {
@@ -41,9 +45,6 @@ function renderLinks() {
     const phases = ref(computed(() => performanceStore.phases));
     const activePhase = ref(phases.value.find((p) => p.active));
     const games = ref(computed(() => performanceStore.games));
-    console.log('admin', isAdmin.value);
-    console.log('actor', isActor.value);
-    console.log('auth', isAuthenticated.value);
     const activeGame = ref(
         games.value.find(
             (game) => game?._id === activePhase?.value?.phase_game?._id
@@ -51,7 +52,6 @@ function renderLinks() {
     );
     console.log(activeGame.value?.game_type);
     if (isAuthenticated.value && isAdmin.value) {
-        console.log('dude');
         navLinks.value.linx = [
             { name: 'admin.audience.overview', label: 'kapslid', query: {} },
             { name: 'superadmin.games', label: 'mangud', query: {} },
@@ -68,7 +68,6 @@ function renderLinks() {
             },
         ];
     } else if (isAuthenticated.value && isActor.value) {
-        console.log('emm hallo');
         navLinks.value.linx = [
             { name: 'admin.audience.overview', label: 'kapslid', query: {} },
             // { name: 'superadmin.phases', label: 'faasid', query: {} },

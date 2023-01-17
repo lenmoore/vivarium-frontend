@@ -28,6 +28,7 @@ onBeforeMount(async () => {
     activePerformance = computed(() => {
         return performanceStore.getActivePerformance;
     });
+    await performanceStore.getCurrentPerformanceVisitors(activePerformance._id);
     // await humanityStore.fetchProducts();
 });
 
