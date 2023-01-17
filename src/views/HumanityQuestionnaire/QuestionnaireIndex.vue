@@ -110,11 +110,12 @@ async function selectValue(val) {
     let stepToUpdate = updateVisitor.value.quiz_results.find(
         (qR) => qR?.step?._id === state?.current_step?._id
     );
+    state.game_loading = false;
 
     console.log(stepToUpdate);
     stepToUpdate.result_text = val.option_text;
     stepToUpdate.result_humanity_values = val.humanity_values;
-    state.game_loading = false;
+    gameStepsWithVisitorSelectedValues[state.step_counter] = stepToUpdate;
     stateVIsitor = await visitorStore.editVisitor(updateVisitor.value);
     localStorage.setItem('visitor', stateVIsitor);
     console.log(stateVIsitor);
