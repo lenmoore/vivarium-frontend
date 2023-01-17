@@ -22,7 +22,7 @@
             <!--                :to="{ name: 'archive.date', params: { date: '2023-01-19' } }"-->
             <!--                >19. jaanuari etendus-->
             <!--            </RouterLink>-->
-            <a class="py-2" href="/kava">Vaata lihtsalt kavalehte </a>
+            <a class="py-2" href="/kava">Vaata kavalehte</a>
         </div>
     </div>
 </template>

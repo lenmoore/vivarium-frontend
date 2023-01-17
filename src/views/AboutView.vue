@@ -117,7 +117,7 @@
             detailid, mis just sulle huvi võiks pakkuda. Selleks loob algoritm
             aga igast kasutajast <strong>profiili</strong>. Pean tõdema, et
             hämmastusin juba mõne aasta eest, kuidas
-            <strong>Youtube</strong> teadis ülima täpsusega, mida ma seal
+            <strong>YouTube</strong> teadis ülima täpsusega, mida ma seal
             parajasti vaadata soovisin. Enda arust tulid mul hommikul pähe mõned
             uitmõtted, ent internetti sukeldudes ootasid mind õiged videod juba
             ees! See oli kui võlukunst! Pidin tõdema, et Youtube´i algoritm
@@ -153,6 +153,37 @@
         <p>Mihkel Seeder</p>
 
         <br /><br /><br /><br />
+        <div>
+            <h2>Tund aega, et radikaliseeruda</h2>
+            <p>
+                VIVAARIUMi loomise algimpulss peitub küsimuses, kuidas
+                kunstiliste ja tehnoloogiliste vahendite abil kõnelda ühiskonna
+                soodumusest kapselduda kõlakodadesse. Testpubliku osalusel
+                läbiviidud läbimängudel on selgunud, et lavastusele loodud
+                struktuur on igati toimiv infomulli mõtestamiseks. Publik reisib
+                läbi teatrimaja, kuid ühtlasi ka läbi iseenese sisekosmose
+                pingevälja olukorras. Kuidas säilitada kriitikameel, kui “meie”
+                oleme nn välja joonistatud ainuõigetena ja “nemad” -
+                vaenlastena? Kuis jääda kaine mõistuse juurde, kui dramaturgia
+                on üles ehitatud manipulatsioonile? Kas infomull lõhkeb
+                ülekeemise tulemusel või jääb võitjaks kurb tõdemus - “meil” ei
+                ole just hästi, aga “neil” on halvemini?
+            </p>
+
+            <p>
+                Vastandamine on iidseim vahend võimu saavutamiseks ja
+                säilitamiseks - jaga ja valitse toimib siinkohal kui kellavärk.
+                Tund aega, et hinge minna? Ei. Tund aega, et radikaliseeruda.
+            </p>
+
+            <p>Helen Rekkor</p>
+        </div>
+
+        <br /><br /><br /><br /><br />
+        <a href="/arhiiv">Arhiivi</a>
+
+        <br /><br /><br /><br /><br />
+
         <img
             alt=""
             class="py-2"
