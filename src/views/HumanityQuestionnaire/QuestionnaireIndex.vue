@@ -104,20 +104,15 @@ async function selectValue(val) {
     state.visitor_current_step_selected_option_text = val.option_text;
 
     updateVisitor = ref(stateVIsitor);
-    console.log(updateVisitor);
-    console.log(updateVisitor.value.quiz_results);
-    console.log(state.current_step);
     let stepToUpdate = updateVisitor.value.quiz_results.find(
         (qR) => qR?.step?._id === state?.current_step?._id
     );
 
-    console.log(stepToUpdate);
     stepToUpdate.result_text = val.option_text;
     stepToUpdate.result_humanity_values = val.humanity_values;
     gameStepsWithVisitorSelectedValues[state.step_counter] = stepToUpdate;
     stateVIsitor = await visitorStore.editVisitor(updateVisitor.value);
     localStorage.setItem('visitor', stateVIsitor);
-    console.log(stateVIsitor);
     state.game_loading = false;
 
     instance?.proxy?.$forceUpdate();
