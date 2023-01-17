@@ -55,6 +55,11 @@ export const useVisitorStore = defineStore({
                 return data;
             });
         },
+        async updateQuizResult(payload: any) {
+            console.log('payload', payload);
+
+            return await PerformanceService.updateQuizResult(payload);
+        },
         async fetchVisitorByDateAndNumber(
             date: string,
             wardrobeNumber: number

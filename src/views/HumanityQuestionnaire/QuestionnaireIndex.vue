@@ -111,7 +111,7 @@ async function selectValue(val) {
     stepToUpdate.result_text = val.option_text;
     stepToUpdate.result_humanity_values = val.humanity_values;
     gameStepsWithVisitorSelectedValues[state.step_counter] = stepToUpdate;
-    stateVIsitor = await visitorStore.editVisitor(updateVisitor.value);
+    await visitorStore.updateQuizResult(stepToUpdate);
     localStorage.setItem('visitor', stateVIsitor);
     state.game_loading = false;
 

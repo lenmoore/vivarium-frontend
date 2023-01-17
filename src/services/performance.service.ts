@@ -254,15 +254,9 @@ class PerformanceService {
             });
     }
 
-    //     app.get(
-    //     '/api/actor-state/products-in-capsule',
-    //     [requireUser],
-    //     getActorStateProductsHandler
-    // );
-    //
-    //     app.get('/api/actor-state', [requireUser], getActorStateHandler);
-    //     app.put('/api/actor-state', [requireUser], updateActorStateHandler);
-    //     app.post('/api/actor-state', [requireUser], createActorStateHandler);
+    async updateQuizResult(quizResult: any) {
+        return await api.put('/quizresults/' + quizResult._id, quizResult);
+    }
 }
 
 export default new PerformanceService();

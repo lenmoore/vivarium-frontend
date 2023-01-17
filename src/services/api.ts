@@ -65,7 +65,7 @@ const instance: AxiosInstance = axios.create({
         'X-Refresh': refreshHeader().toString(),
         'X-Forwarded-For': corsAnywhere + herokuapi,
     },
-    baseURL: DEPLOY,
+    baseURL: tina2,
 });
 
 export default instance;
