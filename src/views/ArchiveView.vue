@@ -4,7 +4,7 @@
         <div class="d-flex flex-column">
             <RouterLink
                 :to="{ name: 'archive.date', params: { date: '2023-01-18' } }"
-                >18. jaanuari esietendus
+                >18. jaanuari ESIETENDUS
             </RouterLink>
             <!--            <RouterLink-->
             <!--                :to="{ name: 'archive.date', params: { date: '2023-01-19' } }"-->
