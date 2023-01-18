@@ -10,6 +10,7 @@ const props = defineProps(['menuItems']);
         <MenuItem
             v-for="item in menuItems"
             :key="item._id"
+            :class="{ 'text-bg-success': item.active }"
             :label="item.title + ' ' + (item.active ? 'AKTIIVNE' : '-')"
             :to="{
                 name: 'superadmin.performance-manager.performance',
