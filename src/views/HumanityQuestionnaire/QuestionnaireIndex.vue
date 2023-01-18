@@ -96,8 +96,6 @@ async function startGame() {
 }
 
 async function selectValue(val) {
-    state.game_loading = true;
-
     stateVIsitor = await visitorStore.fetchVisitor(
         localStorage.getItem('visitorId')
     );
@@ -113,7 +111,6 @@ async function selectValue(val) {
     gameStepsWithVisitorSelectedValues[state.step_counter] = stepToUpdate;
     await visitorStore.updateQuizResult(stepToUpdate);
     localStorage.setItem('visitor', stateVIsitor);
-    state.game_loading = false;
 
     instance?.proxy?.$forceUpdate();
 }
@@ -126,6 +123,7 @@ function step(i) {
     if (state.step_counter < gameStepsWithVisitorSelectedValues.length) {
         state.current_step =
             gameStepsWithVisitorSelectedValues[state.step_counter].step;
+        console.log(state.current_step);
         state.current_step.question_options =
             state.current_step.question_options.sort((a, b) =>
                 a.option_text.localeCompare(b.option_text)
