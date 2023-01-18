@@ -134,6 +134,7 @@ function getGameStepObj(step) {
                     class="py-2"
                 >
                     <h4>{{ getGameStepObj(step).question_text }}</h4>
+                    (vastanud: {{ getGameStepObj(step).peopleWhoAnswered }})
 
                     <div
                         v-for="option in getGameStepObj(step).results"
@@ -141,7 +142,9 @@ function getGameStepObj(step) {
                         class="w-100 border-bottom d-flex align-items-center justify-content-between py-1"
                     >
                         <div class="w-75">
-                            <div>{{ option.text }}</div>
+                            <div class="py-1" style="font-size: 1.2rem">
+                                - {{ option.text }}
+                            </div>
                             <div class="fst-italic">{{ option.visitors }}</div>
                         </div>
                         <div>
