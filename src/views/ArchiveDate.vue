@@ -23,7 +23,7 @@ onMounted(async () => {
 </script>
 <template>
     <div>
-        Kuupaeval {{ date }} olid saalis jargnevate garderoobinumbritega
+        Kuupäeval {{ date }} olid saalis järgnevate garderoobinumbritega
         inimesed:
 
         <div>
