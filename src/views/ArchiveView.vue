@@ -14,10 +14,10 @@
                 :to="{ name: 'archive.date', params: { date: '2023-01-20' } }"
                 >20. jaanuari etendus
             </RouterLink>
-            <!--            <RouterLink-->
-            <!--                :to="{ name: 'archive.date', params: { date: '2023-01-21' } }"-->
-            <!--                >21. jaanuari etendus-->
-            <!--            </RouterLink>-->
+            <RouterLink
+                :to="{ name: 'archive.date', params: { date: '2023-01-21' } }"
+                >21. jaanuari etendus
+            </RouterLink>
             <a class="py-2" href="/kava">Vaata kavalehte</a>
         </div>
     </div>

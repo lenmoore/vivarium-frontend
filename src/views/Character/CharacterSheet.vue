@@ -3,11 +3,12 @@ import { onBeforeMount, reactive, ref } from 'vue';
 import router from '../../router/index';
 import { useVisitorStore } from '../../store/visitor.store';
 import { getCurrentInstance } from 'vue';
+import ProductsSummary from '../Admin/AudienceInspector/ProductsSummary.vue';
 
 const instance = getCurrentInstance();
 const visitorStore = useVisitorStore();
 let visitor = reactive({});
-
+let sum = ref(0);
 let avg_hum_values = ref({});
 onBeforeMount(async () => {
     // console.log('GOOD MORNING TEXAS,');
@@ -69,6 +70,7 @@ onBeforeMount(async () => {
         turq: turq?.reduce((a, b) => a + b, 0),
         lime: lime?.reduce((a, b) => a + b, 0),
     };
+
     instance?.proxy?.$forceUpdate();
 
     console.log(visitor);
@@ -107,18 +109,54 @@ onBeforeMount(async () => {
 
         <div class="py-2 text-center">
             Sinu tulemus:
-            <small class="font-size-xs bg-fuchsia p-1 m-1">{{
-                Math.floor(avg_hum_values.fuchsia)
-            }}</small>
-            <small class="font-size-xs bg-green p-1 m-1">{{
-                Math.floor(avg_hum_values.lime)
-            }}</small>
-            <small class="font-size-xs bg-orange p-1 m-1">{{
-                Math.floor(avg_hum_values.turq)
-            }}</small>
-            <small class="font-size-xs bg-blue p-1 m-1">{{
-                Math.floor(avg_hum_values.silver)
-            }}</small>
+            <div class="font-size-xs bg-fuchsia-light p-1 m-1">
+                {{
+                    Math.round(
+                        (avg_hum_values.fuchsia /
+                            (avg_hum_values.turq +
+                                avg_hum_values.fuchsia +
+                                avg_hum_values.silver +
+                                avg_hum_values.lime)) *
+                            10000
+                    ) / 100
+                }}%
+            </div>
+            <div class="font-size-xs bg-green p-1 m-1">
+                {{
+                    Math.round(
+                        (avg_hum_values.lime /
+                            (avg_hum_values.turq +
+                                avg_hum_values.fuchsia +
+                                avg_hum_values.silver +
+                                avg_hum_values.lime)) *
+                            10000
+                    ) / 100
+                }}%
+            </div>
+            <div class="font-size-xs bg-orange p-1 m-1">
+                {{
+                    Math.round(
+                        (avg_hum_values.turq /
+                            (avg_hum_values.turq +
+                                avg_hum_values.fuchsia +
+                                avg_hum_values.silver +
+                                avg_hum_values.lime)) *
+                            10000
+                    ) / 100
+                }}%
+            </div>
+            <div class="font-size-xs bg-blue p-1 m-1">
+                {{
+                    Math.round(
+                        (avg_hum_values.silver /
+                            (avg_hum_values.turq +
+                                avg_hum_values.fuchsia +
+                                avg_hum_values.silver +
+                                avg_hum_values.lime)) *
+                            10000
+                    ) / 100
+                }}%
+            </div>
         </div>
         <div>
             <h4>Võtsid kapslisse kaasa:</h4>
@@ -175,3 +213,9 @@ onBeforeMount(async () => {
         </div>
     </div>
 </template>
+
+<style>
+.bg-fuchsia-light {
+    background-color: violet;
+}
+</style>

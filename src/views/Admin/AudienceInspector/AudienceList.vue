@@ -66,7 +66,12 @@ function toggleViewOptions(show) {
 let countedProducts = ref([]);
 let mappedVisitors = reactive([]);
 let coolAlgorithmedVisitors = reactive({});
-
+let allColorScoresEver = ref({
+    lime: 0,
+    fuchsia: 0,
+    silver: 0,
+    turq: 0,
+});
 watch(visitors, async () => {
     if (visitors.value[0]?.confirmed_humanity_value === 'none') {
         await sortThemGuys();
@@ -90,7 +95,7 @@ async function sortThemGuys() {
 
         let redQuiz = visitor?.quiz_results
             ? visitor?.quiz_results?.map((qR) => {
-                  return qR.result_humanity_values?.fuchsia;
+                  return qR?.result_humanity_values?.fuchsia;
               })
             : [];
         let greenQuiz = visitor?.quiz_results
@@ -133,17 +138,29 @@ async function sortThemGuys() {
             silver: silver?.reduce((a, b) => a + b, 0),
             turq: turq?.reduce((a, b) => a + b, 0),
         };
+        let sum =
+            avg_hum_values.fuchsia +
+            avg_hum_values.lime +
+            avg_hum_values.silver +
+            avg_hum_values.turq;
+
         let maxKey,
             maxValue = 0;
 
         for (const [key, value] of Object.entries(avg_hum_values)) {
-            if (value > maxValue) {
-                maxValue = value;
+            if (value / sum > maxValue) {
+                maxValue = value / sum;
                 maxKey = key;
             }
         }
         let highest = maxKey;
 
+        allColorScoresEver.value.fuchsia += avg_hum_values?.fuchsia || 0;
+        allColorScoresEver.value.lime += avg_hum_values?.lime || 0;
+        allColorScoresEver.value.silver += avg_hum_values?.silver || 0;
+        allColorScoresEver.value.turq += avg_hum_values?.turq || 0;
+
+        console.log(allColorScoresEver.value);
         return {
             ...visitor,
             basket,

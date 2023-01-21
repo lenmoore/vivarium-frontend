@@ -201,18 +201,53 @@ async function deleteVisitor(visitor) {
                         </small>
                     </div>
                     <div>
-                        <small class="font-size-xs bg-fuchsia p-1 m-1">{{
-                            Math.floor(visitor.avg_hum_values.fuchsia)
-                        }}</small>
-                        <small class="font-size-xs bg-green p-1 m-1">{{
-                            Math.floor(visitor.avg_hum_values.lime)
-                        }}</small>
-                        <small class="font-size-xs bg-orange p-1 m-1">{{
-                            Math.floor(visitor.avg_hum_values.turq)
-                        }}</small>
-                        <small class="font-size-xs bg-blue p-1 m-1">{{
-                            Math.floor(visitor.avg_hum_values.silver)
-                        }}</small>
+                        <small class="font-size-xs bg-fuchsia-light p-1 m-1"
+                            >{{
+                                Math.round(
+                                    (visitor.avg_hum_values.fuchsia /
+                                        (visitor.avg_hum_values.turq +
+                                            visitor.avg_hum_values.fuchsia +
+                                            visitor.avg_hum_values.silver +
+                                            visitor.avg_hum_values.lime)) *
+                                        10000
+                                ) / 100
+                            }}%</small
+                        >
+                        <small class="font-size-xs bg-orange p-1 m-1"
+                            >{{
+                                Math.round(
+                                    (visitor.avg_hum_values.turq /
+                                        (visitor.avg_hum_values.turq +
+                                            visitor.avg_hum_values.fuchsia +
+                                            visitor.avg_hum_values.silver +
+                                            visitor.avg_hum_values.lime)) *
+                                        10000
+                                ) / 100
+                            }}%</small
+                        >
+                        <small class="font-size-xs bg-blue p-1 m-1"
+                            >{{
+                                Math.round(
+                                    (visitor.avg_hum_values.silver /
+                                        (visitor.avg_hum_values.turq +
+                                            visitor.avg_hum_values.fuchsia +
+                                            visitor.avg_hum_values.silver +
+                                            visitor.avg_hum_values.lime)) *
+                                        10000
+                                ) / 100
+                            }}%</small
+                        ><small class="font-size-xs bg-green p-1 m-1"
+                            >{{
+                                Math.round(
+                                    (visitor.avg_hum_values.lime /
+                                        (visitor.avg_hum_values.turq +
+                                            visitor.avg_hum_values.fuchsia +
+                                            visitor.avg_hum_values.silver +
+                                            visitor.avg_hum_values.lime)) *
+                                        10000
+                                ) / 100
+                            }}%</small
+                        >
                     </div>
                 </div>
             </div>
@@ -223,5 +258,9 @@ async function deleteVisitor(visitor) {
 <style>
 .turq {
     border: 2px solid #02e5dd;
+}
+
+.bg-fuchsia-light {
+    background-color: violet;
 }
 </style>
