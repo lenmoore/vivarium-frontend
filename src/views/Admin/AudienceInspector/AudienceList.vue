@@ -44,7 +44,7 @@ function toggleViewOptions(show) {
     let name = '';
     switch (show) {
         case 'products':
-            console.log('trying to show products');
+            // console.log('trying to show products');
 
             name = 'admin.audience.products';
 
@@ -160,7 +160,7 @@ async function sortThemGuys() {
         allColorScoresEver.value.silver += avg_hum_values?.silver || 0;
         allColorScoresEver.value.turq += avg_hum_values?.turq || 0;
 
-        console.log(allColorScoresEver.value);
+        // console.log(allColorScoresEver.value);
         return {
             ...visitor,
             basket,
