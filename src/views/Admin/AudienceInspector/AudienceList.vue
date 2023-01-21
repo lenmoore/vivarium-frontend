@@ -211,7 +211,7 @@ async function sortThemGuys() {
 
     function dividePeople() {
         // first do some division of extremists
-        ['fuchsia', 'turq', 'lime', 'silver'].forEach((color) =>
+        ['turq', 'lime', 'silver', 'fuchsia'].forEach((color) =>
             firstSort(color)
         );
 
