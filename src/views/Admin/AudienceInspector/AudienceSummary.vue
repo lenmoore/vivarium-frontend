@@ -26,29 +26,27 @@ onMounted(async () => {
     await sort();
 });
 
-watch(sortedVisitors, () => {
-    console.log('watsch');
-    sort();
-});
+// watch(sortedVisitors, () => {
+//     console.log('watsch');
+//     sort();
+// });
 const isAdmin = ref(localStorage.getItem('admin') === 'true');
 
 async function sort() {
-    let visitorsToMap = ref(sortedVisitors);
+    let visitorsToMap = ref(sortedVisitors.value);
     console.log(showOnlyColorRoute);
     if (showOnlyColorRoute.value !== 'all') {
         console.log('ok');
         visitorsToMap.value = visitorsToMap.value.filter(
             (vis) => vis.confirmed_humanity_value === showOnlyColorRoute.value
         );
-        mappedVisitors = await mapVisitors(visitorsToMap.value);
+        mappedVisitors = ref(await mapVisitors(visitorsToMap));
+        console.log(mappedVisitors);
     }
     console.log(visitorsToMap);
-    if (
-        isAdmin.value &&
-        visitorsToMap.value[0].confirmed_humanity_value === 'none'
-    ) {
+    if (isAdmin.value) {
         console.log('am admin');
-        mappedVisitors = await sortThemGuys();
+        await sortThemGuys();
     }
     console.log(mappedVisitors);
     instance?.proxy?.$forceUpdate();
@@ -66,7 +64,7 @@ async function deleteVisitor(visitor) {
 }
 
 async function mapVisitors(visitorsToMap) {
-    return visitorsToMap
+    return visitorsToMap.value
         .map((visitor) => {
             let basket = visitor.basket;
 
@@ -142,7 +140,7 @@ async function mapVisitors(visitorsToMap) {
                     value: absolute_hum_values?.silver / sum,
                 },
             ];
-            console.log(avg_hum_values);
+            // console.log(avg_hum_values);
             //
             // let maxKey,
             //     maxValue = 0;
@@ -174,9 +172,9 @@ async function mapVisitors(visitorsToMap) {
 
 async function sortThemGuys() {
     coolAlgorithmedVisitors = reactive({});
-    let visitorsToMap = ref(sortedVisitors.value);
+    let visitorsToMap = ref(sortedVisitors);
     countedProducts = ref([]);
-    mappedVisitors = reactive([]);
+    // mappedVisitors = reactive([]);
     coolAlgorithmedVisitors = {
         turq: new Set(),
         fuchsia: new Set(),
@@ -184,15 +182,18 @@ async function sortThemGuys() {
         lime: new Set(),
     };
 
-    mappedVisitors = mapVisitors(visitorsToMap);
+    mappedVisitors = ref(await mapVisitors(visitorsToMap));
     let peopleCountModulo = sortedVisitors.value.length % 4;
 
     let peopleCount = (sortedVisitors.value.length - peopleCountModulo) / 4;
-    let notYetSomewhere = new Set(mappedVisitors);
+    let notYetSomewhere = new Set(mappedVisitors.value);
     // console.log(notYetSomewhere);
     dividePeople();
 
+    console.log(visitorsToMap);
+
     function firstSort(color) {
+        console.log(mappedVisitors);
         let sortedByColor = mappedVisitors.value.sort(
             (a, b) => b.avg_hum_values[color] - a.avg_hum_values[color]
         );
@@ -281,7 +282,7 @@ async function sortThemGuys() {
         notYetSomewhere.delete(visitor);
     }
 
-    console.log(coolAlgorithmedVisitors);
+    console.log('>>>>>', coolAlgorithmedVisitors);
     return coolAlgorithmedVisitors;
     // viewOptions.value.ready = true;
 }
