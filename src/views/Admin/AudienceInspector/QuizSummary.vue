@@ -174,7 +174,7 @@ function getGameStepObj(step) {
                             ? 'btn-outline-primary'
                             : 'btn-primary'
                     "
-                    class="btn"
+                    class="btn font-size-xl"
                     @click.prevent="activateQuestionnaire(game)"
                 >
                     {{ getGameActiveButton(game) }}
