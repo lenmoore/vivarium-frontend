@@ -158,7 +158,7 @@ watch(visitors, async () => {
                     class="btn btn-outline-primary font-size-xl"
                     @click="toggleViewOptions('products')"
                 >
-                    Tooted kaasas
+                    Tooted
                 </button>
                 <button
                     :class="{
@@ -168,7 +168,7 @@ watch(visitors, async () => {
                     class="btn btn-outline-primary font-size-xl"
                     @click="toggleViewOptions('quiz-pre-capsule')"
                 >
-                    2. ja 3. mäng
+                    2.-3. mäng
                 </button>
                 <button
                     :class="{
