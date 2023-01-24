@@ -155,10 +155,11 @@ async function mapVisitors(visitorsToMap) {
                 (a, b) => b.value - a.value
             ).color;
 
-            allColorScoresEver.value.fuchsia += avg_hum_values?.fuchsia || 0;
-            allColorScoresEver.value.lime += avg_hum_values?.lime || 0;
-            allColorScoresEver.value.silver += avg_hum_values?.silver || 0;
-            allColorScoresEver.value.turq += avg_hum_values?.turq || 0;
+            allColorScoresEver.value.fuchsia +=
+                absolute_hum_values?.fuchsia || 0;
+            allColorScoresEver.value.lime += absolute_hum_values?.lime || 0;
+            allColorScoresEver.value.silver += absolute_hum_values?.silver || 0;
+            allColorScoresEver.value.turq += absolute_hum_values?.turq || 0;
 
             return {
                 ...visitor,
@@ -190,10 +191,10 @@ async function sortThemGuys() {
     // console.log(notYetSomewhere);
     dividePeople();
 
-    console.log(visitorsToMap);
+    // console.log(visitorsToMap);
 
     function firstSort(color) {
-        console.log(mappedVisitors);
+        // console.log(mappedVisitors);
         let sortedByColor = mappedVisitors.value.sort(
             (a, b) => b.avg_hum_values[color] - a.avg_hum_values[color]
         );
@@ -225,24 +226,24 @@ async function sortThemGuys() {
 
         while (notYetSomewhere.size) {
             notYetSomewhere.forEach((silverGuy) => {
-                console.log('________');
-                console.log('________');
-                console.log('________');
-                console.log('________');
-                console.log(
-                    'ok trying to add one person',
-                    silverGuy.wardrobe_number,
-                    silverGuy.avg_hum_values
-                );
+                // console.log('________');
+                // console.log('________');
+                // console.log('________');
+                // console.log('________');
+                // console.log(
+                //     'ok trying to add one person',
+                //     silverGuy.wardrobe_number,
+                //     silverGuy.avg_hum_values
+                // );
                 let maxKey = silverGuy.avg_hum_values[0].color;
                 silverGuy.highest = maxKey;
                 if (coolAlgorithmedVisitors[maxKey]?.size <= 26) {
                     addToAlgorithmedVisitors(maxKey, silverGuy);
                 } else {
-                    console.log(
-                        'fuck couldnt be added anywhere -- firstvalue ',
-                        maxKey
-                    );
+                    // console.log(
+                    //     'fuck couldnt be added anywhere -- firstvalue ',
+                    //     maxKey
+                    // );
                     let secondMaxValue = silverGuy.avg_hum_values[1].color;
                     console.log('secondMaxValue', secondMaxValue);
                     if (
@@ -256,7 +257,7 @@ async function sortThemGuys() {
                         //     secondMaxValue
                         // );
                         let thirdMaxValue = silverGuy.avg_hum_values[2].color;
-                        console.log('thirdMaxValue', thirdMaxValue);
+                        // console.log('thirdMaxValue', thirdMaxValue);
                         if (
                             thirdMaxValue.length &&
                             coolAlgorithmedVisitors[thirdMaxValue]?.size <= 26
@@ -266,7 +267,7 @@ async function sortThemGuys() {
                             let fourthMaxValue =
                                 silverGuy.avg_hum_values[3].color;
 
-                            console.log('fourthmaxvalue', fourthMaxValue);
+                            // console.log('fourthmaxvalue', fourthMaxValue);
                             addToAlgorithmedVisitors(fourthMaxValue, silverGuy);
                         }
                     }
@@ -342,6 +343,9 @@ async function confirmColors() {
 </script>
 <template>
     <div>
+        <!--        <div v-if="isAdmin">-->
+        <!--    {{ // allColorScoresEver  }}-->
+        <!--        </div>-->
         {{ mappedVisitors.length }} inimest sinu kapslis.
 
         <div v-if="!showOnlyColorRoute.length">

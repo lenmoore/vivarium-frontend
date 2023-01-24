@@ -81,7 +81,6 @@ watch(visitors, async () => {
 
 <template>
     <div class="my-4">
-        <!--        {{ allColorScoresEver }}-->
         <div
             v-if="isAdmin"
             class="d-flex justify-content-around align-items-center"
@@ -99,7 +98,6 @@ watch(visitors, async () => {
                 }"
                 class="mx-2 p-2"
                 style="background-color: paleturquoise"
-                @click="sortThemGuys"
             >
                 Türkiis
             </RouterLink>
@@ -112,7 +110,6 @@ watch(visitors, async () => {
                 }"
                 class="mx-2 p-2"
                 style="background-color: lightpink"
-                @click="sortThemGuys"
             >
                 Violett
             </RouterLink>
@@ -125,7 +122,6 @@ watch(visitors, async () => {
                 }"
                 class="mx-2 p-2"
                 style="background-color: silver"
-                @click="sortThemGuys"
             >
                 Hõbevalge
             </RouterLink>
@@ -138,7 +134,6 @@ watch(visitors, async () => {
                 }"
                 class="mx-2 p-2"
                 style="background-color: lime"
-                @click="sortThemGuys"
             >
                 Laim
             </RouterLink>
@@ -150,7 +145,7 @@ watch(visitors, async () => {
                     :class="{
                         'bg-success text-white': viewOptions.showSummaryList,
                     }"
-                    class="btn btn-outline-primary"
+                    class="btn btn-outline-primary font-size-xl"
                     @click="toggleViewOptions('audience')"
                 >
                     Kõik
@@ -160,7 +155,7 @@ watch(visitors, async () => {
                         'bg-success text-white':
                             router.currentRoute.value.name.includes('products'),
                     }"
-                    class="btn btn-outline-primary"
+                    class="btn btn-outline-primary font-size-xl"
                     @click="toggleViewOptions('products')"
                 >
                     Tooted kaasas
@@ -170,7 +165,7 @@ watch(visitors, async () => {
                         'bg-success text-white':
                             router.currentRoute.value.name.includes('pre'),
                     }"
-                    class="btn btn-outline-primary"
+                    class="btn btn-outline-primary font-size-xl"
                     @click="toggleViewOptions('quiz-pre-capsule')"
                 >
                     2. ja 3. mäng
@@ -182,7 +177,7 @@ watch(visitors, async () => {
                                 'in-capsule'
                             ),
                     }"
-                    class="btn btn-outline-primary"
+                    class="btn btn-outline-primary font-size-xl"
                     @click="toggleViewOptions('quiz-in-capsule')"
                 >
                     Kapslimängud

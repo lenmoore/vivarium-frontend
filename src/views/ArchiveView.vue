@@ -20,9 +20,13 @@
                 >21. jaanuari etendus
             </RouterLink>
             <RouterLink
-                :to="{ name: 'archive.date', params: { date: '2023-01-23' } }"
-                >23. jaanuari etendus
+                :to="{ name: 'archive.date', params: { date: '2023-01-24' } }"
+                >24. jaanuari etendus
             </RouterLink>
+            <!--            <RouterLink-->
+            <!--                :to="{ name: 'archive.date', params: { date: '2023-01-25' } }"-->
+            <!--                >25. jaanuari etendus-->
+            <!--            </RouterLink>-->
             <a class="py-2" href="/kava">Vaata kavalehte</a>
         </div>
     </div>
