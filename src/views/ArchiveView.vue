@@ -1,8 +1,8 @@
 <template>
-    <div>
+    <div class="container">
         <h1>Arhiiv</h1>
 
-        <div class="d-flex flex-column">
+        <div class="d-flex flex-column date-list">
             <RouterLink
                 :to="{ name: 'archive.date', params: { date: '2023-01-18' } }"
                 >18. jaanuari ESIETENDUS
@@ -20,14 +20,30 @@
                 >21. jaanuari etendus
             </RouterLink>
             <RouterLink
+                :to="{ name: 'archive.date', params: { date: '2023-01-23' } }"
+                >23. jaanuari etendus
+            </RouterLink>
+            <RouterLink
                 :to="{ name: 'archive.date', params: { date: '2023-01-24' } }"
                 >24. jaanuari etendus
             </RouterLink>
+            <RouterLink
+                :to="{ name: 'archive.date', params: { date: '2023-01-25' } }"
+                >25. jaanuari etendus
+            </RouterLink>
             <!--            <RouterLink-->
-            <!--                :to="{ name: 'archive.date', params: { date: '2023-01-25' } }"-->
-            <!--                >25. jaanuari etendus-->
+            <!--                :to="{ name: 'archive.date', params: { date: '2023-01-26' } }"-->
+            <!--                >26. jaanuari etendus-->
             <!--            </RouterLink>-->
-            <a class="py-2" href="/kava">Vaata kavalehte</a>
+            <a class="py-4" href="/kava"><strong>Vaata kavalehte</strong></a>
         </div>
     </div>
 </template>
+<style lang="scss">
+.date-list {
+    * {
+        font-size: 1.25rem;
+        margin-bottom: 1rem;
+    }
+}
+</style>

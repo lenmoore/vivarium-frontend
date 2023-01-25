@@ -23,7 +23,10 @@ let showOnlyColorRoute = ref(router.currentRoute.value.query.color || 'all');
 onMounted(async () => {
     await performanceStore.getActorCapsuleVisitors(showOnlyColorRoute.value);
     sortedVisitors = computed(() => performanceStore.getVisitors);
-    await sort();
+
+    if (sortedVisitors.value[0]?.confirmed_humanity_value === 'none') {
+        await sort();
+    }
 });
 
 // watch(sortedVisitors, () => {
@@ -343,9 +346,9 @@ async function confirmColors() {
 </script>
 <template>
     <div>
-        <!--        <div v-if="isAdmin">-->
-        <!--    {{ // allColorScoresEver  }}-->
-        <!--        </div>-->
+        <div v-if="isAdmin">
+            {{ allColorScoresEver }}
+        </div>
         {{ mappedVisitors.length }} inimest sinu kapslis.
 
         <div v-if="!showOnlyColorRoute.length">
