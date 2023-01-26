@@ -88,6 +88,11 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('../views/ArchiveDate.vue'),
     },
     {
+        path: '/arhiiv/:date/stat',
+        name: 'archive.date.statistics',
+        component: () => import('../views/ArchiveDateSummary.vue'),
+    },
+    {
         path: '/login',
         name: 'login',
         component: () => import('../views/Auth/LoginView.vue'),

@@ -81,6 +81,13 @@ export const useVisitorStore = defineStore({
                 }
             );
         },
+        async fetchSummaryByDate(date: string): Promise<Visitor> {
+            return await PerformanceService.getSummaryByDate(date).then(
+                (data) => {
+                    return data;
+                }
+            );
+        },
     },
     persist: true,
 });

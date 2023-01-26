@@ -178,6 +178,14 @@ function logout() {
         <button class="btn" @click="toggleAdminMenu">menu</button>
     </div>
     <!--    <button class="btn" @click="logout">logout</button>-->
+
+    <button
+        v-if="isAuthenticated && $route.path === '/visitor/logout'"
+        class="btn btn-primary"
+        @click="logout"
+    >
+        logout
+    </button>
     <div
         v-if="confirmedHumanityValue !== 'none'"
         :class="
@@ -249,13 +257,6 @@ function logout() {
             </button>
         </span>
     </nav>
-    <button
-        v-if="isAuthenticated && $route.path === '/visitor/logout'"
-        class="btn"
-        @click="logout"
-    >
-        logout
-    </button>
     <!--    <button class="btn" @click="renderLinks">XX</button>-->
 </template>
 

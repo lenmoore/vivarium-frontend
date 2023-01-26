@@ -188,6 +188,14 @@ class PerformanceService {
             });
     }
 
+    async getSummaryByDate(date: string) {
+        return await api
+            .get(`/performance/summary/${date}`)
+            .then(({ data }) => {
+                return data;
+            });
+    }
+
     async getCurrentPerformanceVisitors(performance: string) {
         return await api
             .get(`/performance-visitors/${performance}`)
