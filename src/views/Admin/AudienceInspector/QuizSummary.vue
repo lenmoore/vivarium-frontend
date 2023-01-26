@@ -24,7 +24,7 @@ onMounted(async () => {
     await performanceStore.getActorCapsuleVisitors(
         showOnlyColorRoute.value || showOnlyColor
     );
-    await performanceStore.getGames();
+    // await performanceStore.getGames();
 
     games = computed(() => performanceStore.games);
     phases = computed(() => performanceStore.phases);

@@ -24,9 +24,9 @@ onMounted(async () => {
     await performanceStore.getActorCapsuleVisitors(showOnlyColorRoute.value);
     sortedVisitors = computed(() => performanceStore.getVisitors);
 
-    if (sortedVisitors.value[0]?.confirmed_humanity_value === 'none') {
-        await sort();
-    }
+    // if (sortedVisitors.value[0]?.confirmed_humanity_value === 'none') {
+    await sort();
+    // }
 });
 
 // watch(sortedVisitors, () => {
@@ -92,16 +92,20 @@ async function mapVisitors(visitorsToMap) {
                   })
                 : [];
 
-            let redProducts = basket?.products?.map(
+            let redProducts = [];
+            let silverProducts = [];
+            let limeProducts = [];
+            let turqProducts = [];
+            redProducts = basket?.products?.map(
                 (p) => p?.humanity_values?.fuchsia?.average
             );
-            let silverProducts = basket?.products?.map(
+            silverProducts = basket?.products?.map(
                 (p) => p?.humanity_values?.blue?.average
             );
-            let limeProducts = basket?.products?.map(
+            limeProducts = basket?.products?.map(
                 (p) => p?.humanity_values?.green?.average
             );
-            let turqProducts = basket?.products?.map(
+            turqProducts = basket?.products?.map(
                 (p) => p?.humanity_values?.orange?.average
             );
 

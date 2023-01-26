@@ -1,5 +1,6 @@
 import axios, { AxiosInstance } from 'axios';
 import { useAuthStore } from '@/store/auth.store';
+import { ref } from 'vue';
 
 // axios.defaults.baseURL = 'http://localhost:80/api';
 
@@ -13,6 +14,9 @@ function refreshHeader() {
         return '';
     }
 }
+
+const isAdmin = ref(localStorage.getItem('admin') === 'true');
+const isActor = ref(localStorage.getItem('actor') === 'true');
 
 function authHeader() {
     // return auth header with jwt if user is logged in and request is to the api url
@@ -57,6 +61,7 @@ const sitt = 'http://localhost:3000/api';
 const corsAnywhere = 'https://ancient-oasis-40097.herokuapp.com/';
 const vatheroku = 'https://vat-vivaarium.herokuapp.com';
 const DEPLOY = herokuapi;
+const ACTOR_DEPLOY = 'https://api-vivaarium-actors.herokuapp.com/api';
 
 const instance: AxiosInstance = axios.create({
     headers: {
@@ -65,7 +70,7 @@ const instance: AxiosInstance = axios.create({
         'X-Refresh': refreshHeader().toString(),
         'X-Forwarded-For': corsAnywhere + herokuapi,
     },
-    baseURL: DEPLOY,
+    baseURL: isAdmin.value || isActor.value ? ACTOR_DEPLOY : DEPLOY,
 });
 
 export default instance;

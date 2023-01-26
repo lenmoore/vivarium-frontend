@@ -3,15 +3,7 @@ import { useVisitorStore } from '@/store/visitor.store';
 import BaseForm from '../../components/BaseForm/index.vue';
 import BaseInput from '../../components/BaseForm/BaseInput.vue';
 import { usePerformanceStore } from '@/store/performance.store';
-import {
-    computed,
-    defineEmits,
-    onBeforeMount,
-    reactive,
-    ref,
-    watchEffect,
-} from 'vue';
-import router from '../../router/index';
+import { computed, onBeforeMount, reactive } from 'vue';
 import moment from 'moment';
 
 import { getCurrentInstance } from 'vue';
@@ -28,7 +20,7 @@ const visitorStore = useVisitorStore();
 
 const visitor = {
     email: '',
-    wardrobe_number: 0,
+    wardrobe_number: null,
     wants_newsletter: false,
     wants_summary: false,
 };
@@ -52,17 +44,11 @@ async function onLogin() {
         alert('Kas sisestasid õige garderoobinumbri?');
     }
     isLoading = false;
-    // if (localVisitor) {
-    // localStorage.setItem('visitorId', localVisitor.visitorId);
-    // localStorage.setItem('visitor', visitor);
-    // }
-
-    // location.replace('/visitor/intro');
 }
 </script>
 
 <template>
-    <h1 class="container">Sisene Vivaariumisse</h1>
+    <h1 class="container">Sisene Vivaariumisse oma garderoobinumbriga</h1>
 
     <BaseForm
         v-if="activePerformance"
@@ -75,17 +61,16 @@ async function onLogin() {
         <BaseInput
             :id="'wardrobe_number'"
             v-model="visitor.wardrobe_number"
-            :label="'Sinu garderoobinumber *'"
+            :label="'Sinu GARDEROOBINUMBER *'"
             :type="'number'"
             name="wardrobe_number"
         />
         <BaseInput
             :id="'email'"
             v-model="visitor.email"
-            :label="'Email, kui soovid VAT teatri uudiskirja'"
+            :label="'Email, kui soovid VAT teatri uudiskirja (ei ole kohustuslik)'"
             :placeholder="'Email'"
             :type="'email'"
-            disabled
             name="email"
         />
     </BaseForm>

@@ -7,7 +7,7 @@ function goScan() {
 </script>
 
 <template>
-    <div class="container">
+    <div class="container overflow-y-scroll">
         <div class="d-flex align-items-center justify-content-center">
             <h2>Tere!</h2>
             <img
@@ -26,8 +26,8 @@ function goScan() {
         </p>
         <p>Tänane teekond on ühes vaatuses.</p>
         <p>
-            Sinu ülesanne on liikuda ruumist ruumi, vaadelda ja võtta minu abil
-            vastu otsuseid. Ei midagi enamat.
+            <strong>Sinu ülesanne</strong> on liikuda ruumist ruumi, vaadelda ja
+            võtta minu abil vastu otsuseid. Ei midagi enamat.
         </p>
         <h3>Ilusat etendust!</h3>
         <p>Esmalt aga külasta kohvikut esimesel korrusel.</p>

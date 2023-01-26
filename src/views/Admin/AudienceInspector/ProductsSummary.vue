@@ -33,7 +33,7 @@ setInterval(async function () {
         <img alt="loader" src="/public/Spinner-1s-200px.gif" />
     </div>
     <div v-else>
-        {{ amountOfProductsInCapsule }}
+        {{ amountOfProductsInCapsule }} kokku asju kapslis.
         <div v-for="product in countedProducts" :key="product._id">
             <div
                 v-if="product.count > 0"
@@ -47,7 +47,9 @@ setInterval(async function () {
                     </h4>
                     <div class="m-1">
                         kaasas:&nbsp;&nbsp;<span
-                            v-for="visitor in product.visitors"
+                            v-for="visitor in Object.values(
+                                product.visitors
+                            ).sort((a, b) => a - b)"
                             :key="visitor + product.title"
                         >
                             {{ visitor }}, &nbsp;

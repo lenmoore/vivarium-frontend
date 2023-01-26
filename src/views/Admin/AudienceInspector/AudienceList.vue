@@ -23,15 +23,6 @@ let viewOptions = ref({
     ready: false,
 });
 
-let activePerformance = {};
-onBeforeMount(async () => {
-    activePerformance = computed(() => {
-        return performanceStore.getActivePerformance;
-    });
-    await performanceStore.getCurrentPerformanceVisitors(activePerformance._id);
-    // await humanityStore.fetchProducts();
-});
-
 const baskets = computed(() => humanityStore.getBaskets);
 let showOnlyColor = ref(localStorage.getItem('actor_color'));
 
@@ -44,10 +35,7 @@ function toggleViewOptions(show) {
     let name = '';
     switch (show) {
         case 'products':
-            // console.log('trying to show products');
-
             name = 'admin.audience.products';
-
             break;
         case 'quiz-in-capsule':
             name = 'admin.audience.quiz-in-capsule';
@@ -62,21 +50,6 @@ function toggleViewOptions(show) {
     }
     router.push({ name: name, query });
 }
-
-let countedProducts = ref([]);
-let mappedVisitors = reactive([]);
-let coolAlgorithmedVisitors = reactive({});
-let allColorScoresEver = ref({
-    lime: 0,
-    fuchsia: 0,
-    silver: 0,
-    turq: 0,
-});
-watch(visitors, async () => {
-    // if (visitors.value[0]?.confirmed_humanity_value === 'none') {
-    // await sortThemGuys();
-    // }
-});
 </script>
 
 <template>

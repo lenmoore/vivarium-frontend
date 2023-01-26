@@ -206,7 +206,14 @@ function getActiveHomeLink() {
     if (isAdmin.value) {
         return '/superadmin/performances';
     } else if (isActor.value) {
-        return router.currentRoute.value.fullPath;
+        if (router.currentRoute.value.fullPath.includes('audience')) {
+            return router.currentRoute.value.fullPath;
+        } else {
+            return (
+                '/admin/audience/overview?color=' +
+                localStorage.getItem('actor_color')
+            );
+        }
     }
 
     return router.currentRoute.value.fullPath;
