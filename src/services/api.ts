@@ -71,6 +71,7 @@ const instance: AxiosInstance = axios.create({
         'X-Forwarded-For': corsAnywhere + herokuapi,
     },
     baseURL: isAdmin.value || isActor.value ? ACTOR_DEPLOY : DEPLOY,
+    // baseURL: tina2,
 });
 
 export default instance;
