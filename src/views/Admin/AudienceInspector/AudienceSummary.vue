@@ -179,7 +179,7 @@ async function mapVisitors(visitorsToMap) {
         .sort((a, b) => a.wardrobe_number - b.wardrobe_number);
 }
 
-const maxLimit = 17;
+const maxLimit = 26;
 
 // const maxLimit = 26;
 async function sortThemGuys() {
@@ -221,7 +221,7 @@ async function sortThemGuys() {
             })
             .sort((a, b) => b.avg_hum_values[color] - a.avg_hum_values[color]);
         console.log('SORTED BY COLOR', sortedByColor);
-        for (let i = 0; i < peopleCount / 2; i++) {
+        for (let i = 0; i < peopleCount / 3; i++) {
             if (
                 notYetSomewhere.has(sortedByColor[i]) &&
                 sortedByColor[i]?.avg_hum_values[0] === color &&
