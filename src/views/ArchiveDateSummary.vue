@@ -79,12 +79,20 @@ onMounted(async () => {
             console.log(absolute_hum_values);
             return { ...visitor, absolute_hum_values: absolute_hum_values };
         });
+        instance?.proxy?.$forceUpdate();
+
         state.value.realHighestValuesReady = true;
     }
-
+    realHighestValues = {
+        fuchsia: countVisitorsByColor(visitors, 'fuchsia'),
+    };
     console.log(visitors);
     instance?.proxy?.$forceUpdate();
 });
+
+function countVisitorsByColor(visitors, color) {
+    return 10;
+}
 </script>
 
 <template>
@@ -97,9 +105,7 @@ onMounted(async () => {
                     Igasse kapslisse mahub maksimaalselt 27 inimest. <br />
                     Publik jaotati kapslitesse järgnevalt:
                 </p>
-                <p v-if="state.realHighestValuesReady">
-                    {{ summary.visitors }}
-                </p>
+                <p v-if="state.realHighestValuesReady"></p>
                 <div>
                     <small class="bg-fuchsia">{{
                         summary.visitorsWereDividedIn.fuchsia

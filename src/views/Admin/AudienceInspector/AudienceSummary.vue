@@ -161,6 +161,7 @@ async function mapVisitors(visitorsToMap) {
             let highest = avg_hum_values.sort(
                 (a, b) => b.value - a.value
             ).color;
+            console.log(highest);
 
             allColorScoresEver.value.fuchsia +=
                 absolute_hum_values?.fuchsia || 0;
@@ -178,6 +179,9 @@ async function mapVisitors(visitorsToMap) {
         .sort((a, b) => a.wardrobe_number - b.wardrobe_number);
 }
 
+const maxLimit = 17;
+
+// const maxLimit = 26;
 async function sortThemGuys() {
     coolAlgorithmedVisitors = reactive({});
     let visitorsToMap = ref(sortedVisitors);
@@ -201,16 +205,29 @@ async function sortThemGuys() {
     // console.log(visitorsToMap);
 
     function firstSort(color) {
+        console.log(color);
         // console.log(mappedVisitors);
-        let sortedByColor = mappedVisitors.value.sort(
-            (a, b) => b.avg_hum_values[color] - a.avg_hum_values[color]
-        );
-        for (let i = 0; i < peopleCount / 3; i++) {
+        console.log(mappedVisitors);
+        let sortedByColor = mappedVisitors.value
+            .filter((visitor) => {
+                console.log(visitor.wardrobe_number, visitor.avg_hum_values[0]);
+                if (
+                    notYetSomewhere.has(visitor) &&
+                    visitor.avg_hum_values[0].color === color
+                ) {
+                    console.log(visitor);
+                    return visitor;
+                }
+            })
+            .sort((a, b) => b.avg_hum_values[color] - a.avg_hum_values[color]);
+        console.log('SORTED BY COLOR', sortedByColor);
+        for (let i = 0; i < peopleCount / 2; i++) {
             if (
                 notYetSomewhere.has(sortedByColor[i]) &&
-                sortedByColor[i]?.highest === color &&
-                coolAlgorithmedVisitors[color]?.size < 26
+                sortedByColor[i]?.avg_hum_values[0] === color &&
+                coolAlgorithmedVisitors[color]?.size < maxLimit
             ) {
+                console.log(i);
                 addToAlgorithmedVisitors(color, sortedByColor[i]);
             }
         }
@@ -218,20 +235,21 @@ async function sortThemGuys() {
 
     function dividePeople() {
         // first do some division of extremists
-        ['fuchsia', 'silver', 'turq', 'silver'].forEach((color) =>
+        ['fuchsia', 'silver', 'turq', 'lime'].forEach((color) =>
             firstSort(color)
         );
-        ['turq', 'lime', 'silver', 'fuchsia'].forEach((color) =>
-            firstSort(color)
-        );
-        ['turq', 'lime', 'fuchsia', 'silver'].forEach((color) =>
-            firstSort(color)
-        );
-        ['lime', 'fuchsia', 'turq', 'silver'].forEach((color) =>
+        ['silver', 'lime', 'turq', 'fuchsia'].forEach((color) =>
             firstSort(color)
         );
 
         while (notYetSomewhere.size) {
+            ['fuchsia', 'silver', 'turq', 'lime'].forEach((color) =>
+                firstSort(color)
+            );
+            ['fuchsia', 'silver', 'turq', 'lime'].forEach((color) =>
+                firstSort(color)
+            );
+
             notYetSomewhere.forEach((silverGuy) => {
                 // console.log('________');
                 // console.log('________');
@@ -244,7 +262,7 @@ async function sortThemGuys() {
                 // );
                 let maxKey = silverGuy.avg_hum_values[0].color;
                 silverGuy.highest = maxKey;
-                if (coolAlgorithmedVisitors[maxKey]?.size <= 26) {
+                if (coolAlgorithmedVisitors[maxKey]?.size <= maxLimit) {
                     addToAlgorithmedVisitors(maxKey, silverGuy);
                 } else {
                     // console.log(
@@ -255,7 +273,8 @@ async function sortThemGuys() {
                     console.log('secondMaxValue', secondMaxValue);
                     if (
                         secondMaxValue.length &&
-                        coolAlgorithmedVisitors[secondMaxValue]?.size <= 26
+                        coolAlgorithmedVisitors[secondMaxValue]?.size <=
+                            maxLimit
                     ) {
                         addToAlgorithmedVisitors(secondMaxValue, silverGuy);
                     } else {
@@ -267,7 +286,8 @@ async function sortThemGuys() {
                         // console.log('thirdMaxValue', thirdMaxValue);
                         if (
                             thirdMaxValue.length &&
-                            coolAlgorithmedVisitors[thirdMaxValue]?.size <= 26
+                            coolAlgorithmedVisitors[thirdMaxValue]?.size <=
+                                maxLimit
                         ) {
                             addToAlgorithmedVisitors(thirdMaxValue, silverGuy);
                         } else {

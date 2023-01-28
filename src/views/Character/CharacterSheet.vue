@@ -1,14 +1,49 @@
 <script setup>
-import { onBeforeMount, reactive, ref } from 'vue';
+import { computed, onBeforeMount, reactive, ref } from 'vue';
 import router from '../../router/index';
 import { useVisitorStore } from '../../store/visitor.store';
+import { usePerformanceStore } from '../../store/performance.store';
 import { getCurrentInstance } from 'vue';
 import ProductsSummary from '../Admin/AudienceInspector/ProductsSummary.vue';
 
+const performanceStore = usePerformanceStore();
 const instance = getCurrentInstance();
 const visitorStore = useVisitorStore();
 let visitor = reactive({});
+
+const jahEiGame = '63bef97628a69a85e5bb45d5';
+const otherPreCapsuleGame = '63bef98d28a69a85e5bb45e0';
+const lifeInCapsule = [
+    '63bf20cd28a69a85e5bb4d80',
+    '63bf20dd28a69a85e5bb4d88',
+    '63bf20eb28a69a85e5bb4d91',
+    '63bf20f728a69a85e5bb4d99',
+];
+
+const worldViewQuestions = [
+    '63bf213828a69a85e5bb4da2',
+    '63bf215928a69a85e5bb4db7',
+    '63bf217428a69a85e5bb4dcb',
+    '63bf21bb28a69a85e5bb4df4',
+];
+const guiltyAndAgentQuestions = [
+    '63bf21f128a69a85e5bb4e09',
+    '63bf221028a69a85e5bb4e1e',
+    '63bf231a28a69a85e5bb4ea0',
+    '63bf233828a69a85e5bb4eb5',
+    '63bf22d428a69a85e5bb4e8b',
+    '63bf226528a69a85e5bb4e4c',
+    '63bf22a928a69a85e5bb4e77',
+    '63bf224228a69a85e5bb4e32',
+];
+const humanityQuestions = [
+    '63bf237928a69a85e5bb4ec9',
+    '63bf238628a69a85e5bb4ed1',
+    '63bf23a228a69a85e5bb4ee1',
+    '63bf239328a69a85e5bb4ed9',
+];
 let sum = ref(0);
+let visitorQuizResultsSortedByGame = ref([]);
 let avg_hum_values = ref({});
 onBeforeMount(async () => {
     // console.log('GOOD MORNING TEXAS,');
@@ -18,10 +53,13 @@ onBeforeMount(async () => {
 
     // console.log(routeDate, wardrobeNumber);
 
+    await performanceStore.getGames();
     visitor = await visitorStore.fetchVisitorByDateAndNumber(
         routeDate,
         wardrobeNumber
     );
+    let games = computed(() => performanceStore.getGames);
+    console.log('games-', games);
 
     let basket = visitor.basket;
 
@@ -158,6 +196,10 @@ onBeforeMount(async () => {
                 }}%
             </div>
         </div>
+        <h3>
+            Vivaariumis jagati publik nelja inimgruppi. Need otsused tehti
+            järgnevate valikute põhjal:
+        </h3>
         <div>
             <h4>Võtsid kapslisse kaasa:</h4>
 
@@ -180,9 +222,82 @@ onBeforeMount(async () => {
             "
             class="py-4"
         >
-            <h4>Tegid järgmised valikud:</h4>
+            <h4>Sind kapslisse määranud valikud:</h4>
             <div v-for="(res, i) in visitor.quiz_results" :key="'selected' + i">
-                <div v-if="res.result_text !== '-'" class="border mb-1">
+                <div
+                    v-if="
+                        res.result_text !== '-' &&
+                        (res?.game === jahEiGame ||
+                            res?.game === otherPreCapsuleGame)
+                    "
+                    class="border mb-1"
+                >
+                    <strong>{{ res?.step?.question_text }}</strong>
+                    {{ res?.result_text }}
+                </div>
+            </div>
+
+            <h4 class="pt-4">Kapslis iseloomustasid sind järgnevad valikud:</h4>
+
+            <div v-for="(res, i) in visitor.quiz_results" :key="'selected' + i">
+                <div
+                    v-if="
+                        res.result_text !== '-' &&
+                        lifeInCapsule.includes(res.game)
+                    "
+                    class="border mb-1"
+                >
+                    <strong>{{ res?.step?.question_text }}</strong>
+                    {{ res?.result_text }}
+                </div>
+            </div>
+
+            <div v-for="(res, i) in visitor.quiz_results" :key="'selected' + i">
+                <div
+                    v-if="
+                        res.result_text !== '-' &&
+                        worldViewQuestions.includes(res.game)
+                    "
+                    class="border mb-1"
+                >
+                    <strong>{{ res?.step?.question_text }}</strong>
+                    {{ res?.result_text }}
+                </div>
+            </div>
+
+            <div v-for="(res, i) in visitor.quiz_results" :key="'selected' + i">
+                <div
+                    v-if="
+                        res.result_text !== '-' &&
+                        worldViewQuestions.includes(res.game)
+                    "
+                    class="border mb-1"
+                >
+                    <strong>{{ res?.step?.question_text }}</strong>
+                    {{ res?.result_text }}
+                </div>
+            </div>
+            <div v-for="(res, i) in visitor.quiz_results" :key="'selected' + i">
+                <div
+                    v-if="
+                        res.result_text !== '-' &&
+                        guiltyAndAgentQuestions.includes(res.game)
+                    "
+                    class="border mb-1"
+                >
+                    <strong>{{ res?.step?.question_text }}</strong>
+                    {{ res?.result_text }}
+                </div>
+            </div>
+            Ja...
+            <div v-for="(res, i) in visitor.quiz_results" :key="'selected' + i">
+                <div
+                    v-if="
+                        res.result_text !== '-' &&
+                        humanityQuestions.includes(res.game)
+                    "
+                    class="border mb-1"
+                >
                     <strong>{{ res?.step?.question_text }}</strong>
                     {{ res?.result_text }}
                 </div>
