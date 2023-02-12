@@ -17,6 +17,7 @@ const state = ref({
     realValues: { turq: 0, fuchsia: 0, silver: 0, lime: 0 },
     humanityValuesByHighest: {},
     capsuleProducts: [],
+    gamesPreCapsule: [],
 });
 let visitors = reactive([]);
 onMounted(async () => {
@@ -172,8 +173,9 @@ function getHighestColor(avg_hum_values) {
 
             <br />
             <br />
+            <h2>Valikud, valikud, valikud</h2>
             <div class="products d-flex flex-column">
-                <p>Terve saal võttis kaasa kõigisse kapslitesse:</p>
+                <h3>Terve saal võttis kaasa kõigisse kapslitesse:</h3>
                 <div
                     v-for="(product, i) in summary.capsuleProducts.sort(
                         (a, b) => b.count - a.count
@@ -206,6 +208,33 @@ function getHighestColor(avg_hum_values) {
                             <small class="bg-blue p-1 mx-1">{{
                                 product.colors.silver
                             }}</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <br />
+            <br />
+            <div class="quiz-pre">
+                <h3>Maailmavaatelised küsimustikud</h3>
+                <p>
+                    Eksperimendis määrasid need küsimused ning eelnevad tooted
+                    publiku kapslissekuuluvuse.
+                </p>
+                <div>
+                    <div
+                        v-for="phase in summary.gamesPreCapsule"
+                        :key="phase._id"
+                    >
+                        {{ phase.phase_game.name }}
+                        <div v-for="step in phase.phase_game.game_steps">
+                            {{ step.question_text }}
+                            <div
+                                v-for="option in step.question_options"
+                                :key="option.option_text + step._id"
+                            >
+                                {{ option.option_text }}
+                            </div>
                         </div>
                     </div>
                 </div>
