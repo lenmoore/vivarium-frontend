@@ -220,19 +220,38 @@ function getHighestColor(avg_hum_values) {
                 <p>
                     Eksperimendis määrasid need küsimused ning eelnevad tooted
                     publiku kapslissekuuluvuse.
+                    <br />
+                    Siin on välja toodud kõik punktilised väärtused - mitu
+                    punkti iga kapsli tulemusele juurde sai.
                 </p>
                 <div>
                     <div
                         v-for="phase in summary.gamesPreCapsule"
                         :key="phase._id"
                     >
-                        {{ phase.phase_game.name }}
-                        <div v-for="step in phase.phase_game.game_steps">
-                            {{ step.question_text }}
+                        <h4>Mäng {{ phase.phase_game.name }}</h4>
+                        <div
+                            v-for="step in phase.phase_game.game_steps"
+                            :key="step._id"
+                            class="py-2"
+                        >
+                            <strong> {{ step.question_text }} </strong>
                             <div
                                 v-for="option in step.question_options"
                                 :key="option.option_text + step._id"
                             >
+                                <small class="bg-fuchsia-light px-1 mx-1">{{
+                                    option.humanity_values.fuchsia
+                                }}</small>
+                                <small class="bg-green px-1 mx-1">{{
+                                    option.humanity_values.lime
+                                }}</small>
+                                <small class="bg-orange px-1 mx-1">{{
+                                    option.humanity_values.turq
+                                }}</small>
+                                <small class="bg-blue px-1 mx-1">{{
+                                    option.humanity_values.silver
+                                }}</small>
                                 {{ option.option_text }}
                             </div>
                         </div>
