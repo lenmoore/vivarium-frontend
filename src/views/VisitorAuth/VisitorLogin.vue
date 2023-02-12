@@ -48,31 +48,14 @@ async function onLogin() {
 </script>
 
 <template>
-    <h1 class="container">Sisene Vivaariumisse oma garderoobinumbriga</h1>
-
-    <BaseForm
-        v-if="activePerformance"
-        :is-loading="isLoading"
-        :show-cancel="false"
-        :submit-label="'Sisene'"
-        class="container"
-        @submit="onLogin"
-    >
-        <BaseInput
-            :id="'wardrobe_number'"
-            v-model="visitor.wardrobe_number"
-            :label="'Sinu GARDEROOBINUMBER *'"
-            :type="'number'"
-            name="wardrobe_number"
-        />
-        <BaseInput
-            :id="'email'"
-            v-model="visitor.email"
-            :label="'Email, kui soovid VAT teatri uudiskirja (ei ole kohustuslik)'"
-            :placeholder="'Email'"
-            :type="'email'"
-            name="email"
-        />
-    </BaseForm>
-    <div v-else class="container">! Etendus algab 18:45.</div>
+    <div>
+        <h1 class="text-center">Vivaariumi eksperiment on lõppenud.</h1>
+        <br /><br /><br />
+        <div
+            class="d-flex flex-column flex-sm-row align-items-center justify-content-around"
+        >
+            <a class="btn btn-primary p-4 m-1" href="/arhiiv">Mine arhiivi</a>
+            <a class="btn btn-primary p-4 m-1" href="/kava">Loe kavalehte</a>
+        </div>
+    </div>
 </template>

@@ -20,19 +20,19 @@ onMounted(async () => {
 <template>
     <div>
         <div>
-            <h4>Etenduse kokkuvõtted</h4>
+            <h4>Etenduse kokkuvõte</h4>
+            {{ date }}
         </div>
 
-        <!--        <p>-->
-        <!--            Kui soovid lugeda terve etenduse kokkuvotet,-->
-        <!--            <RouterLink-->
-        <!--                :to="{ name: 'archive.date.statistics', params: { date } }"-->
-        <!--                >vajuta siia.</RouterLink-->
-        <!--            >-->
-        <!--        </p>-->
-        Kuupäeval {{ date }} olid saalis järgnevate garderoobinumbritega
-        inimesed:
-
+        <p>
+            Kui soovid lugeda terve etenduse kokkuvotet,
+            <RouterLink
+                :to="{ name: 'archive.date.statistics', params: { date } }"
+                ><strong>vajuta siia.</strong>
+            </RouterLink>
+        </p>
+        Kui soovid lugeda üksikisikute kokkuvõtteid, vali garderoobinumbri
+        järgi:
         <div>
             <RouterLink
                 v-for="visitor in visitors"

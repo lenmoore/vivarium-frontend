@@ -30,28 +30,28 @@ onMounted(async () => {
 });
 
 // watch(sortedVisitors, () => {
-//     console.log('watsch');
+//     // console.log('watsch');
 //     sort();
 // });
 const isAdmin = ref(localStorage.getItem('admin') === 'true');
 
 async function sort() {
     let visitorsToMap = ref(sortedVisitors.value);
-    console.log(showOnlyColorRoute);
+    // console.log(showOnlyColorRoute);
     if (showOnlyColorRoute.value !== 'all') {
-        console.log('ok');
+        // console.log('ok');
         visitorsToMap.value = visitorsToMap.value.filter(
             (vis) => vis.confirmed_humanity_value === showOnlyColorRoute.value
         );
         mappedVisitors = ref(await mapVisitors(visitorsToMap));
-        console.log(mappedVisitors);
+        // console.log(mappedVisitors);
     }
-    console.log(visitorsToMap);
+    // console.log(visitorsToMap);
     if (isAdmin.value) {
-        console.log('am admin');
+        // console.log('am admin');
         await sortThemGuys();
     }
-    console.log(mappedVisitors);
+    // console.log(mappedVisitors);
     instance?.proxy?.$forceUpdate();
 }
 
@@ -63,7 +63,7 @@ setInterval(async function () {
 
 async function deleteVisitor(visitor) {
     await performanceStore.deleteVisitor(visitor);
-    location.reload();
+    // location.reload();
 }
 
 async function mapVisitors(visitorsToMap) {
@@ -121,7 +121,7 @@ async function mapVisitors(visitorsToMap) {
             };
 
             if (typeof absolute_hum_values.fuchsia !== 'number') {
-                console.log(absolute_hum_values);
+                // console.log(absolute_hum_values);
             }
             let sum =
                 absolute_hum_values.fuchsia +
@@ -147,7 +147,7 @@ async function mapVisitors(visitorsToMap) {
                     value: absolute_hum_values?.silver / sum,
                 },
             ];
-            // console.log(avg_hum_values);
+            // // console.log(avg_hum_values);
             //
             // let maxKey,
             //     maxValue = 0;
@@ -161,7 +161,7 @@ async function mapVisitors(visitorsToMap) {
             let highest = avg_hum_values.sort(
                 (a, b) => b.value - a.value
             ).color;
-            console.log(highest);
+            // // console.log(highest);
 
             allColorScoresEver.value.fuchsia +=
                 absolute_hum_values?.fuchsia || 0;
@@ -179,7 +179,7 @@ async function mapVisitors(visitorsToMap) {
         .sort((a, b) => a.wardrobe_number - b.wardrobe_number);
 }
 
-const maxLimit = 26;
+const maxLimit = 25;
 
 // const maxLimit = 26;
 async function sortThemGuys() {
@@ -206,28 +206,28 @@ async function sortThemGuys() {
 
     function firstSort(color) {
         console.log(color);
+        // // // console.log(mappedVisitors);
         // console.log(mappedVisitors);
-        console.log(mappedVisitors);
         let sortedByColor = mappedVisitors.value
             .filter((visitor) => {
-                console.log(visitor.wardrobe_number, visitor.avg_hum_values[0]);
+                // console.log(visitor.wardrobe_number, visitor.avg_hum_values[0]);
                 if (
                     notYetSomewhere.has(visitor) &&
                     visitor.avg_hum_values[0].color === color
                 ) {
-                    console.log(visitor);
+                    // console.log(visitor);
                     return visitor;
                 }
             })
             .sort((a, b) => b.avg_hum_values[color] - a.avg_hum_values[color]);
-        console.log('SORTED BY COLOR', sortedByColor);
+        // console.log('SORTED BY COLOR', sortedByColor);
         for (let i = 0; i < peopleCount / 3; i++) {
             if (
                 notYetSomewhere.has(sortedByColor[i]) &&
                 sortedByColor[i]?.avg_hum_values[0] === color &&
                 coolAlgorithmedVisitors[color]?.size < maxLimit
             ) {
-                console.log(i);
+                // console.log(i);
                 addToAlgorithmedVisitors(color, sortedByColor[i]);
             }
         }
@@ -251,11 +251,11 @@ async function sortThemGuys() {
             );
 
             notYetSomewhere.forEach((silverGuy) => {
-                // console.log('________');
-                // console.log('________');
-                // console.log('________');
-                // console.log('________');
-                // console.log(
+                // // console.log('________');
+                // // console.log('________');
+                // // console.log('________');
+                // // console.log('________');
+                // // console.log(
                 //     'ok trying to add one person',
                 //     silverGuy.wardrobe_number,
                 //     silverGuy.avg_hum_values
@@ -265,12 +265,12 @@ async function sortThemGuys() {
                 if (coolAlgorithmedVisitors[maxKey]?.size <= maxLimit) {
                     addToAlgorithmedVisitors(maxKey, silverGuy);
                 } else {
-                    // console.log(
+                    // // console.log(
                     //     'fuck couldnt be added anywhere -- firstvalue ',
                     //     maxKey
                     // );
                     let secondMaxValue = silverGuy.avg_hum_values[1].color;
-                    console.log('secondMaxValue', secondMaxValue);
+                    // console.log('secondMaxValue', secondMaxValue);
                     if (
                         secondMaxValue.length &&
                         coolAlgorithmedVisitors[secondMaxValue]?.size <=
@@ -278,12 +278,12 @@ async function sortThemGuys() {
                     ) {
                         addToAlgorithmedVisitors(secondMaxValue, silverGuy);
                     } else {
-                        // console.log(
+                        // // console.log(
                         //     'fuck couldnt be added anywhere -- secondmaxvalue ',
                         //     secondMaxValue
                         // );
                         let thirdMaxValue = silverGuy.avg_hum_values[2].color;
-                        // console.log('thirdMaxValue', thirdMaxValue);
+                        // // console.log('thirdMaxValue', thirdMaxValue);
                         if (
                             thirdMaxValue.length &&
                             coolAlgorithmedVisitors[thirdMaxValue]?.size <=
@@ -294,7 +294,7 @@ async function sortThemGuys() {
                             let fourthMaxValue =
                                 silverGuy.avg_hum_values[3].color;
 
-                            // console.log('fourthmaxvalue', fourthMaxValue);
+                            // // console.log('fourthmaxvalue', fourthMaxValue);
                             addToAlgorithmedVisitors(fourthMaxValue, silverGuy);
                         }
                     }
@@ -306,11 +306,11 @@ async function sortThemGuys() {
     function addToAlgorithmedVisitors(maxKey, visitor) {
         visitor.algorithm_result = maxKey;
         coolAlgorithmedVisitors[maxKey]?.add(visitor);
-        // console.log(maxKey);
+        // // console.log(maxKey);
         notYetSomewhere.delete(visitor);
     }
 
-    console.log('>>>>>', coolAlgorithmedVisitors);
+    // console.log('>>>>>', coolAlgorithmedVisitors);
     return coolAlgorithmedVisitors;
     // viewOptions.value.ready = true;
 }
@@ -363,7 +363,7 @@ async function confirmColors() {
         // }
     });
 
-    // console.log(viiiiis);
+    // // console.log(viiiiis);
     await performanceStore.updateVisitors(viiiiis);
     location.reload();
 }

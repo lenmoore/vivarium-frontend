@@ -8,12 +8,15 @@ import { cloneDeep } from 'lodash';
 
 const instance = getCurrentInstance();
 const visitorStore = useVisitorStore();
-let summary = reactive([]);
+let summary = ref({});
 const date = router.currentRoute.value.params.date;
-let realHighestValues = reactive({});
 const state = ref({
     loading: true,
     realHighestValuesReady: false,
+    visitorsWereDividedIn: {},
+    realValues: { turq: 0, fuchsia: 0, silver: 0, lime: 0 },
+    humanityValuesByHighest: {},
+    capsuleProducts: [],
 });
 let visitors = reactive([]);
 onMounted(async () => {
@@ -21,9 +24,10 @@ onMounted(async () => {
     console.log(date);
     summary = await visitorStore.fetchSummaryByDate(date);
     state.value.loading = false;
+    console.log('summary');
     console.log(summary);
-    if (summary) {
-        visitors = summary?.visitors.map((visitor) => {
+    if (summary.value) {
+        visitors = summary.value?.visitors.map((visitor) => {
             console.log(visitor);
             let basket = visitor.basket;
 
@@ -75,22 +79,50 @@ onMounted(async () => {
                 silver: silver?.reduce((a, b) => a + b, 0),
                 turq: turq?.reduce((a, b) => a + b, 0),
             };
-
-            console.log(absolute_hum_values);
-            return { ...visitor, absolute_hum_values: absolute_hum_values };
+            let sum =
+                absolute_hum_values.fuchsia +
+                absolute_hum_values.lime +
+                absolute_hum_values.silver +
+                absolute_hum_values.turq;
+            let avg_hum_values = [
+                {
+                    color: 'lime',
+                    value: absolute_hum_values?.lime / sum,
+                },
+                {
+                    color: 'fuchsia',
+                    value: absolute_hum_values?.fuchsia / sum,
+                },
+                {
+                    color: 'turq',
+                    value: absolute_hum_values?.turq / sum,
+                },
+                {
+                    color: 'silver',
+                    value: absolute_hum_values?.silver / sum,
+                },
+            ];
+            let highest = avg_hum_values.sort(
+                (a, b) => b.value - a.value
+            ).color;
+            console.log(state.value.realValues);
+            state.value.realValues[highest] =
+                state.value.realValues[highest] + 1;
+            return {
+                ...visitor,
+                absolute_hum_values: absolute_hum_values,
+                avg_hum_values,
+            };
         });
         instance?.proxy?.$forceUpdate();
 
         state.value.realHighestValuesReady = true;
     }
-    realHighestValues = {
-        fuchsia: countVisitorsByColor(visitors, 'fuchsia'),
-    };
-    console.log(visitors);
+    console.log('VISItors', visitors);
     instance?.proxy?.$forceUpdate();
 });
 
-function countVisitorsByColor(visitors, color) {
+function getHighestColor(avg_hum_values) {
     return 10;
 }
 </script>
@@ -105,7 +137,6 @@ function countVisitorsByColor(visitors, color) {
                     Igasse kapslisse mahub maksimaalselt 27 inimest. <br />
                     Publik jaotati kapslitesse järgnevalt:
                 </p>
-                <p v-if="state.realHighestValuesReady"></p>
                 <div>
                     <small class="bg-fuchsia">{{
                         summary.visitorsWereDividedIn.fuchsia
@@ -121,6 +152,44 @@ function countVisitorsByColor(visitors, color) {
                     }}</small>
                 </div>
             </div>
+            <div class="visitors-division">
+                <p>Tegelik saali koosseis oli järgmine:</p>
+                <div>
+                    <small class="bg-fuchsia">{{
+                        summary.humanityValuesByHighest.fuchsia
+                    }}</small>
+                    <small class="bg-green">{{
+                        summary.humanityValuesByHighest.lime
+                    }}</small>
+                    <small class="bg-orange">{{
+                        summary.humanityValuesByHighest.turq
+                    }}</small>
+                    <small class="bg-blue">{{
+                        summary.humanityValuesByHighest.silver
+                    }}</small>
+                </div>
+            </div>
+
+            <br />
+            <br />
+            <div class="products d-flex flex-column">
+                <p>Terve saal võttis kaasa kõigisse kapslitesse:</p>
+                <div
+                    v-for="(product, i) in summary.capsuleProducts.sort(
+                        (a, b) => b.count - a.count
+                    )"
+                    :key="'product' + i"
+                >
+                    <div
+                        v-if="i < 10"
+                        class="d-flex align-items-center border m-1"
+                    >
+                        <img :src="product.image" alt="" height="50" />
+                        &nbsp;<small class="mx-4">{{ product?.title }}</small>
+                        {{ product.count }}x
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -131,5 +200,7 @@ function countVisitorsByColor(visitors, color) {
         width: 3rem;
         padding: 1rem;
     }
+
+    padding-bottom: 2rem;
 }
 </style>

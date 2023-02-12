@@ -9,26 +9,18 @@
             <a
                 :href="getActiveHomeLink()"
                 class="text-decoration-none extra-small-for-tiny-mobile"
-                ><h1 class="h1-color text-decoration-none">
-                    VIVAARIUM
-                    <span v-if="!isAdmin && !isActor"
-                        >| ID_{{ visitor.wardrobe_number || '?' }}</span
-                    >
-                </h1>
+                ><h1 class="h1-color text-decoration-none">VIVAARIUM</h1>
             </a>
 
             <a
                 v-if="!isActor && !isAdmin"
                 :href="getActiveHomeLink()"
-                class="text-decoration-none small-for-tiny-mobile"
+                class="text-decoration-none"
                 ><h1>
-                    <span
-                        class="material-symbols-outlined h1-color large-icon small-for-tiny-mobile"
-                    >
-                        sync
-                    </span>
-                </h1></a
-            >
+                    <span>
+                        <img src="/public/img.png" width="60" />
+                    </span></h1
+            ></a>
             <div
                 v-else
                 class="w-100 d-flex align-items-center justify-content-end"
