@@ -182,11 +182,31 @@ function getHighestColor(avg_hum_values) {
                 >
                     <div
                         v-if="i < 10"
-                        class="d-flex align-items-center border m-1"
+                        class="d-flex align-items-center border m-1 justify-content-between"
                     >
-                        <img :src="product.image" alt="" height="50" />
-                        &nbsp;<small class="mx-4">{{ product?.title }}</small>
-                        {{ product.count }}x
+                        <div class="d-flex flex-nowrap align-items-center">
+                            <img :src="product.image" alt="" height="50" />
+                            &nbsp;<small class="mx-4">{{
+                                product?.title
+                            }}</small>
+                            {{ product.count }}x
+                        </div>
+                        <span class="mx-4"></span>
+                        <div>
+                            <span class="font-size-xs"> Kapslites: </span>
+                            <small class="bg-fuchsia-light p-1 mx-1">{{
+                                product.colors.fuchsia
+                            }}</small>
+                            <small class="bg-green p-1 mx-1">{{
+                                product.colors.lime
+                            }}</small>
+                            <small class="bg-orange p-1 mx-1">{{
+                                product.colors.turq
+                            }}</small>
+                            <small class="bg-blue p-1 mx-1">{{
+                                product.colors.silver
+                            }}</small>
+                        </div>
                     </div>
                 </div>
             </div>

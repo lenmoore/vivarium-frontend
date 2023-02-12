@@ -329,8 +329,4 @@ onBeforeMount(async () => {
     </div>
 </template>
 
-<style>
-.bg-fuchsia-light {
-    background-color: violet;
-}
-</style>
+<style></style>
