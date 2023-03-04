@@ -175,7 +175,16 @@ function getHighestColor(avg_hum_values) {
             <br />
             <h2>Valikud, valikud, valikud</h2>
             <div class="products d-flex flex-column">
-                <h3>Terve saal võttis kaasa kõigisse kapslitesse:</h3>
+                <h3>Mäng 1. Tooted saalis</h3>
+                <p>
+                    Need tooted määrasid eksperimendis osa iga publiku liikme
+                    tulemusest ning olid aluseks algoritmile, mis nad nelja
+                    kapslisse jagas.
+                    <br />
+                    Siin oleme teaduse huvides välja toonud nii koguarvu tooteid
+                    saalis kui ka selle, kui mitu seda toodet igasse kapslisse
+                    jõudis.
+                </p>
                 <div
                     v-for="(product, i) in summary.capsuleProducts.sort(
                         (a, b) => b.count - a.count
@@ -222,12 +231,15 @@ function getHighestColor(avg_hum_values) {
                     publiku kapslissekuuluvuse.
                     <br />
                     Siin on välja toodud kõik punktilised väärtused - mitu
-                    punkti iga kapsli tulemusele juurde sai.
+                    punkti iga kapsli tulemusele juurde sai. Lisaks on iga
+                    variandi taga sulgudes kirjas, mitu inimest saalis seekord
+                    nii vastas.
                 </p>
                 <div>
                     <div
                         v-for="phase in summary.gamesPreCapsule"
                         :key="phase._id"
+                        class="py-4"
                     >
                         <h4>Mäng {{ phase.phase_game.name }}</h4>
                         <div

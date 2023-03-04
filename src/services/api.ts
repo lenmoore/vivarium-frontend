@@ -62,6 +62,7 @@ const corsAnywhere = 'https://ancient-oasis-40097.herokuapp.com/';
 const vatheroku = 'https://vat-vivaarium.herokuapp.com';
 const DEPLOY = herokuapi;
 const ACTOR_DEPLOY = 'https://api-vivaarium-actors.herokuapp.com/api';
+const newHeroku = 'https://viva-back-2.herokuapp.com/api';
 
 const instance: AxiosInstance = axios.create({
     headers: {
@@ -70,8 +71,8 @@ const instance: AxiosInstance = axios.create({
         'X-Refresh': refreshHeader().toString(),
         'X-Forwarded-For': corsAnywhere + herokuapi,
     },
-    baseURL: isAdmin.value || isActor.value ? ACTOR_DEPLOY : DEPLOY,
-    // baseURL: tina2,
+    // baseURL: isAdmin.value || isActor.value ? ACTOR_DEPLOY : DEPLOY,
+    baseURL: newHeroku,
 });
 
 export default instance;
